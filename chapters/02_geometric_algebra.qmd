@@ -958,15 +958,15 @@ associado à vorticidade geométrica. A literatura demonstra o uso de bivetores 
 
 Antes da aplicação em superfícies tridimensionais, a mesma linguagem será usada em um estudo bidimensional. No plano euclidiano, a álgebra \(Cl(2,0)\) possui base
 
-$
+$$
 \{1,e_1,e_2,e_{12}\},
-$
+$$
 
 com pseudoescalar \(I=e_{12}\). Para dois pontos consecutivos de um contorno discretizado, \(x_i\) e \(x_{i+1}\), define-se a aresta orientada
 
-$
+$$
 r_i=x_{i+1}-x_i.
-$
+$$
 
 Seu comprimento é \(\ell_i=\|r_i\|\), e a tangente unitária é \(t_i=r_i/\ell_i\). A normal orientada pode ser construída por dualidade, desde que a orientação do contorno e a convenção de dual estejam fixadas de forma consistente. Produtos internos entre tangentes vizinhas medem alinhamento, enquanto produtos exteriores registram a orientação da mudança local de direção.
 
