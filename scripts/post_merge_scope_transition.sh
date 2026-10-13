@@ -33,13 +33,31 @@ review/ch5-methodology-parametrization-doe 920bb3d6508d012ca3b7863a61790b968ac00
 REFS
 refs+=("refactor/academic-research-scope-2026 $source_sha")
 
+# The merged repair branch is also temporary; freeze its observed head
+# before archival to prevent deletion after an unexpected ref move.
+repair_head="$(gh api "repos/$repo/git/ref/heads/fix/post-merge-archive-references" --jq '.object.sha')"
+[[ "$repair_head" =~ ^[a-f0-9]{40}$ ]] || { echo "::error::Invalid repair branch SHA."; exit 1; }
+refs+=("fix/post-merge-archive-references $repair_head")
+
+# A gh api 404 can emit a JSON error object to stdout even when command fails.
+# Treat optional refs as empty when HTTP requests fail, not as moved refs.
+read_optional_ref_sha() {
+  local result
+  if result="$(gh api "repos/$repo/git/ref/$1" --jq '.object.sha' 2>/dev/null)"; then
+    [[ "$result" =~ ^[a-f0-9]{40}$ ]] || return 1
+    printf '%s' "$result"
+  else
+    printf ''
+  fi
+}
+
 # Preflight: all branch heads must still equal the approved snapshot, or
 # must already have an archive tag at that exact revision.
 for record in "${refs[@]}"; do
   read -r name expected <<< "$record"
   [[ "$name" != "main" && "$name" != "develop" && "$name" != "gh-pages" ]] || exit 1
-  current="$(gh api "repos/$repo/git/ref/heads/$name" --jq '.object.sha // empty' 2>/dev/null || true)"
-  saved="$(gh api "repos/$repo/git/ref/tags/$prefix/$name" --jq '.object.sha // empty' 2>/dev/null || true)"
+  current="$(read_optional_ref_sha "heads/$name")"
+  saved="$(read_optional_ref_sha "tags/$prefix/$name")"
   if [[ ( -n "$current" && "$current" != "$expected" ) || ( -n "$saved" && "$saved" != "$expected" ) ]]; then
     echo "::error::$name expected=$expected current=$current archive=$saved; refusing deletion."
     exit 1
@@ -65,7 +83,7 @@ fi
 
 for record in "${refs[@]}"; do
   read -r name expected <<< "$record"
-  current="$(gh api "repos/$repo/git/ref/heads/$name" --jq '.object.sha // empty' 2>/dev/null || true)"
+  current="$(read_optional_ref_sha "heads/$name")"
   [[ -z "$current" ]] && continue
   [[ "$current" == "$expected" ]] || { echo "::error::Ref moved: $name"; exit 1; }
   gh api -X DELETE "repos/$repo/git/refs/heads/$name" --silent
