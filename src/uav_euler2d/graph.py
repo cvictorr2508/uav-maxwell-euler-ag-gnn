@@ -78,6 +78,12 @@ class SurfaceGraph:
             ],
         }
 
+    def continuity_report(self):
+        """Run the non-topological center-gap continuity diagnostic."""
+        from .geometry import check_contour_continuity
+
+        return check_contour_continuity(self)
+
 
 def build_surface_graph(dataset: Euler2DDataset, case_id: str) -> SurfaceGraph:
     """Build only the contour graph explicitly supported by the source data."""

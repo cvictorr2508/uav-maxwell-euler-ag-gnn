@@ -7,6 +7,8 @@ from pathlib import Path
 from uav_euler2d.loader import Euler2DDataset
 from uav_euler2d.graph import build_surface_graph
 from uav_euler2d.validation import ValidationConfig, integrate_surface, validate_dataset
+from uav_euler2d.experiment import FeatureSpec, MeanPredictor, RidgePredictor, evaluate_predictor
+from uav_euler2d.geometry import check_contour_continuity
 
 
 class SyntheticDataset:
@@ -87,6 +89,10 @@ class SyntheticDataset:
     def surface_path(self, case_id):
         return self.root / self.case(case_id)["surface_file"]
 
+    def cases_for_split(self, split, statuses=("success",)):
+        ids = set(self.split_manifest[split])
+        return tuple(row for row in self._cases if row["geometry_id"] in ids and row["status"] in statuses)
+
 
 class LoaderPolicyTests(unittest.TestCase):
     def test_filter_policy_counts_from_fixture(self):
@@ -138,6 +144,20 @@ class LoaderPolicyTests(unittest.TestCase):
         self.assertEqual(graph.source_parquet, "surface/case_c0.parquet")
         self.assertEqual(graph.contour_edges[-1].target, graph.nodes[0].node_id)
         self.assertEqual(graph.nodes[0].attributes["Cp"], 0.5)
+
+    def test_continuity_is_diagnostic_and_orientation_is_not_physical(self):
+        report = check_contour_continuity(build_surface_graph(SyntheticDataset(), "c0"))
+        self.assertTrue(report.passed)
+        self.assertIn("not a physical orientation", report.orientation_semantics)
+
+    def test_baselines_are_case_level_and_targets_are_not_inputs(self):
+        spec = FeatureSpec(names=("alpha_deg", "chord_ref_m"))
+        reports = evaluate_predictor(SyntheticDataset(), MeanPredictor(), spec)
+        self.assertEqual([report.count for report in reports], [1, 1, 1])
+        ridge = evaluate_predictor(SyntheticDataset(), RidgePredictor(alpha=1.0), spec)
+        self.assertEqual([report.count for report in ridge], [1, 1, 1])
+        with self.assertRaises(ValueError):
+            FeatureSpec(names=("Cp",)).validate()
 
 
 if __name__ == "__main__":
