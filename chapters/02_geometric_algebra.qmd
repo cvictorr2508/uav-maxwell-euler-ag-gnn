@@ -4,7 +4,7 @@ A **Álgebra Geométrica (AG)**, também denominada álgebra de Clifford quando 
 
 A adoção da AG não implica que toda formulação matricial ou tensorial deva ser substituída por um multivetor. Matrizes permanecem representações coordenadas naturais de aplicações lineares; tensores gerais preservam seu papel quando expressam relações multilineares que não são antissimétricas; e solucionadores numéricos podem requerer vetores, matrizes e escalares convencionais em suas interfaces. A contribuição da AG consiste em organizar, de modo geometricamente explícito, os objetos para os quais métrica, orientação, produtos, graus, dualidade e transformações podem ser tratados dentro de uma única álgebra associativa.
 
-Essa distinção é particularmente importante para o problema aero-stealth. A geometria superficial de um **Unmanned Combat Aerial Vehicle (UCAV)**, os campos eletromagnéticos, os campos aerodinâmicos e as mensagens trocadas por uma **Graph Neural Network (GNN)** apresentam estruturas geométricas diferentes. O objetivo deste capítulo é construir a linguagem que permitirá representar essas estruturas sem confundir o objeto geométrico com suas componentes em uma base particular.
+Essa distinção é importante para problemas acadêmicos de malhas e campos físicos: geometria discreta, campos eletromagnéticos, velocidades de escoamento e mensagens trocadas por uma Graph Neural Network (GNN) obedecem a estruturas geométricas diferentes. O objetivo é representar tais estruturas sem confundir o objeto geométrico com suas componentes em uma base escolhida.
 
 ## Partindo de objetos familiares: vetores, comprimento, ângulo e orientação
 
@@ -1093,7 +1093,7 @@ A razão pela qual uma única equação contém várias equações físicas é a
 
 Essa escrita deve ser entendida como **unificação representacional**, não como “linearização” das equações. Em meios lineares, Maxwell já é linear nos campos. A vantagem da STA consiste em representar, dentro de uma mesma estrutura, campo, dualidade, polarização, transformações e operadores.
 
-Para o problema de **Radar Cross Section (RCS)**, essa base será usada no capítulo de física para distinguir campo incidente, campo espalhado, condições constitutivas, condições de contorno e extração do campo distante.
+Em problemas eletromagnéticos canônicos, a formulação geométrica ajudará a distinguir campos incidentes e espalhados, condições constitutivas, contornos e grandezas observáveis sem presumir uma aplicação de engenharia específica.
 
 ## Ponte para a dinâmica dos fluidos
 
@@ -1187,7 +1187,7 @@ Por isso, qualquer vantagem computacional será tratada como resultado experimen
 - generalização a geometrias não vistas;
 - sensibilidade a rotações e mudanças de referencial;
 - impacto no número de avaliações dos modelos físicos de referência;
-- impacto no tempo total da otimização aero-stealth.
+- tempo total de preparação, treinamento, validação e inferência nos experimentos acadêmicos.
 
 A AG é, portanto, o formalismo matemático adotado; o ganho computacional de cada representação é uma propriedade a ser demonstrada por benchmark.
 
@@ -1197,6 +1197,6 @@ A construção apresentada neste capítulo começa com objetos familiares e adic
 
 A base recíproca permite extrair componentes e construir operadores diferenciais mesmo quando a base não é ortonormal. O pseudoescalar introduz dualidade entre dimensões complementares. Involuções e reversão permitem controlar sinais e construir inversas. Versores e rotores transformam reflexões e rotações em produtos da própria álgebra. Outermorphisms estendem transformações de vetores a áreas e volumes orientados. A derivada geométrica reúne divergência e derivada exterior em um único produto.
 
-Para o framework aero-stealth, essas ferramentas sustentam três conexões. A primeira é geométrica: faces, áreas orientadas, normais e transformações relativas de uma malha podem ser representadas sem reduzir toda informação a coordenadas cartesianas. A segunda é física: o eletromagnetismo admite uma formulação particularmente compacta em espaço-tempo, enquanto a aerodinâmica se beneficia de representações geométricas de vorticidade e derivadas sem perder a estrutura tensorial e não linear das equações de Euler. A terceira é computacional: atributos e operações de AG podem integrar mensagens e estados internos das GNNs empregadas como modelos substitutos multifidelidade.
+Para esta pesquisa acadêmica, as ferramentas matemáticas sustentam três conexões. A primeira é geométrica: faces, áreas orientadas, normais e transformações relativas de uma malha podem ser representadas preservando sua orientação. A segunda é física: Maxwell possui representações espaço-temporais compactas, enquanto Euler mantém não linearidade e estrutura conservativa. A terceira é computacional: atributos de AG podem ser avaliados em GNNs, sem presumir ganhos de precisão ou recursos.
 
 A partir dessa base, o capítulo seguinte formula as equações eletromagnéticas e aerodinâmicas, especificando quais objetos serão representados por multivetores, quais permanecerão tensores ou operadores e quais projeções escalares serão necessárias para discretização, aprendizado e otimização.
