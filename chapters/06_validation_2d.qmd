@@ -1,0 +1,86 @@
+# GNNs e validação experimental em problemas acadêmicos 2D
+
+Este capítulo estabelece um protocolo experimental para avaliar métodos de aprendizado sobre grafos obtidos de malhas e contornos bidimensionais. As tarefas iniciais incluem predição de observáveis de fluidos, testes de descrição geométrica e verificação de consistência de dados. Estudos eletromagnéticos podem ser conduzidos **separadamente**, em problemas acadêmicos canônicos.
+
+## Unidade experimental e procedimento
+
+Cada instância deverá ter uma geometria ou domínio, uma discretização, condições físicas e saídas de referência identificadas. A validação começará pela inspeção de arquivos e pelo confronto entre valores e definições físicas do solver. A conectividade das malhas, a orientação de contorno e o local de armazenamento das incógnitas devem permanecer rastreáveis.
+
+A cadeia computacional proposta é:
+
+$$
+\text{dados de referência}
+\rightarrow \text{validação de schema}
+\rightarrow \text{malha/grafo}
+\rightarrow \text{atributos geométricos}
+\rightarrow \text{modelos comparadores}
+\rightarrow \text{avaliação}.
+$$
+
+Nenhum arquivo experimental é considerado automaticamente validado pela presença de uma rotina de leitura.
+
+## Baselines e ablações controladas
+
+O conjunto mínimo de modelos para uma tarefa de campo ou resposta global incluirá: (i) um baseline simples adequado às variáveis disponíveis, (ii) uma MPNN usando atributos usuais de geometria relativa e (iii) a mesma família com atributos adicionais derivados de Álgebra Geométrica, mantendo partições e orçamento de treinamento comparáveis. Caso sejam adotadas camadas multivetoriais, sua lei de transformação deverá ser definida e testada; atributos numéricos derivados de AG não conferem equivariância por si só [@bronstein2021; @pfaff2021].
+
+Uma ablação deverá alterar um mecanismo por vez quando isso for metodologicamente possível. Serão reportadas médias, dispersões e limitações de amostra; diferenças ocasionais não constituem comprovação de vantagem estrutural.
+
+## Exemplo de tarefa aerodinâmica 2D
+
+Considere um grafo \(G\) de aerofólio ou domínio de referência e um vetor \(\mathbf c_{\mathrm{flow}}\) de condições de escoamento conhecidas. Uma tarefa de resposta global pode ser descrita por
+
+$$
+\mathcal G_{\boldsymbol\theta}:
+(G,\mathbf c_{\mathrm{flow}})
+\longmapsto
+(\widehat C_L,\widehat C_D),
+$$
+
+onde \(\boldsymbol\theta\) contém os parâmetros treináveis e o acento identifica valores previstos. Quando a base contiver o coeficiente de pressão superficial \(C_p(s)\), outra tarefa é \(G\mapsto\widehat C_p(s)\); sua consistência com forças integradas requer conectividade, normais e referência de pressão. Para o modelo invíscido, não inferir arrasto viscoso a partir de Euler.
+
+O estudo de caso não implica uma cadeia de otimização de características da aeronave. Descritores geométricos de aerofólios são empregados como bancos de prova de discretização e aprendizado.
+
+## Exemplos independentes de eletromagnetismo
+
+Quando existir um benchmark público autorizado de propagação ou espalhamento eletromagnético, poderão ser definidos alvos como o campo elétrico complexo ou grandezas físicas de um problema canônico. Frequência, material, condição de contorno, unidades e definição da saída devem acompanhar cada caso. O aprendizado de campos e a verificação de condições de contorno são tarefas distintas de qualquer aplicação de projeto de detectabilidade.
+
+Não se presume compartilhamento de parâmetros entre surrogates aerodinâmicos e eletromagnéticos: as tarefas somente poderão compartilhar infraestrutura genérica de leitura, representação e avaliação.
+
+## Treinamento e prevenção de vazamento
+
+A seed de referência é 42 para operações estocásticas controláveis, registrando exceções. Hiperparâmetros, partições e versões dos dados serão mantidos em configurações reprodutíveis. Ao afirmar generalização geométrica, nenhuma geometria pode aparecer em mais de um subconjunto, mesmo após remalhamento, mudança de condições ou fidelidade.
+
+O conjunto de teste permanecerá isolado da escolha de hiperparâmetros, seleção de atributos e estratégias adaptativas. Experimentos com número pequeno de geometrias exigem interpretação cautelosa e análises complementares por grupos, quando viáveis.
+
+## Métricas preditivas e físicas
+
+As métricas poderão incluir erro absoluto médio (MAE), raiz do erro quadrático médio (RMSE), erro relativo com denominador bem definido, erro em \(C_p\) ou campos locais, erro dos coeficientes integrados, conservação e resíduos físicos **somente** quando as saídas e os operadores permitirem seu cálculo. Nenhum resíduo das equações completas pode ser calculado apenas de previsões globais.
+
+Sensibilidade a remalhamento, perturbação admissível das condições e outliers deverá ser explicitada como avaliação de robustez, não confundida com generalização para outros regimes físicos.
+
+## Recursos e avaliação de desempenho
+
+O custo total de uma experiência computacional poderá ser expresso por
+
+$$
+T_{\mathrm{total}} =
+T_{\mathrm{dados}}+
+T_{\mathrm{preparo}}+
+T_{\mathrm{treino}}+
+T_{\mathrm{inferência}}+
+T_{\mathrm{verificação}},
+$$
+
+em que cada termo corresponde ao tempo medido nas etapas de geração, preparação, treinamento, inferência e verificação dos resultados. A comparação de recursos usará configuração de hardware, CPU/GPU-hora, memória e armazenamento. Aceleração será declarada apenas após comparação apropriada com baselines e qualidade preditiva equivalente ou caracterizada.
+
+## Multifidelidade como hipótese experimental
+
+Somente após caracterizar diferentes resoluções ou modelos que aproximem a **mesma grandeza** sob condições comparáveis poderão ser avaliadas correção de discrepância, transferência ou estratégias multifidelidade [@peherstorfer2018]. A relação custo–erro de cada alternativa deverá ser medida. Aprendizado ativo é opcional e necessita comparação com amostragem não adaptativa; não se deve adaptar o conjunto final de teste.
+
+## Artefatos e reprodutibilidade
+
+Cada execução deverá produzir manifest de origem, configuração, hashes ou versões de dados, split por geometria, pesos/modelos quando permitidos, métricas e relatórios de limitações. O Capítulo 5 define a entrada e as representações; o Capítulo 6 concentra inferência e validação do modelo.
+
+## Critérios para extensão 3D
+
+A extensão exige baseline 2D verificável, definição matemática dos atributos, rastreabilidade dos campos e resultados suficientes para motivar novos testes. Experimentos 3D constituirão avaliação independente, e não evidência automaticamente herdada dos casos 2D.
