@@ -1,66 +1,41 @@
-# Modelagem multifidelidade e representação geométrica do estudo 3D
+# Representações geométricas e dados acadêmicos tridimensionais
 
-Este capítulo estenderá para três dimensões a infraestrutura validada no estudo 2D. A passagem para 3D não será tratada como simples aumento do número de coordenadas: superfícies triangulares, orientação de faces, remalhamento, campos vetoriais e dependências eletromagnéticas de longo alcance introduzem novas exigências geométricas, físicas e computacionais.
+Este capítulo descreve requisitos para estender a metodologia de malhas e grafos de problemas 2D a **domínios geométricos 3D acadêmicos**, como corpos genéricos, superfícies discretizadas e benchmarks públicos de equações diferenciais. A transição será estudada sem pressupor uma aplicação específica de projeto de aeronaves.
 
-## Geometrias UCAV e parametrização 3D
+## Domínios e geometria
 
-A geometria tridimensional deverá ser gerada a partir de um espaço de projeto explicitamente parametrizado. Cada configuração manterá rastreabilidade entre parâmetros de projeto, CAD ou representação geométrica intermediária, malha superficial, grafo e respostas dos solvers.
+As geometrias devem ter origem, licença, parâmetros e condições de geração verificáveis. Caso seja utilizado um conjunto representativo de geometria civil UAV, esse contexto será declarado separadamente e não determinará as hipóteses físicas das tarefas matemáticas. A escolha efetiva dependerá da disponibilidade de datasets e benchmarks independentes.
 
-## Design of Experiments e banco de dados 3D
+## Malhas e representação em grafos
 
-A extensão tridimensional exigirá um DoE próprio no espaço de parâmetros geométricos e condições físicas. A estratégia de amostragem deverá considerar restrições de fabricação ou integração, validade geométrica do CAD, qualidade da malha e orçamento dos solvers. Técnicas como LHS podem fornecer cobertura inicial [@mckay1979lhs], mas a amostragem final deverá ser compatível com a parametrização 3D e com o custo observado de cada fidelidade.
-
-Quando houver múltiplos níveis de fidelidade, o plano de dados deverá documentar a relação entre os conjuntos de amostras e reservar avaliações de referência para validação e reavaliação final. Estratégias multifidelidade serão selecionadas de acordo com a correlação observada, a compatibilidade das respostas e a relação entre recurso consumido e informação acrescentada [@peherstorfer2018].
-
-## Malhas superficiais e grafos
-
-Serão avaliados grafos de vértices e de faces, escolhidos de acordo com a localização das variáveis físicas e com a discretização dos modelos de referência. A robustez a alterações de densidade e conectividade da malha será testada explicitamente.
+Faces, células e vértices são entidades distintas. Para cada representação, definir a função que relaciona a malha ao grafo, as adjacências e os atributos carregados. O impacto de refinamento e alteração de conectividade será avaliado mantendo a identidade da geometria.
 
 ## Álgebra Geométrica em \(Cl(3,0)\)
 
-Para uma face triangular \(f=(i,j,k)\), o bivetor de área orientada será
+Para uma face triangular orientada \(f=(i,j,k)\) com posições vetoriais \(\mathbf x_i,\mathbf x_j,\mathbf x_k\), defina os vetores relativos \(\mathbf r_{ij}=\mathbf x_j-\mathbf x_i\) e \(\mathbf r_{ik}=\mathbf x_k-\mathbf x_i\). O bivetor de área orientada é
 
 $$
-B_f
-=
-\frac12
-\mathbf r_{ij}\wedge\mathbf r_{ik},
+B_f=\frac{1}{2}\,\mathbf r_{ij}\wedge\mathbf r_{ik}.
 $$
 
-e sua magnitude fornecerá a área. Normais, dualidade, rotores entre referenciais locais e relações de orientação entre faces serão incorporados de forma compatível com as definições do Capítulo 2.
+Sua magnitude representa a área da face, enquanto sua dualidade orientada fornece a normal, sob convenção de sinal explícita. O uso de rotores e extensores exigirá definição dos referenciais e das propriedades de transformação efetivamente preservadas.
 
-## Aerodinâmica tridimensional
+## Modelagem de campos
 
-As respostas poderão incluir \(C_p\), \(C_L\), \(C_D\), \(C_m\) e demais coeficientes relevantes. Os níveis de fidelidade serão definidos por conteúdo físico, discretização, modelos de turbulência quando aplicáveis, condições de contorno, convergência e demanda de recursos.
+Para dinâmica dos fluidos, campos de pressão e velocidades, conservação, condições de contorno e modelos físicos devem ser caracterizados antes de construir os grafos. Para eletromagnetismo, problemas canônicos 3D de propagação ou espalhamento poderão ser examinados separadamente; amplitude, fase e localização de componentes complexas serão preservadas quando necessárias para verificação matemática.
 
-## Espalhamento eletromagnético tridimensional
+## Fidelidade e recursos
 
-A resposta eletromagnética será tratada como RCS tridimensional quando sua definição física e normalização corresponderem a essa grandeza. A dependência angular, de frequência e de polarização deverá ser preservada:
+Resoluções de malha, ordens de discretização e hipóteses físicas definem alternativas numéricas que precisam ser caracterizadas por erro observado, convergência, tempo de parede, CPU/GPU-hora, armazenamento e memória. Diferentes tamanhos de malha não são, por si sós, hierarquias validadas de fidelidade.
 
-$$
-\sigma
-=
-\sigma(\theta,\phi,f,\mathrm{pol}).
-$$
+## Identificação e partição dos dados
 
-Quando campos ou correntes locais estiverem disponíveis, serão preservadas amplitude e fase para permitir reconstruções fisicamente coerentes de campo distante.
+Cada amostra deverá registrar domínio/geometry ID, mesh ID, condições físicas, solver, versão, estado da convergência, local de armazenamento das incógnitas e formato de saída. Uma geometria não pode atravessar partições de treino e teste quando se avaliar generalização geométrica.
 
-## Fidelidades EM e aero
+## Limites da transferência 2D → 3D
 
-As hierarquias não serão definidas apenas por nomes de solvers. Cada nível deverá ser documentado por suas hipóteses, discretização, resolução, tratamento de bordas ou viscosidade, critérios numéricos e recursos observados.
+Operações geométricas elementares, testes e mecanismos de rastreabilidade poderão ser reaproveitados. As diferenças entre conectividade planar e superficial, dimensionalidade e condições de contorno exigem verificação independente de modelos e métricas [@pfaff2021; @li2023gino].
 
-## Correspondência entre fidelidades
+## Gate para o Capítulo 8
 
-A construção multifidelidade exigirá compatibilidade entre grandezas. Respostas LF e HF deverão representar a mesma quantidade física sob condições equivalentes antes de serem usadas em correção residual, transferência de representação ou aprendizado conjunto.
-
-## Dados, manifestos e rastreabilidade
-
-Cada configuração 3D deverá manter identificadores persistentes para geometria, malha, fidelidade e condições físicas. Os splits continuarão sendo realizados por geometria, evitando vazamento entre remalhamentos ou condições derivadas da mesma configuração.
-
-## Transferência do pipeline 2D
-
-Loaders, configuração de jobs, seed oficial, métricas e estrutura de artefatos serão reutilizados. A representação geométrica, os hiperparâmetros e as arquiteturas serão novamente avaliados, pois desempenho no caso 2D não constitui validação automática em 3D.
-
-## Critérios de prontidão para o Capítulo 8
-
-Antes da otimização tridimensional, os surrogates disciplinares deverão demonstrar generalização em geometrias não vistas, estabilidade frente a remalhamento e erro compatível com as decisões de projeto que serão tomadas no domínio aero-stealth.
+A análise 3D somente avançará de planejamento para experimentos após seleção de benchmarks acadêmicos, contratos de dados, baselines e recursos adequados. Não se considerarão resultados 2D como demonstração de desempenho 3D.

@@ -5,9 +5,9 @@ project:
 lang: pt-BR
 
 book:
-  title: "Graph Neural Networks e Álgebra Geométrica para Otimização Aero-Stealth de UCAVs"
-  subtitle: "Modelagem multifidelidade de Maxwell e Euler e aceleração da otimização multidisciplinar"
-  repo-url: "https://github.com/cvictorr2508/ucav-aerostealth-gnn"
+  title: "UAV | Maxwell–Euler, Álgebra Geométrica e Graph Neural Networks"
+  subtitle: "Fundamentos matemáticos, representação em grafos e validação computacional acadêmica"
+  repo-url: "https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn"
   repo-actions: [edit, issue, source]
   page-navigation: true
   search: true
@@ -18,9 +18,9 @@ book:
     - chapters/03_physics.qmd
     - chapters/04_graph_neural_networks.qmd
     - chapters/05_multifidelity.qmd
-    - chapters/06_optimization.qmd
+    - chapters/06_validation_2d.qmd
     - chapters/07_multifidelity_3d.qmd
-    - chapters/08_optimization_3d.qmd
+    - chapters/08_validation_3d.qmd
   downloads: [pdf]
 
 bibliography: references.bib

@@ -1,19 +1,20 @@
 cff-version: 1.2.0
-message: "If you use this repository in research, please cite it using the metadata below."
-title: "UCAV Aero-Stealth GNN"
+message: "If you use this research repository, cite it using the metadata below."
+title: "UAV | Maxwell–Euler, Geometric Algebra and Graph Neural Networks"
 type: software
 authors:
   - given-names: "Victor Rafael Rezende"
     family-names: "Celestino"
-repository-code: "https://github.com/cvictorr2508/ucav-aerostealth-gnn"
-url: "https://github.com/cvictorr2508/ucav-aerostealth-gnn"
+repository-code: "https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn"
+url: "https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn"
 license: MIT
 version: "0.1.0"
 keywords:
-  - graph neural networks
-  - multifidelity learning
+  - Maxwell equations
+  - Euler equations
   - geometric algebra
-  - radar cross section
-  - aerodynamics
-  - multidisciplinary optimization
-  - UCAV
+  - geometric deep learning
+  - graph neural networks
+  - mesh-based simulation
+  - scientific reproducibility
+  - numerical validation

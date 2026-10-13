@@ -1,6 +1,6 @@
 # Contrato preliminar do dataset Euler 2D — S0
 
-**Identificador:** `euler2d-contract-v0.1` · **Situação:** proposta para validação com o responsável pelas simulações · **Projeto:** UCAV Aero-Stealth GNN · **Etapa:** estudo aerodinâmico bidimensional.
+**Identificador:** `euler2d-contract-v0.1` · **Situação:** proposta para validação com o responsável pelas simulações · **Projeto:** UAV | Maxwell–Euler e Aprendizado em Grafos · **Etapa:** estudo aerodinâmico bidimensional.
 
 > Este documento define um **contrato-alvo**, não um relato de arquivos já entregues ou testados. O nome do solver, as variáveis exportáveis, a localização nativa das incógnitas, as convenções de forças e a configuração numérica dependem de confirmação com João Pedro. Não atribuir valores ainda desconhecidos ao solver.
 

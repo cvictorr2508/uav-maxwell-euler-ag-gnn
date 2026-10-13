@@ -1,10 +1,10 @@
-# Física governante: eletromagnetismo, RCS e aerodinâmica compressível
+# Física governante: Maxwell, Euler e modelos numéricos
 
-Este capítulo estabelece os modelos físicos que sustentam as duas respostas centrais do problema aero-stealth de configurações de **Unmanned Combat Aerial Vehicle (UCAV)**: a **assinatura eletromagnética**, representada principalmente pela **Radar Cross Section (RCS)**, e o **desempenho aerodinâmico**, representado por distribuições de pressão, forças e momentos. O objetivo não é apenas registrar equações conhecidas, mas construir uma ponte explícita entre três níveis de descrição usados ao longo do livro: a formulação física convencional, sua interpretação em **Álgebra Geométrica (AG)** e a forma pela qual essas grandezas poderão alimentar modelos substitutos baseados em **Graph Neural Networks (GNNs)**.
+Este capítulo estuda separadamente os modelos físicos de Maxwell e Euler. O objetivo é definir campos, hipóteses, relações constitutivas, leis de conservação e interfaces com métodos numéricos e Álgebra Geométrica. Não se pressupõe acoplamento físico entre os dois sistemas nem aplicação de projeto aeronáutico.
 
-A AG é empregada como linguagem estruturante quando oferece uma representação geometricamente natural. Isso não implica substituir indiscriminadamente tensores, matrizes ou discretizações numéricas por multivetores. No eletromagnetismo, as equações de Maxwell em meios lineares já constituem um sistema linear nos campos; a contribuição da **Álgebra do Espaço-Tempo (*Spacetime Algebra*, STA)** é reunir a estrutura elétrica e magnética em uma representação multivetorial compacta e geometricamente coerente [@dressel2015; @doran2003]. Na aerodinâmica compressível, por outro lado, as equações de Euler contêm não linearidades físicas intrínsecas, em especial na advecção da quantidade de movimento e na relação entre energia, pressão, densidade e velocidade. A AG pode reorganizar e explicitar estruturas geométricas desses campos, mas não elimina essas não linearidades.
+As formulações multivetoriais permitem examinar orientação e estrutura geométrica, sem substituir indiscriminadamente tensores, fluxos conservativos ou condições de contorno. A validade de cada representação depende de hipóteses explicitadas.
 
-## Parte I — Eletromagnetismo, espalhamento e Radar Cross Section
+## Parte I — Eletromagnetismo, propagação e espalhamento acadêmico
 
 ## Do campo eletromagnético às equações de Maxwell
 
@@ -190,193 +190,35 @@ onde \(k\) é o número de onda e \(\lambda\) o comprimento de onda.
 
 Como exemplo, uma frequência maior implica \(\lambda\) menor no mesmo meio. Uma borda, cavidade ou detalhe geométrico de dimensão fixa torna-se, portanto, **eletricamente maior** quando a frequência aumenta. Essa razão entre dimensão física e comprimento de onda ajuda a determinar mecanismos dominantes de espalhamento, resolução de malha e adequação de aproximações assintóticas.
 
-Para RCS em regime harmônico, a aplicação prática é direta: cada frequência é tratada como um problema fasorial. Uma varredura em frequência exige resolver ou aproximar vários desses problemas. Para pulsos de banda larga, materiais não lineares ou fenômenos transientes, a formulação no domínio do tempo pode voltar a ser mais apropriada.
+Para espalhamento em regime harmônico, a aplicação prática é direta: cada frequência é tratada como um problema fasorial. Uma varredura em frequência exige resolver ou aproximar vários desses problemas. Para pulsos de banda larga, materiais não lineares ou fenômenos transientes, a formulação no domínio do tempo pode voltar a ser mais apropriada.
 
-## O problema de espalhamento eletromagnético
+## Problemas canônicos de propagação e espalhamento
 
-### Campo incidente, campo espalhado e campo total
-
-A intuição do espalhamento é a mesma de muitas situações ondulatórias: existe uma onda que chegaria à região mesmo se o objeto não estivesse presente; o objeto perturba essa onda; e a perturbação se propaga para longe. No problema radar, a primeira parcela é o **campo incidente** e a perturbação produzida pelo alvo é o **campo espalhado**.
-
-O campo total é escrito como
+A interação de uma onda com uma interface material ou corpo canônico fornece problemas de referência para verificar soluções das equações de Maxwell. Em formulações lineares, pode-se decompor o campo total na soma dos campos incidente e espalhado. Sejam \(\widetilde{\mathbf E}_{\mathrm{inc}}\), \(\widetilde{\mathbf E}_{\mathrm{sca}}\) e \(\widetilde{\mathbf E}_{\mathrm{tot}}\) os fasores dessas parcelas:
 
 $$
-\mathbf E_{\mathrm{tot}}
+\widetilde{\mathbf E}_{\mathrm{tot}}
 =
-\mathbf E_{\mathrm{inc}}
+\widetilde{\mathbf E}_{\mathrm{inc}}
 +
-\mathbf E_{\mathrm{sca}},
+\widetilde{\mathbf E}_{\mathrm{sca}}.
 $$
 
-$$
-\mathbf H_{\mathrm{tot}}
-=
-\mathbf H_{\mathrm{inc}}
-+
-\mathbf H_{\mathrm{sca}}.
-$$
+A decomposição requer condições de contorno e convenções de amplitude e fase compatíveis. A frequência, o meio material, as dimensões do domínio, a incidência e o método de discretização devem acompanhar cada caso [@vanbladel2007; @rao1982].
 
-A RCS não mede diretamente o campo total na vizinhança do alvo. Ela caracteriza a intensidade com que o objeto redireciona energia eletromagnética para uma determinada direção no campo distante [@knott1993].
+### Onda plana e condições de contorno
 
-### Onda plana incidente
+Em um meio homogêneo, a onda plana é um exemplo que permite confrontar relações constitutivas, frequência, vetores de propagação e polarização. Interfaces dielétricas e superfícies de materiais de referência acrescentam condições de transmissão ou de parede condutora. O método de Yee e métodos integrais constituem exemplos de abordagens numéricas cujos erros precisam ser avaliados por convergência e comparação com solução conhecida [@yee1966; @rao1982].
 
-Quando o radar está suficientemente distante em comparação com a dimensão do alvo, uma pequena região ao redor do veículo pode ser iluminada aproximadamente por frentes de onda planas. Em meio homogêneo,
+### Campo próximo, campo distante e observáveis
 
-$$
-\widetilde{\mathbf E}_{\mathrm{inc}}(\mathbf x)
-=
-\mathbf E_0e^{-j\mathbf k\cdot\mathbf x},
-$$
+Campo próximo e campo distante designam regimes de observação com estruturas diferentes. Amplitudes complexas devem ser somadas coerentemente, preservando fase antes da extração de grandezas quadráticas. Uma observável de espalhamento **estritamente bidimensional** tem definição e dimensão distintas de uma seção transversal de espalhamento tridimensional: não se fará conversão sem especificar normalização e hipóteses físicas.
 
-onde
+A exposição de propriedades de espalhamento tem função **teórica e de verificação acadêmica**. Os exemplos serão objetos canônicos, como cilindros e esferas, sem organizar observáveis eletromagnéticas como objetivo de projeto de aeronaves.
 
-$$
-\mathbf k=k\hat{\mathbf k}
-$$
+## Métodos numéricos e fidelidade eletromagnética
 
-é o vetor de onda. Sua direção \(\hat{\mathbf k}\) indica a propagação e seu módulo \(k\) controla a variação de fase no espaço. Se a propagação ocorre, por exemplo, ao longo de \(+x\), então \(\mathbf k\cdot\mathbf x=kx\) e superfícies com mesmo \(x\) possuem a mesma fase.
-
-O campo magnético associado, para uma onda plana em meio isotrópico sem perdas, satisfaz
-
-$$
-\widetilde{\mathbf H}_{\mathrm{inc}}
-=
-\frac{1}{\eta}
-\hat{\mathbf k}\times
-\widetilde{\mathbf E}_{\mathrm{inc}},
-$$
-
-com impedância intrínseca
-
-$$
-\eta=\sqrt{\frac{\mu}{\varepsilon}}.
-$$
-
-Assim, \(\widetilde{\mathbf E}\), \(\widetilde{\mathbf H}\) e \(\hat{\mathbf k}\) formam direções mutuamente ortogonais no caso ideal de onda plana. O vetor \(\mathbf E_0\) define amplitude e polarização. Para o problema aero-stealth, frequência, direção de incidência e polarização são, portanto, entradas físicas tão importantes quanto a própria geometria.
-
-### Condições de contorno
-
-As equações no domínio não bastam para determinar uma solução única: é preciso informar o que acontece nas interfaces materiais e exigir que o campo espalhado se propague para fora do domínio.
-
-Para um **Perfect Electric Conductor (PEC)** ideal, cargas livres se reorganizam de modo que o campo elétrico tangencial total na superfície seja nulo:
-
-$$
-\boxed{
-\hat{\mathbf n}\times\mathbf E_{\mathrm{tot}}=0
-},
-$$
-
-onde \(\hat{\mathbf n}\) é a normal unitária à superfície. A corrente superficial associada pode ser representada por
-
-$$
-\mathbf J_s
-=
-\hat{\mathbf n}\times\mathbf H_{\mathrm{tot}}.
-$$
-
-Geometricamente, a condição PEC conecta diretamente a orientação local da superfície aos campos. Em uma malha triangular, a normal e o bivetor orientado de cada face tornam-se, por isso, atributos naturais para uma representação física em grafo.
-
-Em materiais dielétricos, magnéticos ou absorvedores, as condições são mais gerais e envolvem continuidade apropriada das componentes tangenciais e normais, além das relações constitutivas de cada meio. No exterior do alvo, uma condição de radiação exclui soluções artificiais que chegariam do infinito.
-
-## Do campo próximo ao campo distante
-
-### Intuição física
-
-Muito perto de um objeto espalhador, o campo registra detalhes locais: correntes, acoplamentos entre superfícies, cavidades e variações rápidas de fase e amplitude. À medida que o observador se afasta, esses detalhes deixam de ser percebidos separadamente e o campo assume a estrutura assintótica de uma onda que se propaga radialmente. A primeira situação é associada ao **campo próximo**; a segunda, ao **campo distante**.
-
-Para um alvo com dimensão característica máxima \(D\), a ordem de grandeza
-
-$$
-r\gg\frac{2D^2}{\lambda}
-$$
-
-é frequentemente usada como referência de região de Fraunhofer, embora a fronteira exata dependa da geometria e do critério adotado [@knott1993]. O ponto conceitual importante é que a distância necessária para observar comportamento de campo distante também depende do comprimento de onda.
-
-No limite assintótico,
-
-$$
-\widetilde{\mathbf E}_{\mathrm{sca}}(r,\hat{\mathbf r})
-\sim
-\frac{e^{-jkr}}{r}
-\mathbf F_E(\hat{\mathbf r}),
-\qquad r\rightarrow\infty,
-$$
-
-onde \(\mathbf F_E\) é a amplitude vetorial de espalhamento e \(\hat{\mathbf r}\) a direção de observação. O fator \(1/r\) descreve o decaimento da amplitude; consequentemente, a densidade de potência decai como \(1/r^2\). A função \(\mathbf F_E\) retém a informação angular e de polarização que interessa à assinatura radar.
-
-### Radar Cross Section como área equivalente
-
-A **Radar Cross Section** pode ser interpretada intuitivamente como uma **área equivalente de espalhamento**: ela responde à pergunta “quão intenso é o campo devolvido por esse alvo, naquela direção, quando comparado à iluminação recebida?”. Essa área equivalente não precisa coincidir com a área geométrica projetada do objeto. Interferência, orientação, materiais, bordas e cavidades podem produzir uma RCS muito maior ou muito menor que uma área física aparente.
-
-Formalmente,
-
-$$
-\boxed{
-\sigma(\hat{\mathbf r})
-=
-\lim_{r\to\infty}
-4\pi r^2
-\frac{
-\|\mathbf E_{\mathrm{sca}}(r,\hat{\mathbf r})\|^2
-}{
-\|\mathbf E_{\mathrm{inc}}\|^2
-}
-}
-$$
-
-em condições compatíveis de normalização [@knott1993]. A unidade de \(\sigma\) é área, normalmente metros quadrados.
-
-Como a variação pode abranger muitas ordens de grandeza, é comum empregar decibéis por metro quadrado:
-
-$$
-\sigma_{\mathrm{dBsm}}
-=10\log_{10}
-\left(
-\frac{\sigma}{1\ \mathrm{m^2}}
-\right).
-$$
-
-Assim, \(1\ \mathrm{m^2}\) corresponde a \(0\ \mathrm{dBsm}\), \(10^{-2}\ \mathrm{m^2}\) corresponde a \(-20\ \mathrm{dBsm}\) e \(10^{2}\ \mathrm{m^2}\) corresponde a \(+20\ \mathrm{dBsm}\). O exemplo serve apenas para interpretar a escala logarítmica; não associa esses valores a uma plataforma específica.
-
-### RCS monoestática e biestática
-
-Na configuração **monoestática**, transmissor e receptor estão essencialmente co-localizados. O receptor observa, portanto, o retroespalhamento na direção de retorno ao radar. Na configuração **biestática**, transmissor e receptor ocupam posições diferentes e a direção de observação não coincide, em geral, com a direção de retorno.
-
-Essa distinção importa porque um mesmo alvo pode apresentar um pico intenso em uma direção e baixa assinatura em outra. Para o framework deste livro, a curva angular de RCS deve ser tratada como uma resposta física rica, e não reduzida prematuramente a um único valor médio. Métricas agregadas podem ser calculadas posteriormente, preservando-se antes os lóbulos, picos especulares e regiões de baixa assinatura.
-
-### Polarização
-
-A polarização especifica a orientação e a evolução temporal do campo elétrico transversal à direção de propagação. Em problemas radar, escolhe-se uma base de polarização — frequentemente descrita como horizontal e vertical em relação a uma convenção geométrica — e mede-se como o alvo transforma a componente transmitida na componente recebida.
-
-Podem ser consideradas respostas co-polarizadas e cruzadas, como HH, VV, HV e VH. Os rótulos dependem da base de referência escolhida e, por isso, a convenção deve acompanhar os dados. Uma representação abstrata é
-
-$$
-\sigma
-=
-\sigma(\theta_i,\phi_i,\theta_s,\phi_s,f,\mathrm{pol}),
-$$
-
-onde os índices \(i\) e \(s\) indicam incidência e observação. Em um cenário monoestático, parte dessa parametrização se reduz geometricamente, mas frequência e polarização continuam sendo variáveis essenciais.
-
-## Mecanismos de espalhamento e geometria da aeronave
-
-A RCS não é uma soma de “RCS locais” independentes. O campo espalhado é uma soma **coerente**: amplitudes complexas provenientes de diferentes regiões chegam com fases distintas e podem reforçar-se ou cancelar-se.
-
-Uma superfície aproximadamente plana e eletricamente grande pode produzir forte reflexão especular em certas direções. Uma borda pode difratar energia para regiões que não receberiam contribuição apenas pela reflexão geométrica. Cavidades e entradas podem sustentar múltiplas interações internas. Pequenas alterações de ângulo ou posição de uma superfície podem modificar fases relativas e deslocar picos angulares [@knott1993].
-
-Essa dependência explica por que uma representação de malha para GNN não deve carregar apenas coordenadas dos vértices. Normais, áreas, orientação relativa entre faces, conectividade, bordas e condições de incidência carregam informação diretamente relacionada aos mecanismos físicos de espalhamento.
-
-## Métodos numéricos e níveis de fidelidade eletromagnética
-
-A escolha do método computacional depende do que precisa ser resolvido e da relação entre dimensão geométrica e comprimento de onda. Métodos de onda completa procuram representar diretamente a solução de Maxwell dentro das hipóteses constitutivas adotadas; aproximações assintóticas exploram regimes em que a estrutura da propagação permite simplificações controladas.
-
-Yee [@yee1966] constitui uma referência clássica para **Finite-Difference Time-Domain (FDTD)**: espaço e tempo são discretizados e os campos evoluem passo a passo. Uma vantagem conceitual é que uma única excitação transitória pode conter várias frequências; em contrapartida, o domínio volumétrico e a resolução exigida pelo menor comprimento de onda podem elevar a demanda de memória e processamento.
-
-Em alvos PEC, formulações integrais de superfície podem reduzir as incógnitas às correntes na superfície. As funções de base de Rao, Wilton e Glisson [@rao1982] são fundamentais em implementações do **Method of Moments (MoM)** para malhas triangulares. Após a discretização, o problema é convertido em um sistema linear cujas propriedades computacionais dependem do tamanho da malha e da formulação utilizada.
-
-Quando o alvo é eletricamente grande, aproximações de alta frequência, como **Physical Optics (PO)** e técnicas baseadas em raios, podem reduzir a demanda de recursos ao representar mecanismos dominantes sem resolver todos os detalhes de uma formulação de onda completa. Essa economia vem acompanhada de hipóteses adicionais, especialmente relevantes em bordas, regiões de sombra, cavidades ou múltiplas interações.
-
-Por isso, **fidelidade** não deve ser confundida com o nome do solver. Um nível de fidelidade é definido pelo conteúdo físico e numérico efetivamente representado: aproximações, resolução de malha, tratamento de bordas e cavidades, propriedades materiais, frequência, critérios de convergência e demais hipóteses. A classificação será retomada no capítulo de modelagem multifidelidade.
+Fidelidade não depende apenas do solver ou do número de graus de liberdade. Cada caso deverá caracterizar equações, domínio, discretização, tratamentos de contorno, convergência, erro e recursos observados. A nomenclatura de graus de fidelidade é uma classificação posterior aos testes, não uma pressuposição.
 
 ## Maxwell em Álgebra Geométrica do espaço-tempo
 
@@ -459,11 +301,11 @@ $$
 
 não “lineariza” Maxwell. Em meios lineares, o sistema já é linear nos campos. A contribuição da STA é de **unificação representacional**, manipulação geométrica e acesso natural a invariantes e transformações de Lorentz [@dressel2015].
 
-Também não se conclui, apenas pela compacidade da notação, que um solver em AG será mais rápido. Um cálculo de RCS ainda precisa discretizar geometria e materiais, impor condições de contorno, resolver as incógnitas e extrair o campo distante. Eventual redução de tempo, memória ou número de operações deve ser demonstrada por benchmark com implementações comparáveis.
+Também não se conclui, apenas pela compacidade da notação, que um solver em AG será mais rápido. Um cálculo de campos espalhados ainda precisa discretizar geometria e materiais, impor condições de contorno, resolver as incógnitas e extrair o campo distante. Eventual redução de tempo, memória ou número de operações deve ser demonstrada por benchmark com implementações comparáveis.
 
 ## Validação eletromagnética progressiva
 
-A validação deve separar erros de formulação de dificuldades introduzidas pela geometria. Uma sequência apropriada começa com propagação de onda plana em meio homogêneo, passa pela reflexão em plano PEC, pelo espalhamento em esfera condutora e por uma placa ou face triangular, e somente depois avança para geometrias aeronáuticas e para a configuração UCAV de interesse. Em cada etapa devem ser verificadas convenções de fase, polarização, orientação de normais, condições de contorno e extração do campo distante antes de se atribuir discrepâncias à complexidade do alvo.
+A sequência de verificação poderá envolver propagação em meio homogêneo, interface entre materiais, geometria canônica com solução analítica conhecida e benchmark numérico público. Resultados de um problema não validam automaticamente outra dimensão, discretização ou regime físico.
 
 ## Parte II — Aerodinâmica compressível e equações de Euler
 
@@ -559,7 +401,7 @@ $$
 
 Ele compara a velocidade do escoamento com a velocidade de propagação de pequenas perturbações de pressão. Como exemplo meramente ilustrativo, se \(V=240\ \mathrm{m/s}\) e \(a=340\ \mathrm{m/s}\), então \(M\approx0{,}71\). Como \(a\) varia com a temperatura, o mesmo valor de velocidade não corresponde necessariamente ao mesmo Mach em todas as condições atmosféricas.
 
-Para uma configuração UCAV, \(M_\infty\), ângulo de ataque, altitude ou condições equivalentes de \(p_\infty\), \(T_\infty\) e \(\rho_\infty\) fazem parte da definição da condição de voo.
+Para um problema de escoamento externo, \(M_\infty\), ângulo de ataque, altitude ou condições equivalentes de \(p_\infty\), \(T_\infty\) e \(\rho_\infty\) fazem parte da definição da condição de voo.
 
 ## Conservação de massa
 
@@ -1004,7 +846,7 @@ Essa sequência não constitui uma escala universal de “baixo para alto custo�
 
 ## Validação aerodinâmica progressiva
 
-Antes de aplicar o modelo a uma geometria UCAV completa, a validação deve avançar de problemas elementares para problemas integrados: conservação em estados uniformes, casos com solução conhecida ou benchmark consolidado, perfis bidimensionais, asas simples e finalmente a geometria tridimensional de interesse.
+Antes de aplicar o modelo a uma geometria tridimensional de referência, a validação deve avançar de problemas elementares para problemas integrados: conservação em estados uniformes, casos com solução conhecida ou benchmark consolidado, perfis bidimensionais, asas simples e finalmente a geometria tridimensional de interesse.
 
 A comparação não deve se restringir a \(C_L\), \(C_D\) e \(C_m\). Campos intermediários, como \(C_p\), pressão superficial e balanços de conservação, ajudam a identificar compensações de erro que poderiam produzir um coeficiente integrado aparentemente correto. Quando houver resultados experimentais ou soluções de referência adequadas, eles devem ser usados para distinguir erro de discretização, limitação do modelo físico e erro do futuro surrogate.
 
@@ -1016,48 +858,23 @@ No eletromagnetismo, a distinção é ainda mais importante. Um problema de espa
 
 Essa distinção será preservada na ingestão dos dados e nas funções de perda: nenhuma conversão entre *scattering width* e RCS será realizada implicitamente.
 
-## Ponte entre os dois domínios físicos e as GNNs
+## Interfaces independentes entre física e aprendizado em grafos
 
-Os domínios eletromagnético e aerodinâmico compartilham a mesma geometria de superfície, mas respondem a condições físicas diferentes. Isso motiva a investigação de representações geométricas compartilháveis sem pressupor que um único modelo multitarefa seja necessariamente superior.
-
-Uma geometria discretizada pode ser representada por um grafo
+Maxwell e Euler podem ser estudados em malhas, mas **um grafo compartilhável não implica acoplamento físico**. Para o problema de fluidos, seja \(G\) uma representação de malha e \(\mathbf c_{\mathrm{fluido}}\) o conjunto de condições conhecidas. Um modelo pode predizer um vetor de observáveis \(\widehat{\mathbf y}_{\mathrm{fluido}}\):
 
 $$
-G=(V,E,\mathcal F),
+\mathcal G_{\mathrm{fluido}}(G,\mathbf c_{\mathrm{fluido}})
+\longmapsto \widehat{\mathbf y}_{\mathrm{fluido}}.
 $$
 
-no qual nós, arestas ou faces carregam atributos. A partir do capítulo anterior, exemplos naturais são posição \(\mathbf x_i\), normal \(\hat{\mathbf n}_i\), área \(A_i\), bivetor orientado de face \(B_i\), curvatura local, vetores relativos e rotores associados à orientação entre elementos vizinhos.
-
-Para o problema eletromagnético, uma representação abstrata é
+Em um benchmark eletromagnético independente, o alvo poderá ser um campo de referência complexo; denotando por \(\mathbf c_{\mathrm{EM}}\) as condições de Maxwell,
 
 $$
-\mathcal G_{\mathrm{EM}}:
-(G,f,\theta,\phi,\mathrm{pol})
-\longrightarrow
-\sigma(\theta_s,\phi_s,\mathrm{pol}_s),
+\mathcal G_{\mathrm{EM}}(G,\mathbf c_{\mathrm{EM}})
+\longmapsto \widehat{\mathbf E}.
 $$
 
-ou, quando campos intermediários forem incluídos,
-
-$$
-\mathcal G_{\mathrm{EM}}:
-(G,c_{\mathrm{EM}})
-\longrightarrow
-(\mathbf J_s,
-\mathbf E_{\mathrm{sca}},
-\sigma).
-$$
-
-Para aerodinâmica,
-
-$$
-\mathcal G_{\mathrm{aero}}:
-(G,M_\infty,\alpha,\beta,\rho_\infty,p_\infty,\ldots)
-\longrightarrow
-(C_p,C_L,C_D,C_m,\ldots).
-$$
-
-O mesmo \(G\) fornece uma base geométrica comum; os condicionantes físicos e as saídas permanecem específicos de cada domínio. Compartilhamento de codificadores, cabeças especializadas ou modelos separados são hipóteses arquiteturais a serem comparadas empiricamente.
+A notação com acento distingue previsão de referência. Entradas e saídas devem manter unidades, posicionamento físico e convenções. Resíduos diferenciais só serão computados se os campos e operadores necessários estiverem disponíveis.
 
 ## Resíduos físicos como informação de treinamento
 
@@ -1098,7 +915,7 @@ $$
 \nabla\cdot[(\rho E+p)\mathbf u].
 $$
 
-Por outro lado, uma rede que prevê apenas \(C_L\), \(C_D\) ou uma RCS agregada não contém informação suficiente para calcular diretamente esses resíduos diferenciais. Nesse caso, devem ser usadas consistências compatíveis com as saídas disponíveis ou devem ser previstos campos intermediários.
+Por outro lado, uma rede que prevê apenas \(C_L\), \(C_D\) ou um escalar eletromagnético agregado não contém informação suficiente para calcular diretamente esses resíduos diferenciais. Nesse caso, devem ser usadas consistências compatíveis com as saídas disponíveis ou devem ser previstos campos intermediários.
 
 Uma função de perda genérica pode assumir a forma
 
@@ -1116,8 +933,5 @@ Como os termos podem possuir unidades e escalas muito diferentes, normalização
 
 ## Síntese do capítulo
 
-A assinatura radar e o desempenho aerodinâmico derivam de sistemas físicos diferentes, mas ambos são condicionados pela geometria e podem ser discretizados sobre malhas. No eletromagnetismo, Maxwell conecta fontes, materiais e propagação; a passagem para o domínio da frequência transforma derivadas temporais em multiplicações por \(j\omega\), mantendo a estrutura diferencial espacial; condições de contorno produzem o campo espalhado, e seu comportamento assintótico conduz à RCS. Na STA, os campos elétrico e magnético podem ser reunidos no bivetor de Faraday \(F\), sem atribuir à AG uma linearização que não existe.
+As equações de Maxwell e Euler fornecem problemas acadêmicos distintos para estudar representações matemáticas e aprendizado sobre malhas. A Álgebra Geométrica organiza objetos orientados e operações, mantendo as hipóteses físicas e o significado de tensores e fluxos conservativos. A verificação começa por casos canônicos, dados rastreáveis e métricas apropriadas, sem inferir vantagens computacionais antes de experimentos.
 
-Na aerodinâmica, Euler aplica conservação de massa, quantidade de movimento e energia a um gás perfeito compressível e invíscido. A forma conservativa conecta naturalmente fluxos às faces da malha. A derivada geométrica separa expansão e rotação local, enquanto bivetores fornecem uma representação natural para vorticidade. Entretanto, o fluxo de quantidade de movimento permanece um operador tensorial e a não linearidade convectiva continua fisicamente presente.
-
-Esses dois blocos definem variáveis, hipóteses, condições de contorno, campos intermediários e respostas integradas que serão utilizados nos capítulos seguintes. A continuidade metodológica é deliberada: **física → representação geométrica → dados multifidelidade → GNN → otimização determinística**, sem confundir compacidade matemática com simplificação física nem precisão preditiva com validade de engenharia.

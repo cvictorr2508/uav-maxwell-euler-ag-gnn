@@ -1,257 +1,77 @@
-# Contexto e Definição do Problema Aero-Stealth de um UCAV
+# Problema científico, hipóteses e delineamento da pesquisa
 
-Este capítulo apresenta o contexto de engenharia, a justificativa, a lacuna de pesquisa, os objetivos e a formulação inicial do problema de otimização aero-stealth de um **Unmanned Combat Aerial Vehicle (UCAV)**. A contribuição computacional central consiste no uso de **Graph Neural Networks (GNNs)** multifidelidade como modelos substitutos para reduzir a demanda de recursos computacionais e o tempo de processamento associados às avaliações eletromagnéticas e aerodinâmicas repetidas durante a otimização multidisciplinar.
+A pesquisa investiga representações matemáticas e estruturas computacionais associadas às equações de Euler e Maxwell, à Álgebra Geométrica (AG) e a métodos de aprendizado em grafos. O propósito é compreender equivalências algébricas, representação de dados discretizados e validação de modelos aproximadores. O enquadramento institucional é o de uma pesquisa acadêmica de mestrado em Engenharia Elétrica.
 
-A **Álgebra Geométrica (AG)** é adotada como formalismo matemático estruturante do trabalho. Ela será empregada na representação da geometria, na reformulação das relações físicas e na construção dos modelos de aprendizado e otimização. O objetivo é obter descrições algébricas mais compactas, reduzir a dependência de representações exclusivamente matriciais e explorar formulações lineares nos objetos multivetoriais sempre que a estrutura matemática do problema permitir. Não linearidades físicas intrínsecas, como os termos convectivos das equações de Euler, permanecem explicitamente representadas.
+A expressão *Unmanned Aerial Vehicle* (UAV), quando utilizada neste eBook, designa apenas o contexto civil geral de veículos aéreos não tripulados. A metodologia será desenvolvida e avaliada por **problemas acadêmicos independentes**, especialmente modelos canônicos bidimensionais e conjuntos públicos ou sintéticos, não por um processo de projeto integrado de aeronaves.
 
-## UCAV: conceito, escopo e terminologia
+## Motivação científica
 
-A expressão **Unmanned Aerial Vehicle (UAV)** designa, de forma ampla, um veículo aéreo não tripulado. A classe **Unmanned Combat Aerial Vehicle (UCAV)** particulariza esse conceito para plataformas destinadas a missões de combate. A classificação está associada à função, à missão e à integração do sistema, e não a uma configuração aerodinâmica específica [@usaf2020afi16401; @sepulveda2017].
+### Problemas de equações diferenciais e discretização
 
-Consequentemente, UCAV e *flying wing* não são termos equivalentes. Configurações sem cauda (*tailless*), *flying-wing*, *lambda-wing*, *blended-wing-body* e outras arquiteturas aparecem na literatura de baixa observabilidade porque determinadas escolhas geométricas podem favorecer integração volumétrica, desempenho aerodinâmico e controle de assinatura radar. Essas configurações representam famílias de projeto possíveis dentro da classe UCAV.
+A dinâmica dos fluidos e o eletromagnetismo são descritos por equações diferenciais com campos e leis de transformação distintos. Equações de Euler compressíveis descrevem conservação de massa, momento e energia em fluido invíscido. Maxwell descreve relações entre campos eletromagnéticos, fontes e constituição material. A modelagem computacional exige condições iniciais e de contorno, discretização, critérios de solução e verificação de erros.
 
-A literatura ilustra essa diversidade. O programa NATO Science and Technology Organization (NATO STO) AVT-251 desenvolveu e avaliou a configuração MULDICON, derivada do SACCON, como um conceito UCAV multidisciplinar com ênfase em aerodinâmica, controlabilidade e baixa assinatura [@liersch2020]. Aleisa et al. estudaram especificamente um UCAV de configuração *flying-wing* com enflechamento não constante [@aleisa2023]. Nikbay et al. investigaram uma configuração UCAV não planar derivada de um conceito planar de asa integrada [@nikbay2026].
+O produto geométrico em AG reúne produtos interno e exterior, fornecendo uma representação natural para orientações e grandezas antissimétricas. Entretanto, tensores, derivadas e fluxos conservativos não se tornam automaticamente multivetores, e uma notação compacta não elimina a necessidade de discretizar o sistema nem demonstra redução de recursos [@hestenes1984; @doran2003].
 
-O objeto desta pesquisa é, portanto, uma **família geometricamente parametrizada de configurações UCAV de baixa observabilidade**. A arquitetura aerodinâmica específica será definida pelo espaço de projeto e pelas restrições de engenharia adotadas, preservando a distinção entre a classe funcional do veículo e sua configuração geométrica.
+### Grafos de malhas científicas
 
-## UCAV como problema de engenharia multidisciplinar
+Malhas estruturadas e não estruturadas podem ser convertidas em grafos com vértices, células ou faces como entidades. A definição de arestas e atributos determina quais informações geométricas e físicas chegam ao modelo. Redes neurais em grafos, incluindo arquiteturas do tipo Message Passing Neural Network (MPNN), oferecem um mecanismo de aprendizado compatível com conectividade variável; sua adequação depende da tarefa, dos dados e dos baselines utilizados [@bronstein2021; @pfaff2021].
 
-O projeto de um UCAV integra requisitos aerodinâmicos, eletromagnéticos, estruturais, propulsivos, de estabilidade e controle, além de requisitos próprios de sistemas não tripulados, como autonomia, sensores, comunicação e gerenciamento de missão [@sepulveda2017]. Essas disciplinas interagem por meio de variáveis de projeto comuns e podem produzir objetivos conflitantes.
+### Aprendizado multifidelidade
 
-A **Otimização Multidisciplinar de Projeto (Multidisciplinary Design Optimization, MDO)** fornece o arcabouço para formular essas interações como um problema integrado de otimização numérica [@martins2013]. Revisões recentes continuam a destacar a MDO como elemento central do projeto de aeronaves avançadas, especialmente quando modelos disciplinares de diferentes níveis de detalhe precisam ser combinados sob restrições de desempenho e de recursos computacionais [@leng2025].
+Se dois modelos numéricos representam grandezas físicas compatíveis em níveis distintos de resolução ou aproximação, estratégias multifidelidade podem ser investigadas. A existência de níveis diferentes, isoladamente, não comprova maior eficiência nem permite classificar uma malha como referência sem estudo de discretização e convergência [@peherstorfer2018].
 
-No recorte desta pesquisa, o acoplamento principal envolve **desempenho aerodinâmico**, **assinatura radar** e **geometria**. Hu e Yu formularam um problema MDO aerodinâmico-stealth-estrutural para um UCAV [@hu2009]. Nguyen et al. integraram modelos de diferentes fidelidades ao projeto multidisciplinar de UCAVs [@nguyen2013]. Sepulveda, Smith e Sziroczak desenvolveram uma análise multidisciplinar de UCAVs subsônicos de baixa observabilidade [@sepulveda2019], enquanto Papageorgiou et al. incorporaram assinatura radar, sensores, aerodinâmica e trajetória em um problema integrado de projeto de aeronave não tripulada [@papageorgiou2018].
+## Questões de pesquisa
 
-Esses antecedentes mostram que alterações na forma externa do veículo afetam simultaneamente sustentação, arrasto, estabilidade, distribuição de pressão e mecanismos de espalhamento eletromagnético. O problema de engenharia consiste, portanto, em identificar geometrias que produzam compromissos tecnicamente adequados entre respostas aerodinâmicas e eletromagnéticas sob um conjunto explícito de restrições de projeto.
+**Q1 — Equivalência e estrutura matemática.** Quais propriedades de Euler e Maxwell podem ser expressas por AG com equivalência verificável em relação às formulações usuais? É preciso declarar dimensão, assinatura da álgebra, unidades, domínio de validade e hipóteses para cada identidade.
 
-## Continuidade em relação à caracterização de RCS
+**Q2 — Qualidade das representações de grafos.** Como diferentes atributos convencionais ou derivados de AG representam orientação, adjacência e campos? A hipótese comparativa é que alguns atributos possam oferecer estrutura útil, mas sua superioridade somente poderá ser demonstrada por ablações sob condições controladas.
 
-A pesquisa parte de uma base experimental e computacional previamente desenvolvida para caracterização de **Radar Cross Section (RCS)**, ou seção reta radar. No Trabalho de Conclusão de Curso de **João Pedro Rocha Silva (2026)**, foram avaliados alvos canônicos e alvos aeroespaciais complexos por meio de diferentes técnicas de **Eletromagnetismo Computacional (Computational Electromagnetics, CEM)** e de medição experimental [@rocha2026].
+**Q3 — Validação de software científico.** Quais critérios permitem aferir integridade de dados, consistência física e desempenho estatístico de baselines e GNNs em casos acadêmicos? A análise incluirá erros, reprodutibilidade, sensibilidade à discretização e consumo de recursos.
 
-Entre os métodos empregados encontram-se a **Óptica Física (Physical Optics, PO)**, a **Large Element Physical Optics (LE-PO)**, a **Ray Launching Geometrical Optics (RL-GO)** e a técnica **Shooting and Bouncing Rays Plus (SBR+)**, implementadas em ferramentas como Altair Feko e Ansys **High Frequency Structure Simulator (HFSS)**. O trabalho também implementou, para geometrias canônicas, o **Método das Diferenças Finitas no Domínio do Tempo (Finite-Difference Time-Domain, FDTD)**, o **Método dos Momentos (Method of Moments, MoM)** e o **Método dos Elementos Finitos (Finite Element Method, FEM)** [@rocha2026].
+## Hipóteses testáveis
 
-A contribuição dessa base para a presente pesquisa está na experiência acumulada com modelagem eletromagnética, comparação entre métodos e validação experimental. A nova etapa desloca a ênfase da caracterização de geometrias previamente definidas para a exploração de **famílias paramétricas de configurações UCAV** dentro de um processo de otimização.
+A hipótese **H1** é de equivalência matemática, quando demonstrável: representações geométricas podem reescrever estruturas das equações físicas preservando seu conteúdo sob hipóteses explícitas. Equivalência formal não implica estabilidade numérica ou velocidade maior.
 
-Os resultados de Rocha Silva também evidenciam diferenças relevantes entre modelos eletromagnéticos. Em geometrias canônicas, métodos distintos reproduzem com diferentes níveis de precisão mecanismos como reflexão especular, múltiplas reflexões e difração [@rocha2026]. Essa observação conduz diretamente ao conceito de fidelidade utilizado no framework.
+A hipótese **H2** é empírica: atributos de AG podem alterar erro, robustez ou demanda computacional de uma GNN em relação a atributos geométricos convencionais. A direção e a magnitude desses efeitos são desconhecidas antes dos experimentos.
 
-## Fidelidade e modelagem multifidelidade
+A hipótese **H3** é metodológica: um contrato explícito de dados, rastreamento da procedência e divisões por geometria reduzem riscos de inconsistência e vazamento na avaliação. A eficácia desses procedimentos será examinada por testes de integridade e experimentos reproduzíveis.
 
-Neste trabalho, **fidelidade** representa o grau de detalhamento físico e numérico com que um modelo aproxima o fenômeno e a resposta de referência relevantes ao problema. A fidelidade depende de vários elementos: equações governantes, hipóteses físicas, discretização espacial, resolução da malha, tratamento de condições de contorno, modelos constitutivos e método numérico. Portanto, a classificação de um modelo como de menor ou maior fidelidade é sempre relativa ao regime físico e à resposta de interesse.
+## Fundamentos de Euler
 
-Modelos de maior fidelidade tendem a representar mais fenômenos ou a empregar discretizações mais detalhadas, o que geralmente aumenta a demanda de **tempo de CPU/GPU, memória e armazenamento**. Modelos de menor fidelidade utilizam aproximações físicas, discretizações mais simples ou resoluções reduzidas e, por isso, permitem avaliar um número maior de configurações com a mesma infraestrutura computacional.
-
-A **modelagem multifidelidade** combina sistematicamente informações provenientes de dois ou mais níveis de fidelidade. O objetivo é aproveitar a ampla cobertura do espaço de projeto proporcionada por modelos de menor demanda de recursos e utilizar um conjunto menor de avaliações de maior fidelidade para corrigir, calibrar ou enriquecer a aproximação [@nguyen2013; @shi2021; @black2022; @taghizadeh2025]. A relação entre níveis pode ser aprendida, por exemplo, por uma correção de discrepância
+Para um fluido compressível invíscido, considere a densidade \(\rho\), a velocidade \(\mathbf u\), a pressão \(p\) e a energia total específica \(E\). As variáveis conservativas podem ser agrupadas no vetor de estado
 
 $$
-y_{HF}=y_{LF}+\Delta_{\theta}(G,y_{LF},c),
-$$
-
-em que $y_{LF}$ e $y_{HF}$ representam respostas de menor e maior fidelidade, $G$ representa a geometria codificada como grafo, $c$ reúne as condições operacionais e $\Delta_{\theta}$ é um modelo treinável de correção.
-
-No domínio eletromagnético, uma hierarquia poderá combinar métodos assintóticos de alta frequência e métodos com representação mais detalhada dos mecanismos de espalhamento, sempre mediante validação para o regime de interesse. No domínio aerodinâmico, modelos de painel, equações de Euler e formulações viscosas baseadas nas equações de Navier--Stokes com médias de Reynolds podem ocupar diferentes níveis dessa hierarquia. A classificação final será definida pelas respostas que cada modelo reproduz e pelos recursos necessários para sua execução.
-
-## Radar Cross Section como resposta de projeto
-
-A RCS quantifica a intensidade com que um alvo espalha energia eletromagnética na direção do receptor e pode ser interpretada como uma área efetiva de espalhamento sob condições especificadas [@knott1993]. Na equação de alcance radar monoestática idealizada, a distância máxima de detecção varia com a quarta raiz de $\sigma$, o que estabelece uma conexão direta entre assinatura radar e detectabilidade [@knott1993; @rocha2026].
-
-A RCS depende da frequência, da direção de incidência e observação, da polarização, das propriedades materiais e dos mecanismos de espalhamento. Em alvos eletricamente grandes, a geometria local influencia reflexão especular, difração em bordos e pontas, múltiplas reflexões e ondas de superfície [@knott1993; @rocha2026]. Consequentemente, a resposta eletromagnética relevante para projeto é angular e pode apresentar picos estreitos em determinados setores.
-
-A modelagem proposta preservará essa estrutura por meio de curvas de RCS em função de azimute, elevação, frequência e polarização. Para condições $c_{EM}=(\phi,\theta,f,p)$,
-
-$$
-\sigma=\sigma(\phi,\theta,f,p;x),
-$$
-
-em que $x$ representa a geometria parametrizada. A partir da curva podem ser construídos objetivos escalares, como média setorial, valor máximo, quantis ou outras medidas de risco. Essa separação permite avaliar simultaneamente a fidelidade física da curva e sua utilização em otimização matemática.
-
-## Desempenho aerodinâmico no regime subsônico
-
-O domínio aerodinâmico concentra-se inicialmente em escoamento externo subsônico de ar tratado como gás perfeito. A **Dinâmica dos Fluidos Computacional (Computational Fluid Dynamics, CFD)** será utilizada em níveis de fidelidade compatíveis com a fase do estudo. Modelos potenciais ou de painel podem fornecer respostas de menor demanda de recursos; as equações compressíveis e invíscidas de Euler constituem um nível intermediário relevante; e modelos viscosos baseados nas **Reynolds-Averaged Navier--Stokes (RANS)** podem servir como referência de maior fidelidade para condições selecionadas.
-
-As respostas aerodinâmicas de interesse incluem o coeficiente de sustentação $C_L$, o coeficiente de arrasto $C_D$, o coeficiente de momento $C_m$, a razão $L/D$ e, quando necessário, campos de pressão e outras grandezas locais. GNNs já foram aplicadas a malhas não estruturadas e *body-fitted* para aproximar campos de escoamento em geometrias variáveis [@chen2021; @peng2024], e operadores neurais informados pela geometria foram empregados em problemas tridimensionais de equações diferenciais parciais [@li2023gino]. Esses resultados fornecem base metodológica para a representação aerodinâmica por grafos.
-
-## Estado da arte em otimização aero-stealth de UCAVs
-
-A otimização aero-stealth evoluiu de formulações com modelos disciplinares simplificados para ambientes de projeto que integram CFD, CEM, modelos substitutos e técnicas de sensibilidade. Hu e Yu combinaram aerodinâmica, stealth e estruturas em um problema MDO de UCAV [@hu2009]. Nguyen et al. utilizaram uma arquitetura multifidelidade no projeto de sistemas UCAV [@nguyen2013]. O programa SACCON/MULDICON consolidou uma plataforma de pesquisa multidisciplinar para aeronaves de baixa observabilidade [@liersch2020].
-
-A otimização matemática determinística ocupa papel relevante nessa evolução. Em MDO, as funções objetivo, restrições e variáveis das diferentes disciplinas podem ser organizadas em arquiteturas monolíticas ou decompostas [@martins2013]. Métodos baseados em gradientes reduzem o número de avaliações necessárias quando derivadas confiáveis estão disponíveis. Li et al. empregaram Programação Quadrática Sequencial (*Sequential Quadratic Programming*, SQP) em otimização aero-stealth de uma configuração *flying-wing*, combinando CFD, PO e sensitividades adjuntas [@li2019aerostealth]. Thoulon et al. utilizaram o algoritmo *Sequential Least Squares Programming* (SLSQP), CFD com RANS e PO para construir uma fronteira de compromisso aero-stealth em uma aeronave simplificada [@thoulon2024].
-
-A pesquisa também considera formulações com variáveis contínuas e discretas. Problemas com variáveis contínuas e relações não lineares podem ser formulados como **Programação Não Linear (Nonlinear Programming, NLP)**. Quando decisões discretas --- por exemplo, escolhas de configuração, número de elementos geométricos ou categorias de materiais --- são combinadas com variáveis contínuas e relações não lineares, surge a **Programação Não Linear Inteira Mista (Mixed-Integer Nonlinear Programming, MINLP)** [@lee2012minlp; @belotti2013]. Em aplicações aeroespaciais, formulações mistas já foram empregadas para integrar decisões de missão, alocação e projeto de aeronaves [@roy2017mixed].
-
-Esse interesse é particularmente relevante para o presente framework. Os modelos substitutos baseados em GNN podem fornecer avaliações rápidas e diferenciáveis de respostas físicas, enquanto a otimização matemática determinística pode explorar explicitamente gradientes, restrições e estrutura combinatória. A formulação final será contínua ou inteira mista de acordo com a natureza real das variáveis de projeto, preservando compatibilidade com arquiteturas MDO e com métodos determinísticos de otimização local ou global.
-
-Trabalhos recentes mantêm ativo o problema aero-stealth. Aleisa et al. investigaram o projeto conceitual de um UCAV *flying-wing* [@aleisa2023]. Thoulon et al. demonstraram uma metodologia gradiente para compromisso entre arrasto e assinatura radar [@thoulon2024]. Nikbay et al. apresentaram em 2026 uma otimização multidisciplinar de um conceito UCAV não planar, combinando CFD, RCS e modelos de Kriging por **Partial Least Squares (KPLS)** para reduzir o número de avaliações das análises de maior demanda de recursos [@nikbay2026].
-
-## GNNs para análise aerodinâmica e eletromagnética
-
-A representação de malhas por grafos estabelece uma conexão natural entre geometria discretizada e aprendizado de máquina. MeshGraphNets demonstrou a aplicação de redes de grafos à simulação sobre malhas [@pfaff2021], enquanto a literatura de *geometric deep learning* fornece o arcabouço para explorar conectividade, simetrias e transformações geométricas [@bronstein2021].
-
-No eletromagnetismo, Shan et al. empregaram aprendizado residual informado pela física sobre grafos para equações integrais de espalhamento de alvos tridimensionais condutores perfeitos [@shan2024]. Kong et al. desenvolveram um preditor de campo distante espalhado a partir de nuvens de pontos de alvos tridimensionais [@kong2024]. Esses trabalhos mostram que a geometria discretizada pode ser diretamente utilizada para aproximar respostas eletromagnéticas complexas.
-
-O antecedente mais próximo da integração aero-eletromagnética por GNN identificado na literatura recente é o trabalho de Li et al. [@li2026aeroem]. Os autores desenvolveram uma GNN de difusão multitarefa definida sobre malhas superficiais não estruturadas de configurações *blended-wing-body*. O modelo prediz simultaneamente o campo de coeficiente de pressão $C_p$, os coeficientes globais $C_L$ e $C_D$ e valores médios de RCS monoestático para polarizações horizontal e vertical. O estudo reporta aproximadamente $35\times$ de aceleração de inferência para o conjunto de saídas em relação aos solvers utilizados na geração dos dados [@li2026aeroem].
-
-Esse resultado estabelece um benchmark diretamente relacionado ao presente problema e demonstra a viabilidade de um modelo de grafo compartilhado entre as disciplinas aerodinâmica e eletromagnética. A presente pesquisa amplia essa linha ao incorporar fidelidades distintas, preservar a dependência angular e de polarização da RCS, integrar os modelos substitutos a uma formulação de otimização matemática determinística e utilizar Álgebra Geométrica como formalismo comum de representação da geometria, da física e das operações algébricas.
-
-## Lacuna de pesquisa
-
-A lacuna abordada nesta pesquisa concentra-se na **integração sistemática de modelagem geométrica, física, aprendizado multifidelidade e otimização matemática para configurações UCAV**. A literatura recente apresenta avanços importantes em cada um desses componentes, porém a articulação conjunta permanece limitada.
-
-A contribuição proposta reúne cinco elementos em uma única arquitetura metodológica:
-
-1. representação de geometrias UCAV por malhas e grafos capazes de alimentar simultaneamente modelos aerodinâmicos e eletromagnéticos;
-2. aprendizado multifidelidade explícito entre níveis de análise com diferentes graus de detalhamento e diferentes demandas de recursos computacionais;
-3. predição da RCS preservando sua dependência angular e de polarização, em vez de restringir a resposta a um valor médio global;
-4. integração dos modelos substitutos a uma formulação de otimização matemática determinística, com suporte a NLP e, quando houver decisões discretas, MINLP;
-5. adoção da Álgebra Geométrica como linguagem matemática comum para representar geometria, operadores físicos e relações empregadas no aprendizado e na otimização.
-
-Essa integração será avaliada pelo desempenho preditivo dos modelos, pela demanda de recursos computacionais, pelo tempo total de processamento e pela qualidade das soluções obtidas após reavaliação com modelos de referência.
-
-## Justificativa
-
-A justificativa de engenharia decorre do forte acoplamento entre geometria, aerodinâmica e assinatura radar em UCAVs de baixa observabilidade. Uma alteração geométrica capaz de reduzir retornos eletromagnéticos pode modificar distribuição de pressão, arrasto, sustentação e estabilidade. O tratamento integrado dessas respostas reduz a possibilidade de soluções ótimas em uma disciplina produzirem desempenho inadequado em outra [@sepulveda2017; @sepulveda2019; @liersch2020].
-
-A justificativa computacional decorre da demanda de recursos associada às avaliações disciplinares repetidas. Modelos CEM e CFD com maior detalhamento podem requerer tempos elevados de CPU/GPU, maior uso de memória e malhas com grande número de graus de liberdade. Uma otimização que exija centenas ou milhares de avaliações multiplica essa demanda. Revisões sobre MDO baseada em metamodelos destacam esse problema como uma das principais motivações para modelos substitutos em sistemas aeroespaciais [@shi2021], e estudos recentes de eficiência em MDO de aeronaves continuam a tratar a redução de avaliações disciplinares como tema central [@leng2025].
-
-A justificativa metodológica está na compatibilidade entre a estrutura dos dados e o modelo de aprendizado. Malhas CEM e CFD já contêm relações topológicas entre vértices, arestas, faces e células. GNNs permitem incorporar essas relações diretamente ao modelo. A multifidelidade, por sua vez, permite distribuir o orçamento de simulação entre modelos com diferentes demandas de recursos, preservando avaliações de maior fidelidade para calibração e revalidação.
-
-A Álgebra Geométrica fornece o eixo matemático comum do framework. No eletromagnetismo, a Álgebra do Espaço-Tempo permite reunir as equações de Maxwell em uma formulação multivetorial compacta [@dressel2015]. No domínio aerodinâmico, a AG será empregada para representar vetores, bivetores, orientações, operadores diferenciais e transformações geométricas, buscando formulações mais compactas e linearizações operacionais quando matematicamente admissíveis. Na otimização, a arquitetura priorizará variáveis, operadores e restrições formulados em termos geométricos e multivetoriais, recorrendo a projeções escalares quando exigidas pelos solvers numéricos [@hestenes1984; @doran2003].
-
-A justificativa científica completa-se pela continuidade com a infraestrutura de RCS já estabelecida por Rocha Silva [@rocha2026]. A passagem de caracterização de alvos fixos para otimização de famílias geométricas cria uma trajetória integrada entre modelagem física, aprendizado, otimização e revalidação.
-
-## Formulação inicial do problema multidisciplinar
-
-Seja $x\in\mathbb{R}^{n}$ o vetor de variáveis contínuas de projeto. Caso o espaço de decisão inclua escolhas discretas, seja $z\in\mathbb{Z}^{m}$ o vetor correspondente. Uma formulação multiobjetivo pode ser escrita como
-
-$$
-\min_{x,z}
+\mathbf U =
 \begin{bmatrix}
-J_{\mathrm{EM}}(x,z)\\
-J_{\mathrm{aero}}(x,z)
-\end{bmatrix}
+\rho & \rho u & \rho v & \rho E
+\end{bmatrix}^{T}
 $$
 
-sujeita a
+em duas dimensões. O sistema possui a forma local
 
 $$
-g_i(x,z)\leq 0,\qquad h_j(x,z)=0,
+\frac{\partial \mathbf U}{\partial t}
++\nabla\cdot\mathbf F(\mathbf U)=0,
 $$
 
-além de limites geométricos e condições operacionais.
+onde \(\mathbf F\) representa os fluxos conservativos e seu significado depende da equação de estado e das condições adotadas. A forma conservativa é necessária ao tratamento consistente de descontinuidades e fluxos intercelulares. A AG poderá ser utilizada para interpretar orientação e derivadas geométricas sem substituir indevidamente o fluxo tensorial [@sen2023].
 
-O objetivo eletromagnético será obtido a partir da resposta angular de RCS,
+## Fundamentos de Maxwell
 
-$$
-J_{\mathrm{EM}}(x,z)=\mathcal{R}\!\left[\sigma(\phi,\theta,f,p;x,z)\right],
-$$
+Para os campos elétrico \(\mathbf E\), magnético \(\mathbf H\), densidade de deslocamento \(\mathbf D\) e indução magnética \(\mathbf B\), Maxwell relaciona divergências e rotacionais aos campos e às fontes. Em uma formulação de Álgebra do Espaço-Tempo, o campo eletromagnético pode ser organizado em um bivetor, sob convenções explícitas de assinatura, unidades e fonte; a escrita compacta **não cria** a linearidade já presente em meios lineares [@dressel2015; @doran2003].
 
-em que $\mathcal{R}$ representa uma operação de agregação ou risco definida para setores angulares e condições de interesse. No domínio aerodinâmico, formulações possíveis incluem minimização de $C_D$ com restrição de sustentação ou maximização de eficiência aerodinâmica, equivalente a
+A propagação e o espalhamento poderão ser apresentados por problemas canônicos acadêmicos, sem vincular o estudo a objetivos de detectabilidade ou de projeto aeronáutico. Dados de eletromagnetismo e aerodinâmica serão tratados **como experimentos independentes**, a menos que um acoplamento físico de outro tipo seja demonstrado e aprovado.
 
-$$
-J_{\mathrm{aero}}(x,z)=-\frac{L}{D}.
-$$
+## Delineamento experimental
 
-A otimização multiobjetivo poderá ser tratada por escalarização, método $\varepsilon$-constraint ou outras estratégias compatíveis com otimização matemática determinística. Quando todas as variáveis forem contínuas, cada subproblema poderá assumir a forma de um NLP. A presença de decisões discretas combinadas com relações não lineares conduz a uma formulação MINLP [@lee2012minlp; @belotti2013].
+Os experimentos iniciarão por operações elementares de \(Cl(2,0)\), propriedades de contornos e grafos, verificação de malhas e campos de referência de Euler 2D. Quando houver dados eletromagnéticos adequados, poderão ser avaliados testes acadêmicos separados de Maxwell. Uma extensão 3D será condicionada a evidência no domínio 2D e terá novos critérios de validação.
 
-## Papel das GNNs e da multifidelidade na otimização
+Os conjuntos de dados deverão registrar solver, versão, condições, identificação persistente de geometria e malha, localização das variáveis, unidades e critérios de convergência. Quando houver várias condições ou remalhamentos de uma geometria, a partição de treino/validação/teste deverá preservar grupos geométricos.
 
-O modelo substituto terá como função aproximar respostas disciplinares a partir da geometria e das condições operacionais:
+A escolha de métricas precederá a execução: erro nos campos e observáveis disponíveis, estabilidade sob remalhamento, generalização a novas geometrias, tempo total de preparação/treinamento/inferência, CPU/GPU-hora, memória e armazenamento. Testes de sensibilidade podem empregar múltiplas sementes, preservando 42 como referência documental.
 
-$$
-\mathcal{G}_{\theta}:
-(G,c,y_{LF})
-\longrightarrow
-(\widehat{y}_{EM},\widehat{y}_{aero}).
-$$
+## Delimitação das conclusões
 
-O grafo $G$ representa a geometria discretizada, $c$ reúne condições de operação e $y_{LF}$ contém respostas provenientes de modelos de menor fidelidade quando disponíveis. A arquitetura multifidelidade aprenderá a relação entre níveis de modelagem, reduzindo o número de avaliações de maior demanda de recursos necessárias para cobrir o espaço de projeto.
+Resultados em contornos 2D não demonstram generalização para malhas 3D. Atributos construídos por produtos geométricos não tornam uma rede automaticamente equivariante. Um modelo que prevê apenas coeficientes globais não permite calcular resíduos completos de Euler ou Maxwell sem os campos necessários.
 
-Durante a otimização, a maior parte das avaliações de objetivos e restrições poderá ser realizada pelas GNNs. Modelos físicos de referência permanecerão associados à geração de dados, à verificação de regiões críticas e à reavaliação das soluções selecionadas. A combinação entre inferência rápida, diferenciação automática e otimização matemática determinística é particularmente relevante para problemas com muitas variáveis e restrições.
-
-## Quantificação de incerteza e aprendizado ativo como estratégias auxiliares
-
-A **Quantificação de Incerteza (Uncertainty Quantification, UQ)** corresponde à estimativa da incerteza associada às previsões do modelo. Em modelos substitutos, essa informação pode indicar regiões do espaço de projeto pouco representadas pelos dados e apoiar a decisão sobre quais soluções exigem nova avaliação por modelos de maior fidelidade.
-
-O **aprendizado ativo (active learning)** é uma estratégia sequencial de geração de dados na qual o próprio estado do modelo auxilia a escolha das próximas amostras a serem avaliadas. Sua utilização é justificável quando as avaliações de maior fidelidade demandam recursos suficientes para tornar ineficiente uma amostragem uniforme ou exclusivamente predefinida. Critérios de seleção podem combinar incerteza preditiva, discrepância entre fidelidades ou relevância para a região de Pareto.
-
-UQ e aprendizado ativo são tratados nesta pesquisa como **estratégias auxiliares a serem avaliadas**, e não como componentes obrigatórios da arquitetura. Sua adoção dependerá de evidência de que acrescentam informação útil ao processo multifidelidade em relação a um plano de experimentos previamente definido.
-
-## Questão de pesquisa
-
-> **Em que medida um framework baseado em Álgebra Geométrica, Graph Neural Networks multifidelidade e otimização matemática determinística pode reduzir a demanda de recursos computacionais e o tempo total de processamento da otimização aero-stealth de configurações UCAV, preservando a precisão das respostas físicas e a qualidade das soluções reavaliadas por modelos de referência?**
-
-## Objetivo geral
-
-> **Desenvolver e validar um framework de otimização multidisciplinar aero-stealth para configurações UCAV, baseado em Álgebra Geométrica e modelos substitutos por Graph Neural Networks multifidelidade, de forma a reduzir a demanda de recursos computacionais das avaliações eletromagnéticas e aerodinâmicas e viabilizar sua integração com métodos determinísticos de otimização matemática.**
-
-## Objetivos específicos
-
-1. **Contextualizar e formalizar o problema de engenharia de UCAVs**, distinguindo a classe funcional do veículo das configurações aerodinâmicas empregadas no espaço de projeto.
-2. **Definir uma parametrização geométrica reproduzível** para as configurações estudadas e estabelecer o fluxo CAD $\rightarrow$ malha $\rightarrow$ grafo.
-3. **Formular em Álgebra Geométrica as representações geométricas e físicas relevantes**, incluindo operações associadas às equações de Maxwell, ao escoamento de Euler e às transformações empregadas no processo de otimização.
-4. **Definir os níveis de fidelidade eletromagnéticos e aerodinâmicos** a partir do conteúdo físico, da discretização e da demanda de recursos de cada modelo.
-5. **Construir bases de dados multifidelidade** para RCS e aerodinâmica, preservando condições operacionais, metadados de simulação e rastreabilidade entre níveis.
-6. **Desenvolver GNNs baseadas em malha** para predizer curvas angulares e polarizadas de RCS, coeficientes aerodinâmicos e, quando necessário, campos físicos intermediários.
-7. **Desenvolver estratégias de aprendizado multifidelidade** capazes de transferir ou corrigir informação entre modelos de diferentes níveis de fidelidade.
-8. **Incorporar conhecimento físico às GNNs** por meio de representações e restrições derivadas das formulações em Álgebra Geométrica de Maxwell e Euler.
-9. **Integrar os modelos substitutos a uma formulação de otimização matemática determinística multiobjetivo**, utilizando NLP para variáveis contínuas e MINLP quando o espaço de decisão incorporar variáveis discretas.
-10. **Validar o framework de forma end-to-end**, quantificando precisão, demanda de recursos computacionais, tempo de processamento, número de avaliações dos solvers e qualidade da fronteira de Pareto após reavaliação por modelos de referência.
-
-## Hipóteses de pesquisa
-
-As hipóteses centrais são formuladas como relações testáveis entre desempenho preditivo, recursos empregados e qualidade das decisões de otimização.
-
-**Representação por grafos.** GNNs que recebem a geometria discretizada e sua conectividade deverão apresentar melhor generalização para geometrias não vistas do que modelos baseados exclusivamente em parâmetros globais, sob condições comparáveis de treinamento.
-
-**Aprendizado multifidelidade.** Para uma quantidade fixa de avaliações de maior fidelidade, a combinação de informações provenientes de diferentes fidelidades deverá produzir menor erro preditivo ou melhor qualidade das soluções de otimização do que o treinamento realizado apenas com o subconjunto de maior fidelidade.
-
-**Consistência física.** A incorporação de relações físicas formuladas em Álgebra Geométrica às representações, perdas ou saídas auxiliares das GNNs deverá melhorar a consistência física e a eficiência amostral em relação a um modelo puramente supervisionado com a mesma base de dados.
-
-**Aceleração da otimização.** A utilização das GNNs multifidelidade no ciclo MDO deverá reduzir o tempo total de processamento e o número de avaliações de maior demanda de recursos necessários para obter uma fronteira de Pareto reavaliada, preservando a qualidade das soluções selecionadas.
-
-## Métricas de avaliação
-
-A avaliação deverá combinar métricas de predição, otimização e utilização de recursos. Para RCS, serão considerados erro médio da curva, erro de pico, deslocamento angular de picos e erro por setor. Para aerodinâmica, serão considerados erros em $C_L$, $C_D$, $C_m$, $L/D$ e, quando aplicável, em campos físicos.
-
-A utilização de recursos será caracterizada por **tempo de processamento**, **horas de CPU/GPU**, **pico de memória**, **armazenamento**, **número de avaliações dos modelos de referência** e **tempo de geração dos dados de treinamento**. Quando UQ for empregada, serão acrescentadas métricas de calibração e cobertura.
-
-Duas medidas de aceleração são particularmente relevantes:
-
-$$
-S_{\mathrm{eval}}=\frac{T_{\mathrm{solver}}}{T_{\mathrm{GNN}}}
-$$
-
-para uma avaliação individual, e
-
-$$
-S_{\mathrm{MDO}}=
-\frac{T_{\mathrm{MDO,referência}}}
-{T_{\mathrm{dados}}+T_{\mathrm{treinamento}}+T_{\mathrm{otimização}}+T_{\mathrm{reavaliação}}}
-$$
-
-para o processo completo. A segunda métrica evita atribuir aceleração ao framework sem contabilizar os recursos empregados para geração de dados e treinamento.
-
-A qualidade da otimização será avaliada pela comparação entre a fronteira de Pareto prevista e a fronteira reavaliada, utilizando indicadores apropriados de dominância, hipervolume e erro das soluções selecionadas.
-
-## Estudos de ablação
-
-O protocolo experimental incluirá modelos de referência capazes de separar a contribuição das principais camadas metodológicas:
-
-- baseline baseado em parâmetros globais da geometria;
-- GNN com representação geométrica convencional;
-- GNN com representação e operações em Álgebra Geométrica;
-- GNN com incorporação explícita de relações físicas;
-- GNN multifidelidade integrada ao processo de otimização.
-
-A Álgebra Geométrica permanece como formalismo adotado no framework final. A ablação tem a função de quantificar como cada componente modifica precisão, estabilidade, demanda de dados e comportamento da otimização, e não de decidir sua adoção.
-
-## Progressão experimental de 2D para 3D
-
-A validação do framework será realizada em duas etapas complementares. A primeira utilizará problemas bidimensionais de aerofólios e espalhamento eletromagnético para construir e testar, de ponta a ponta, a representação geométrica, a conversão malha--grafo, os atributos em Álgebra Geométrica, os modelos substitutos e os protocolos de treinamento e validação. Essa etapa não será tratada como substituta do problema tridimensional: seu papel é fornecer um ambiente controlado no qual hipóteses arquiteturais, fontes de erro e ganhos de recursos possam ser isolados com maior transparência.
-
-A segunda etapa estenderá a infraestrutura validada para geometrias tridimensionais de configurações UCAV. As conclusões obtidas em 2D serão consideradas evidência metodológica preliminar, e propriedades como generalização geométrica, sensibilidade a remalhamento, dependências eletromagnéticas de longo alcance e desempenho em otimização serão novamente avaliadas no domínio 3D antes de qualquer conclusão de engenharia sobre a configuração completa.
-
-## Delimitação do estudo
-
-O trabalho concentra-se na integração entre geometria UCAV, RCS, aerodinâmica subsônica, Álgebra Geométrica, GNNs multifidelidade e otimização matemática. Os solvers físicos de referência serão utilizados para geração de dados e reavaliação, enquanto as reformulações em AG terão profundidade suficiente para sustentar as representações, relações físicas e operações empregadas pelo modelo substituto e pela otimização.
-
-O resultado esperado é um **framework reproduzível de otimização aero-stealth** no qual a aceleração seja demonstrada por medidas de tempo e recursos computacionais, e a validade das decisões seja sustentada por reavaliação eletromagnética e aerodinâmica em níveis de fidelidade adequados.
+O trabalho evitará reivindicações de novidade genérica não fundamentadas, caracterizações prematuras de fidelidade e afirmações de desempenho sem baselines reprodutíveis. Seu valor científico dependerá da consistência entre formulação, código, dados e experimentos.

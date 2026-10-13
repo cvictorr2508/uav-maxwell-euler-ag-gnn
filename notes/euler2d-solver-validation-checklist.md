@@ -1,6 +1,6 @@
 # Checklist de verificação do solver Euler 2D — S1
 
-**Projeto:** UCAV Aero-Stealth GNN · **Responsável pela campanha:** João Pedro · **Estado:** modelo de preenchimento, sem afirmar verificações realizadas · **Contrato:** `notes/euler2d-dataset-contract.md` (v0.1).
+**Projeto:** UAV | Maxwell–Euler e Aprendizado em Grafos · **Responsável pela campanha:** João Pedro · **Estado:** modelo de preenchimento, sem afirmar verificações realizadas · **Contrato:** `notes/euler2d-dataset-contract.md` (v0.1).
 
 > Marcar cada item como **verificado**, **não verificado**, **não disponível** ou **não aplicável**, com evidência (log, arquivo, captura de configuração, comando, versão ou checksum). Não preencher lacunas por inferência. As caixas abaixo iniciam desmarcadas.
 

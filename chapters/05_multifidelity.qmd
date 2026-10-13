@@ -1,313 +1,86 @@
-# Modelagem multifidelidade, parametrização e representação geométrica do estudo 2D
+# Dados, Álgebra Geométrica e modelagem multifidelidade no estudo 2D
 
-Este capítulo estabelece o primeiro bloco experimental do framework. O objetivo é transformar a formulação desenvolvida nos capítulos anteriores em um pipeline reproduzível para geometrias bidimensionais, preservando o significado físico das respostas e preparando a extensão tridimensional. O estudo 2D será usado para validar representação, ingestão de dados, construção de grafos, atributos em Álgebra Geométrica e relações entre níveis de fidelidade antes de aumentar a complexidade geométrica.
+Este capítulo estabelece o contrato metodológico de **problemas acadêmicos bidimensionais** destinados a estudar malhas, atributos em Álgebra Geométrica (AG), aprendizado por grafos e qualidade de dados. Os experimentos prioritários utilizam escoamentos de referência e grafos de contorno; a teoria eletromagnética será avaliada em benchmarks **independentes**, quando dados verificáveis estiverem disponíveis.
 
-## Escopo do estudo bidimensional
+## Unidade de análise e identificação
 
-Serão considerados dois problemas disciplinares complementares. Na aerodinâmica, cada configuração corresponde a um aerofólio discretizado, acompanhado de respostas como \(C_L\), \(C_D\) e \(L/D\), além das condições de operação necessárias à interpretação dessas grandezas. No eletromagnetismo, cada configuração corresponde a uma geometria bidimensional ou a uma geometria tridimensional parametrizada a partir de uma seção 2D, acompanhada da resposta de espalhamento fornecida pelo solver.
+Uma geometria pode possuir diferentes discretizações e condições de simulação. É necessário distinguir `geometry_id` (geometria), `mesh_id` (malha) e `case_id` (execução físico-numérica). Todos os remalhamentos e condições de uma geometria devem permanecer na mesma partição quando se examina generalização para novas geometrias. Uma malha com milhares de células não representa milhares de geometrias independentes.
 
-A grandeza eletromagnética deverá ser identificada a partir dos metadados do conjunto de dados. Se o solver resolver um problema estritamente bidimensional, a saída poderá corresponder a *scattering width* ou outra grandeza por unidade de comprimento. Se a resposta tiver sido calculada para uma extrusão finita ou uma geometria tridimensional, poderá ser uma RCS em \(\mathrm{m^2}\) ou dBsm. O pipeline não converterá implicitamente uma definição na outra.
+O documento [contrato de dataset Euler 2D](../notes/euler2d-dataset-contract.md) estabelece uma proposta inicial para arquivos e metadados. Sua versão documental não implica que o solver tenha exportado todos os campos solicitados.
 
-## Parametrização geométrica e vetor de projeto
+## Problemas de escoamento 2D
 
-A malha ou o contorno é a entrada natural da GNN, mas não é, por si só, uma parametrização adequada para otimização contínua. Para gerar novas geometrias de forma controlada, define-se um vetor de projeto
+Para um conjunto de perfis de referência, uma parametrização inicialmente considerada é \(\mathbf d=[m,p,t]^T\), em que \(m\) é a curvatura relativa máxima, \(p\) a localização desta curvatura em frações de corda e \(t\) a espessura relativa. O domínio preliminar segue os limites documentados na campanha histórica:
 
 $$
-\mathbf d
+0\le m\le 0.04,\qquad
+0.20\le p\le 0.60,\qquad
+0.08\le t\le 0.16.
+$$
+
+A correspondência exata com uma família de aerofólios e o gerador geométrico precisam ser verificados. Esses parâmetros formam um conjunto de teste de geometria e aerodinâmica, **não** um processo de otimização integrada de características de uma aeronave. Outros domínios canônicos poderão ser selecionados para testar generalização.
+
+## Malhas, contornos e grafo
+
+Considere um contorno fechado orientado com posições \(\mathbf x_i\in\mathbb R^2\). A aresta do contorno é \(\mathbf r_i=\mathbf x_{i+1}-\mathbf x_i\), cujo comprimento é \(\ell_i=\|\mathbf r_i\|\). A tangente unitária vale
+
+$$
+\mathbf t_i=\frac{\mathbf r_i}{\ell_i}.
+$$
+
+Seja \(I=e_1e_2\) o pseudoescalar de \(Cl(2,0)\). Produtos como \(\mathbf t_i\cdot\mathbf t_j\) representam alinhamento e \(\mathbf t_i\wedge\mathbf t_j\) codificam mudanças orientadas de direção. Normais externas dependem da orientação de contorno e da convenção de dualidade; seus sinais exigem testes.
+
+O grafo \(G=(V,E)\) associa nós e arestas à conectividade definida. Uma malha volumétrica não deve ser inferida apenas da ordem dos pontos do contorno; sua topologia requer arquivos adicionais. Geometria discreta não equivale à vorticidade do campo de fluidos: o produto exterior entre tangentes do contorno e \(\Omega=\nabla\wedge\mathbf u\) possuem significados diferentes.
+
+## Dados científicos necessários
+
+O registro dos casos deverá conter geometrias, condições de operação, versão do solver, malha, convergência, unidades, observáveis e proveniência. Para escoamento 2D, \(C_L\), \(C_D\) e pressão superficial \(C_p\) serão considerados quando disponíveis e fisicamente definidos:
+
+$$
+C_p=\frac{p-p_\infty}{q_\infty},\qquad
+q_\infty=\frac{1}{2}\rho_\infty V_\infty^2.
+$$
+
+O dado \(p\) representa pressão local, \(p_\infty\) pressão de referência, \(\rho_\infty\) densidade do campo livre, \(V_\infty\) velocidade de referência e \(q_\infty\) pressão dinâmica. É necessário preservar a localização das variáveis nos nós, faces ou células e documentar qualquer interpolação.
+
+## Consistência física campo–integral
+
+No regime invíscido, a força por unidade de envergadura de um contorno fechado pode ser obtida da distribuição de pressão, com normal unitária \(\mathbf n\) externa ao corpo:
+
+$$
+\mathbf F'=-\oint_\Gamma p(s)\,\mathbf n(s)\,ds.
+$$
+
+A relação entre forças e os coeficientes globais depende dos eixos aerodinâmicos e das referências adotadas pelo solver. A integração numérica de \(C_p\) somente será implementada após confirmação de conectividade, normais, quadratura e localização física da pressão. \(L/D\) deve ser tratado como razão derivada de coeficientes, não como uma grandeza física independente de \(C_L\) e \(C_D\).
+
+## Design of Experiments e reprodutibilidade
+
+Se novas instâncias forem necessárias, o plano de amostragem deverá indicar domínio, restrições geométricas e orçamento numérico. Latin Hypercube Sampling (LHS) é uma alternativa documentada para exploração do domínio, sem ser opção obrigatória [@mckay1979lhs]. A seed 42 é referência para operações estocásticas controláveis. O conjunto de teste deve permanecer fixo e independente de seleção adaptativa posterior.
+
+As proporções iniciais de 70% treino, 15% validação e 15% teste são configuráveis por job. Com poucas geometrias, a incerteza estatística das métricas e a sensibilidade ao split precisam ser reconhecidas.
+
+## Fidelidade numérica e aprendizado
+
+Fidelidade significa grau de aproximação **físico-numérica** a um problema de referência. Diferentes malhas ou modelos somente poderão ser classificados em uma hierarquia depois da avaliação de convergência, erro, resolução de fenômenos físicos e demanda de CPU/GPU, memória e tempo.
+
+Quando duas fidelidades representarem observáveis comparáveis, poderá ser testada uma correção de discrepância
+
+$$
+\widehat y_{\mathrm{ref}}
 =
-[d_1,\ldots,d_p]^T,
-$$
-
-em que cada componente \(d_k\) modifica uma característica geométrica com domínio e significado conhecidos. Um gerador geométrico \(\mathcal P\) transforma esse vetor em uma geometria contínua,
-
-$$
-\Gamma
-=
-\mathcal P(\mathbf d),
-$$
-
-e uma etapa de discretização \(\mathcal M\) produz a malha ou o contorno usado pela GNN,
-
-$$
-G
-=
-\mathcal M\!\left(\mathcal P(\mathbf d)\right).
-$$
-
-No estudo de aerofólios, parametrizações como **Class-Shape Transformation (CST)** constituem uma alternativa compacta e amplamente usada para representar famílias de perfis [@kulfan2008]. Splines, PARSEC, *free-form deformation* e outras técnicas permanecem alternativas possíveis. A escolha não será fixada antes da inspeção dos 50 casos, porque é necessário saber se os CSVs preservam os parâmetros geradores ou apenas as coordenadas discretizadas.
-
-Se os dados fornecerem somente coordenadas, a GNN poderá ser treinada normalmente sobre os grafos, mas a otimização contínua de novas formas exigirá posteriormente ajustar ou definir um mapeamento \(\mathcal P\). Essa distinção impede confundir **representação para aprendizado** com **parametrização para geração de projeto**.
-
-## Design of Experiments e construção do banco de dados
-
-A geração planejada de dados deve cobrir conjuntamente o espaço geométrico e as condições físicas sem contaminar a avaliação final do surrogate. Seja \(\mathbf c\) o vetor de condições de operação e seja \(f\) um identificador do nível de fidelidade. Uma amostra computacional pode ser representada por
-
-$$
-\mathcal D
-=
-\left\{
-\left(
-\mathbf d^{(s)},
-\mathbf c^{(s)},
-f^{(s)},
-G^{(s)},
-\mathbf y^{(s)}
-\right)
-\right\}_{s=1}^{N},
-$$
-
-em que \(s\) identifica a amostra, \(G^{(s)}\) é o grafo correspondente e \(\mathbf y^{(s)}\) contém as respostas físicas disponíveis.
-
-Quando novas configurações forem geradas, o **Design of Experiments (DoE)** deverá ser definido sobre os limites admissíveis de \(\mathbf d\) e \(\mathbf c\). Latin Hypercube Sampling (LHS) é uma alternativa clássica para cobrir espaços multidimensionais sem exigir uma grade cartesiana completa [@mckay1979lhs], mas não será adotado automaticamente: a estratégia deverá respeitar restrições geométricas, regiões fisicamente admissíveis e o orçamento de simulação.
-
-No conjunto inicial de aproximadamente 50 configurações, a primeira tarefa será caracterizar como essas amostras foram produzidas. Se forem dados já existentes, não serão reclassificados retroativamente como um DoE planejado. A cobertura do espaço de projeto será medida a partir dos parâmetros disponíveis ou, na ausência deles, por descritores geométricos apropriados.
-
-A partição de teste será congelada antes de qualquer ajuste adaptativo do banco de dados. Novas simulações escolhidas por DoE sequencial ou aprendizado ativo poderão enriquecer treino e validação, mas não serão selecionadas para melhorar diretamente o desempenho observado no teste final.
-
-Em um conjunto multifidelidade, deve-se ainda registrar quais configurações possuem avaliações em cada nível. Amostras de referência podem ser um subconjunto das amostras do modelo de base ou seguir outro desenho explicitamente documentado. O requisito essencial é que respostas usadas em fusão ou correção representem a mesma grandeza física sob condições comparáveis [@peherstorfer2018].
-
-## Unidade de amostragem e identificação das configurações
-
-A unidade estatística primária será a **configuração geométrica**, identificada por um campo persistente como \(\texttt{configuration\_id}\). Todos os nós, arestas, faces, condições de operação e respostas pertencentes à mesma configuração deverão permanecer associados a esse identificador.
-
-Essa regra é essencial para evitar vazamento de dados. A divisão entre treinamento, validação e teste será realizada por configuração, e não por linha de CSV, nó ou elemento de malha.
-
-## Contrato inicial dos dados em CSV
-
-Os arquivos recebidos poderão possuir formatos diferentes, mas serão convertidos internamente para uma representação canônica. Para uma malha ou contorno nodal, o núcleo geométrico deverá conter, no mínimo,
-
-- identificador da configuração;
-- identificador do nó;
-- coordenadas \(x\) e \(y\);
-- conectividade, quando não puder ser inferida de maneira inequívoca pela ordenação dos pontos.
-
-As condições físicas deverão ser preservadas em campos próprios. Para aerodinâmica, podem incluir \(M_\infty\), \(\alpha\), número de Reynolds e outras variáveis realmente presentes no solver. Para eletromagnetismo, podem incluir frequência, direção de incidência, polarização, propriedades materiais e direção de observação.
-
-As respostas globais serão armazenadas separadamente dos atributos geométricos. No primeiro conjunto experimental, espera-se trabalhar com aproximadamente 50 configurações e alvos como
-
-$$
-C_L,\qquad
-C_D,\qquad
-\frac{L}{D},\qquad
-R_{\mathrm{EM}},
-$$
-
-em que \(R_{\mathrm{EM}}\) representa genericamente a resposta eletromagnética até que sua definição física seja confirmada pelos metadados do conjunto de dados.
-
-## Reconstrução geométrica em \(Cl(2,0)\)
-
-Considere um contorno orientado por pontos consecutivos \(\mathbf x_i\in\mathbb R^2\). A aresta orientada é
-
-$$
-\mathbf e_i
-=
-\mathbf x_{i+1}-\mathbf x_i.
-$$
-
-Seu comprimento e sua tangente unitária são
-
-$$
-\ell_i=\|\mathbf e_i\|,
-\qquad
-\mathbf t_i=\frac{\mathbf e_i}{\ell_i}.
-$$
-
-Em \(Cl(2,0)\), com pseudoescalar \(I=e_1e_2\), a orientação do contorno permite construir uma normal local por dualidade. A convenção de sinal será fixada de acordo com a orientação escolhida para o contorno e verificada numericamente.
-
-Entre elementos vizinhos, produtos como
-
-$$
-\mathbf t_i\cdot\mathbf t_j
-$$
-
-medem alinhamento, enquanto
-
-$$
-\mathbf t_i\wedge\mathbf t_j
-$$
-
-representam a mudança orientada de direção no plano. Essas grandezas podem ser usadas para construir medidas discretas de curvatura e atributos geometricamente estruturados para a GNN.
-
-Se o arquivo representar uma malha triangular 2D, a área orientada da célula \(f=(i,j,k)\) será representada por
-
-$$
-B_f
-=
-\frac12
-\mathbf r_{ij}\wedge\mathbf r_{ik},
-$$
-
-com \(\mathbf r_{ij}=\mathbf x_j-\mathbf x_i\) e \(\mathbf r_{ik}=\mathbf x_k-\mathbf x_i\).
-
-## Do CSV ao grafo
-
-A conversão geométrica produzirá um grafo
-
-$$
-G=(V,E),
-$$
-
-em que os nós representam as entidades escolhidas da discretização e as arestas preservam a conectividade física ou geométrica. A escolha entre grafo de vértices, grafo de segmentos e grafo de células será determinada pela estrutura real dos CSVs e pela localização das variáveis de entrada.
-
-O primeiro baseline utilizará atributos convencionais, como posição relativa, comprimento, normal, curvatura e condições globais. Uma variante posterior acrescentará atributos derivados de Álgebra Geométrica. A comparação entre essas representações será feita com a mesma divisão de dados e orçamento de treinamento.
-
-## Respostas globais e campos locais
-
-A disponibilidade apenas de \(C_L\), \(C_D\), \(L/D\) e uma resposta eletromagnética global permite treinar um modelo de **resposta global**, mas não reconstruir a solução física completa.
-
-Para aerodinâmica, a reconstrução de campos exigiria, por exemplo, \(C_p\), pressão, densidade ou velocidade definidos nos nós ou elementos. Para eletromagnetismo, seriam necessários campos ou correntes complexas, como \(\widetilde{\mathbf E}_{\mathrm{sca}}\) ou \(\widetilde{\mathbf J}_s\).
-
-O pipeline inicial será, portanto,
-
-$$
-G,\mathbf c
-\longmapsto
-\text{respostas globais},
-$$
-
-em que \(\mathbf c\) reúne as condições de operação. Caso campos locais sejam incorporados posteriormente, o mesmo grafo poderá sustentar uma segunda etapa de predição campo--integração--resposta global.
-
-## Consistência de \(L/D\)
-
-A razão aerodinâmica não é uma quarta grandeza independente quando \(C_L\) e \(C_D\) estão disponíveis:
-
-$$
-\frac{L}{D}
-=
-\frac{C_L}{C_D}.
-$$
-
-O baseline deverá prever \(C_L\) e \(C_D\), calculando \(L/D\) a partir dessas previsões. Uma cabeça adicional para predição direta de \(L/D\) poderá ser avaliada posteriormente, mas sua saída deverá ser comparada com
-
-$$
-\frac{\widehat C_L}{\widehat C_D}
-$$
-
-como teste de consistência.
-
-## Definição de fidelidade no conjunto 2D
-
-Um nível de fidelidade será caracterizado por seu conteúdo físico e numérico, não apenas pelo nome do solver. Para cada conjunto de dados deverão ser registrados, quando disponíveis,
-
-- equações ou aproximações físicas;
-- dimensionalidade do problema;
-- discretização e resolução;
-- condições de contorno;
-- propriedades de material ou modelo de turbulência;
-- critérios de convergência;
-- tempo de processamento;
-- uso de CPU/GPU, memória e armazenamento.
-
-A relação entre níveis somente será modelada como multifidelidade se o conjunto de dados contiver respostas comparáveis para a mesma grandeza física. Se o primeiro conjunto de 50 configurações possuir uma única fidelidade, o experimento começará com um baseline *single-fidelity* e a extensão multifidelidade será adicionada apenas quando houver dados compatíveis.
-
-## Estratégias multifidelidade a avaliar
-
-Quando pares ou conjuntos de fidelidades estiverem disponíveis, uma hipótese inicial será a correção de discrepância
-
-$$
-y_{\mathrm{ref}}
-=
-y_{\mathrm{base}}
+\widehat y_{\mathrm{base}}
 +
-\Delta_{\boldsymbol\theta}
-\left(
-G,
-y_{\mathrm{base}},
-\mathbf c
-\right),
+\Delta_{\boldsymbol\theta}(G,\mathbf c,\widehat y_{\mathrm{base}}),
 $$
 
-em que \(y_{\mathrm{base}}\) é a resposta do nível de base, \(y_{\mathrm{ref}}\) é a resposta do nível de referência, \(G\) é o grafo, \(\mathbf c\) contém as condições físicas e \(\Delta_{\boldsymbol\theta}\) é uma correção aprendida. A forma aditiva será tratada como hipótese e comparada com alternativas quando os dados permitirem.
+em que \(G\) é o grafo, \(\mathbf c\) contém condições físicas, \(\Delta_{\boldsymbol\theta}\) é o modelo aprendido e os acentos denotam previsões. A forma aditiva é apenas uma hipótese a comparar com alternativas de dados e orçamento equivalente [@peherstorfer2018].
 
-Também poderão ser avaliadas transferência de representação, treinamento *coarse-to-fine* e compartilhamento parcial de parâmetros entre fidelidades [@black2022; @taghizadeh2025]. A classificação mais ampla de métodos multifidelidade inclui estratégias de adaptação, fusão e filtragem; essa taxonomia será usada para posicionar as alternativas implementadas sem reduzir multifidelidade a uma única correção aditiva [@peherstorfer2018].
+## Estudos eletromagnéticos independentes
 
-## Reprodutibilidade da preparação dos dados
+Propagação ou espalhamento em problemas acadêmicos canônicos de Maxwell poderão utilizar grafos de malhas 2D separados. A resposta física, suas unidades, condição de contorno e convenção complexa serão definidas a partir do benchmark. Uma seção transversal 3D e uma grandeza de espalhamento 2D não são intercambiáveis por nomenclatura. Não se define aqui uma função objetivo de redução de retorno eletromagnético, nem um problema de otimização conjunta entre disciplinas.
 
-A divisão oficial do conjunto utilizará semente fixa
+## Requisitos de implementação e artefatos
 
-$$
-\texttt{seed}=42.
-$$
+A preparação deverá produzir manifestos com IDs, versão dos dados, transformação geométrica e partição por geometria, além de atributos de grafos, testes de consistência e arquivos serializados em formato independente da biblioteca de GNN. A infraestrutura existente na PR #16 constitui um **protótipo legado ainda não integrado** e precisa de revisão de nomenclatura e validação com dados reais antes de reutilização. Não se atribui suporte a malhas arbitrárias ou a campos volumétricos que não tenham sido implementados e testados.
 
-As proporções de treino, validação e teste serão parâmetros do job. Um valor inicial de referência é \(70\%/15\%/15\%\), mas nenhuma proporção será codificada de forma rígida no código.
-
-O manifest de cada execução deverá registrar, no mínimo, identificadores das configurações em cada subconjunto, versão dos arquivos de entrada, transformações geométricas aplicadas e parâmetros usados para construir o grafo.
-
-## Especificação computacional de referência
-
-A implementação associada ao estudo 2D deverá manter transparentes as operações geométricas usadas na construção dos atributos do grafo. Em \(Cl(2,0)\), um multivetor pode ser representado por
-
-$$
-M
-=
-m_0
-+
-m_1e_1
-+
-m_2e_2
-+
-m_{12}e_{12},
-$$
-
-com componentes escalar, vetoriais e bivetorial. A implementação deverá verificar explicitamente as relações
-
-$$
-e_1^2=e_2^2=1,
-\qquad
-e_1e_2=e_{12},
-\qquad
-e_2e_1=-e_{12},
-\qquad
-e_{12}^2=-1.
-$$
-
-Essa escolha permite testar produto geométrico, dualidade, orientação e sinais antes de incorporar as quantidades resultantes à GNN.
-
-### Features geométricas de referência
-
-Para um grafo nodal construído a partir de um contorno ordenado, um vetor inicial de atributos pode reunir
-
-$$
-\left[
-x_i,
-y_i,
-t_{x,i},
-t_{y,i},
-n_{x,i},
-n_{y,i},
-d_i,
-b_i
-\right],
-$$
-
-em que \((x_i,y_i)\) são as coordenadas do nó, \(\mathbf t_i\) é a tangente unitária local, \(\mathbf n_i\) é a normal externa, \(d_i\) é o produto interno entre tangentes adjacentes e \(b_i\) é o coeficiente de \(e_{12}\) do produto exterior entre essas tangentes. O par \((d_i,b_i)\) separa alinhamento e mudança orientada de direção.
-
-As arestas direcionadas podem armazenar deslocamento relativo, comprimento e direção unitária. O conjunto final de features será confirmado a partir da semântica real dos CSVs e mantido idêntico entre baselines quando a comparação buscar isolar o efeito da Álgebra Geométrica.
-
-### Serialização e rastreabilidade
-
-A preparação dos dados deverá produzir, para cada configuração, uma representação serializável independente da biblioteca de GNN escolhida para o treinamento. Essa representação deverá preservar identificadores, features nodais e de arestas, conectividade, orientação, respostas globais e condições físicas.
-
-Além dos grafos, cada job de preparação deverá registrar um **manifest do dataset** e um **manifest do split**. Esses artefatos documentarão a origem dos dados, as configurações alocadas a treino, validação e teste, a seed utilizada e as transformações aplicadas. Essa separação permite reproduzir o mesmo conjunto de entrada em arquiteturas de GNN diferentes sem reconstruir silenciosamente as partições.
-
-## Limites da primeira etapa computacional
-
-A primeira etapa computacional será formulada para **contornos fechados 2D ordenados**, hipótese adequada a aerofólios representados pela fronteira e a geometrias eletromagnéticas descritas por um contorno equivalente. Essa delimitação não implica suporte antecipado a qualquer malha bidimensional volumétrica.
-
-Se os CSVs fornecidos contiverem células triangulares, conectividade explícita, múltiplos componentes de contorno ou campos internos, o contrato será estendido depois de inspecionar a estrutura real dos arquivos. Essa extensão preservará os princípios definidos aqui, mas não será inferida antecipadamente.
-
-Da mesma forma, o campo chamado provisoriamente de RCS no conjunto de dados será renomeado no pipeline caso os metadados mostrem que se trata de *scattering width* ou de outra grandeza eletromagnética.
-
-## Saídas computacionais deste capítulo
-
-A primeira implementação deverá fornecer
-
-- validação do contrato dos CSVs;
-- reconstrução de contornos 2D;
-- atributos convencionais e derivados de \(Cl(2,0)\);
-- grafos serializáveis independentes do framework de GNN;
-- divisão por configuração com semente 42;
-- manifestos de dados e split;
-- testes unitários para o produto geométrico, dualidade, orientação, comprimentos, grafos e ausência de vazamento entre partições.
-
-Os resultados experimentais serão produzidos somente depois que os CSVs reais forem incorporados e seu contrato físico-numérico for validado. O Capítulo 6 utilizará os artefatos desse pipeline para treinamento, validação e comparação das GNNs.
+O Capítulo 6 estabelece critérios de comparação e validação, sem apresentar resultados que ainda não foram obtidos.

@@ -1,61 +1,51 @@
-# UCAV Aero-Stealth Optimization with Multifidelity Graph Neural Networks {.unnumbered}
+# Maxwell–Euler, Álgebra Geométrica e Aprendizado em Grafos {.unnumbered}
 
-## Sobre este projeto
+## Sobre a pesquisa
 
-Este eBook documenta o desenvolvimento de um framework de otimização multidisciplinar aero-stealth para **configurações UCAV de baixa observabilidade**. A expressão UCAV (*Unmanned Combat Aerial Vehicle*) designa uma classe funcional de aeronave não tripulada de combate e não uma configuração aerodinâmica específica. Configurações sem cauda, *flying-wing*, *blended-wing-body* e outras famílias geométricas podem ser consideradas conforme o espaço de projeto for formalizado.
+Este eBook apresenta os fundamentos e o planejamento experimental de uma pesquisa acadêmica de mestrado em Engenharia Elétrica do Programa de Pós-Graduação em Engenharia Elétrica (PPGEE) da Universidade de Brasília. O objeto científico é o estudo de **representações matemáticas e computacionais** associadas às equações de Maxwell e Euler, à Álgebra Geométrica (AG) e às **Graph Neural Networks (GNNs)** sobre malhas.
 
-A contribuição computacional central é o emprego de **Graph Neural Networks (GNNs) multifidelidade** como modelos substitutos para reduzir a demanda de recursos computacionais e o tempo de processamento das avaliações eletromagnéticas e aerodinâmicas repetidas durante a otimização.
+O interesse em veículos aéreos não tripulados (*Unmanned Aerial Vehicles*, UAVs) é contextual e civil. Os experimentos computacionais serão realizados com **problemas acadêmicos não militares**, incluindo benchmarks independentes de dinâmica dos fluidos, eletromagnetismo, geometria discreta e aprendizado em grafos. Não se desenvolve um sistema de redução de detectabilidade, nem um processo de otimização conjunta de propriedades aeronáuticas e retorno eletromagnético.
 
-A **Álgebra Geométrica (AG)** é adotada como formalismo matemático estruturante para representar geometria, operações físicas e relações empregadas no aprendizado e na otimização. O projeto buscará formulações multivetoriais mais compactas e, quando matematicamente admissível, representações lineares nos objetos algébricos escolhidos, preservando explicitamente as não linearidades físicas intrínsecas.
+## Objetivo científico
 
-## Objetivo geral
+Investigar a consistência matemática, a expressividade geométrica e as propriedades computacionais de representações em Álgebra Geométrica e em grafos aplicadas a problemas de equações diferenciais, com verificação numérica, baselines explícitos e avaliação reprodutível. A existência de uma formulação compacta não implica superioridade de acurácia, memória, tempo ou robustez sem evidência.
 
-Desenvolver e validar um framework de otimização multidisciplinar aero-stealth para configurações UCAV, baseado em Álgebra Geométrica e modelos substitutos por Graph Neural Networks multifidelidade, de forma a reduzir a demanda de recursos computacionais das avaliações eletromagnéticas e aerodinâmicas e viabilizar sua integração com métodos determinísticos de otimização matemática.
+## Questões de pesquisa
 
-## Arquitetura da pesquisa
+**Q1 — Representação matemática.** Quais propriedades de Maxwell e Euler podem ser escritas de forma consistente utilizando Álgebra Geométrica? Serão identificados objetos matemáticos, hipóteses físicas e equivalências entre formulações, distinguindo resultados demonstrados de convenções de notação [@hestenes1984; @doran2003; @dressel2015].
 
-A arquitetura metodológica de referência é:
+**Q2 — Representação em grafos.** Quais informações sobre geometria, conectividade, orientação e campos de malhas são preservadas por representações convencionais e atributos derivados de AG? O emprego de GNNs será comparado com baselines simples, controlando treino, parâmetros e divisão de dados [@bronstein2021; @pfaff2021].
 
-$
-\text{geometria parametrizada 2D/3D}
-\rightarrow
-\text{malha/grafo}
-\rightarrow
-\text{representação em AG}
-\rightarrow
-\text{modelos em diferentes fidelidades}
-\rightarrow
-\boxed{\text{GNN multifidelidade}}
-\rightarrow
-\text{otimização matemática aero-stealth}
-\rightarrow
-\text{reavaliação por modelos de referência}.
-$
+**Q3 — Verificação e validação.** Como aferir integridade de datasets, fidelidade numérica, ausência de vazamento entre geometrias, reprodutibilidade e recursos computacionais ao integrar solvers e aprendizado? As métricas serão definidas antes dos experimentos, e resultados ainda não disponíveis não serão antecipados [@peherstorfer2018].
 
-A validação metodológica será conduzida em duas etapas. Primeiro, o pipeline completo será desenvolvido e testado em problemas bidimensionais de aerofólios e espalhamento eletromagnético, nos quais geometria, conectividade, atributos em Álgebra Geométrica, treinamento e erros podem ser inspecionados diretamente. Depois, a mesma infraestrutura será estendida para geometrias tridimensionais de configurações UCAV, preservando a separação entre o que foi demonstrado em 2D e o que precisa ser novamente validado em 3D.
+## Arquitetura metodológica
 
-A motivação para grafos decorre da estrutura natural de malhas triangulares e não estruturadas, amplamente explorada em *geometric deep learning* e simulação baseada em malhas [@bronstein2021; @pfaff2021]. Trabalhos recentes já demonstram GNNs para modelagem eletromagnética tridimensional [@shan2024] e análise aero-eletromagnética multitarefa em malhas de configurações *blended-wing-body* [@li2026aeroem].
+As disciplinas físicas são examinadas **independentemente** nesta etapa; compartilhar linguagem algébrica ou um tipo de grafo não estabelece, por si só, acoplamento entre elas.
 
-Do ponto de vista da otimização, o framework pertence à família de **análise e otimização baseadas em modelos substitutos** (*surrogate-based analysis and optimization*, SBAO), na qual aproximações treinadas reduzem o número de consultas aos modelos físicos de referência sem removê-los do processo de validação [@queipo2005sbao]. A organização multidisciplinar será descrita com a terminologia de arquiteturas de MDO de Martins e Lambe [@martins2013], mas a classificação final como MDF, IDF ou outra arquitetura não será imposta antes de identificar o acoplamento efetivo entre as disciplinas. A gestão dos níveis de fidelidade seguirá o princípio de combinar modelos que aproximam grandezas físicas compatíveis, mantendo avaliações de referência no ciclo para controlar precisão e validade [@peherstorfer2018].
+$$
+\text{problema físico de referência}
+\;\longrightarrow\;
+\text{discretização e dados}
+\;\longrightarrow\;
+\text{descritores geométricos / AG}
+\;\longrightarrow\;
+\text{representação em grafo}
+\;\longrightarrow\;
+\text{baseline e GNN}
+\;\longrightarrow\;
+\text{validação e análise de recursos}.
+$$
 
-## Questões metodológicas centrais
+A progressão experimental começa com problemas bidimensionais controlados e poderá ser estendida a casos tridimensionais acadêmicos. Resultados em 2D não são evidência automática de generalização em 3D.
 
-O projeto investiga, entre outras questões:
+## Delimitação e evidências
 
-1. quanto as GNNs reduzem o tempo de processamento e o número de avaliações dos modelos eletromagnéticos e aerodinâmicos de referência;
-2. como combinar modelos de diferentes fidelidades para ampliar o espaço de projeto avaliado com a mesma infraestrutura computacional;
-3. como incorporar relações físicas de Maxwell e Euler, formuladas em Álgebra Geométrica, à representação e ao treinamento das GNNs;
-4. como integrar os modelos substitutos a formulações determinísticas de otimização multiobjetivo, incluindo NLP e, quando houver variáveis discretas, MINLP;
-5. quanto o processo completo reduz a demanda de CPU/GPU, memória e tempo de processamento após contabilizar geração de dados, treinamento, otimização e reavaliação;
-6. em que medida a fronteira de Pareto prevista preserva sua qualidade após reavaliação pelos modelos físicos de referência.
+A formulação conservativa de Euler continua não linear e a descrição por bivetores não substitui o esquema de volumes finitos. As equações de Maxwell em meios lineares já são lineares nos campos; uma forma multivetorial pode reorganizar a descrição, mas não cria essa linearidade. Do mesmo modo, uma GNN com componentes de AG como atributos não é necessariamente equivariante [@sen2023; @bronstein2021].
 
-Quantificação de incerteza e aprendizado ativo poderão ser avaliados como estratégias auxiliares de seleção de novas simulações, caso acrescentem informação relevante ao processo multifidelidade.
+O espalhamento eletromagnético poderá ser exposto como parte da teoria de Maxwell e examinado em problemas canônicos; não constitui um objetivo integrado de otimização de plataformas. A comparação de modelos multifidelidade dependerá da existência de respostas físicas compatíveis sob diferentes aproximações e custos mensurados.
 
-## Organização do eBook
+## Estrutura do eBook
 
-Os capítulos são organizados em quatro blocos:
+O Capítulo 1 formaliza o problema acadêmico; os Capítulos 2–4 abordam AG, fundamentos de Maxwell e Euler, e aprendizado em grafos. Os Capítulos 5–6 tratam de dados, modelagem e validação acadêmica 2D; os Capítulos 7–8 apresentam requisitos e experimentos de extensão 3D, condicionados a dados e evidências suficientes.
 
-- fundamentos do problema aero-stealth, da Álgebra Geométrica, da física governante e das GNNs;
-- estudo bidimensional de representação geométrica, fidelidade, dados e construção dos grafos;
-- treinamento, validação e uso dos surrogates no problema bidimensional;
-- extensão tridimensional da mesma metodologia, culminando na otimização aero-stealth de configurações UCAV e na reavaliação com modelos de referência.
+O eBook tem propósito didático e científico-editorial. Contribuições originais e resultados específicos da dissertação dependem de avaliação independente, revisão e aprovação.
