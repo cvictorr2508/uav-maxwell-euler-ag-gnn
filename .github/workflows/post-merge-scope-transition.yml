@@ -4,6 +4,12 @@ name: One-time academic scope transition
 on:
   push:
     branches: [develop]
+    paths:
+      - notes/research-scope-2026-10-13.md
+
+concurrency:
+  group: post-merge-scope-transition
+  cancel-in-progress: false
 
 permissions:
   contents: write
