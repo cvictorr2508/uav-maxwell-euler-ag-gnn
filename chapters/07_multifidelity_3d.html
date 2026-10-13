@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Modelagem multifidelidade e representação geométrica do estudo 3D – Graph Neural Networks e Álgebra Geométrica para Otimização Aero-Stealth de UCAVs</title>
+<title>7&nbsp; Representações geométricas e dados acadêmicos tridimensionais – UAV | Maxwell–Euler, Álgebra Geométrica e Graph Neural Networks</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -56,8 +56,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/08_optimization_3d.html" rel="next">
-<link href="../chapters/06_optimization.html" rel="prev">
+<link href="../chapters/08_validation_3d.html" rel="next">
+<link href="../chapters/06_validation_2d.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -137,7 +137,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/07_multifidelity_3d.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Modelagem multifidelidade e representação geométrica do estudo 3D</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/07_multifidelity_3d.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Representações geométricas e dados acadêmicos tridimensionais</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -152,10 +152,10 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">Graph Neural Networks e Álgebra Geométrica para Otimização Aero-Stealth de UCAVs</a> 
+      <a href="../">UAV | Maxwell–Euler, Álgebra Geométrica e Graph Neural Networks</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/cvictorr2508/ucav-aerostealth-gnn" title="Código fonte" class="quarto-navigation-tool px-1" aria-label="Código fonte"><i class="bi bi-github"></i></a>
-    <a href="../Graph-Neural-Networks-e-Álgebra-Geométrica-para-Otimização-Aero-Stealth-de-UCAVs.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
+    <a href="https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn" title="Código fonte" class="quarto-navigation-tool px-1" aria-label="Código fonte"><i class="bi bi-github"></i></a>
+    <a href="../UAV---Maxwell–Euler,-Álgebra-Geométrica-e-Graph-Neural-Networks.pdf" title="Baixar PDF" class="quarto-navigation-tool px-1" aria-label="Baixar PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -169,13 +169,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">UCAV Aero-Stealth Optimization with Multifidelity Graph Neural Networks</span></a>
+ <span class="menu-text">Maxwell–Euler, Álgebra Geométrica e Aprendizado em Grafos</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/01_problem.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Contexto e Definição do Problema Aero-Stealth de um UCAV</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Problema científico, hipóteses e delineamento da pesquisa</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -187,37 +187,37 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/03_physics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Física governante: eletromagnetismo, RCS e aerodinâmica compressível</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Física governante: Maxwell, Euler e modelos numéricos</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/04_graph_neural_networks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Neural Networks para modelagem substituta baseada em malhas</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Graph Neural Networks e representações em malhas</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/05_multifidelity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelagem multifidelidade, parametrização e representação geométrica do estudo 2D</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dados, Álgebra Geométrica e modelagem multifidelidade no estudo 2D</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/06_optimization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GNNs, treinamento, validação e otimização no estudo 2D</span></span></a>
+  <a href="../chapters/06_validation_2d.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GNNs e validação experimental em problemas acadêmicos 2D</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/07_multifidelity_3d.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Modelagem multifidelidade e representação geométrica do estudo 3D</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Representações geométricas e dados acadêmicos tridimensionais</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/08_optimization_3d.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">GNNs multifidelidade e otimização aero-stealth no estudo 3D</span></span></a>
+  <a href="../chapters/08_validation_3d.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">GNNs e validação acadêmica em três dimensões</span></span></a>
   </div>
 </li>
     </ul>
@@ -230,26 +230,23 @@ window.Quarto = {
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#geometrias-ucav-e-parametrização-3d" id="toc-geometrias-ucav-e-parametrização-3d" class="nav-link active" data-scroll-target="#geometrias-ucav-e-parametrização-3d"><span class="header-section-number">7.1</span> Geometrias UCAV e parametrização 3D</a></li>
-  <li><a href="#design-of-experiments-e-banco-de-dados-3d" id="toc-design-of-experiments-e-banco-de-dados-3d" class="nav-link" data-scroll-target="#design-of-experiments-e-banco-de-dados-3d"><span class="header-section-number">7.2</span> Design of Experiments e banco de dados 3D</a></li>
-  <li><a href="#malhas-superficiais-e-grafos" id="toc-malhas-superficiais-e-grafos" class="nav-link" data-scroll-target="#malhas-superficiais-e-grafos"><span class="header-section-number">7.3</span> Malhas superficiais e grafos</a></li>
-  <li><a href="#álgebra-geométrica-em-cl30" id="toc-álgebra-geométrica-em-cl30" class="nav-link" data-scroll-target="#álgebra-geométrica-em-cl30"><span class="header-section-number">7.4</span> Álgebra Geométrica em <span class="math inline">\(Cl(3,0)\)</span></a></li>
-  <li><a href="#aerodinâmica-tridimensional" id="toc-aerodinâmica-tridimensional" class="nav-link" data-scroll-target="#aerodinâmica-tridimensional"><span class="header-section-number">7.5</span> Aerodinâmica tridimensional</a></li>
-  <li><a href="#espalhamento-eletromagnético-tridimensional" id="toc-espalhamento-eletromagnético-tridimensional" class="nav-link" data-scroll-target="#espalhamento-eletromagnético-tridimensional"><span class="header-section-number">7.6</span> Espalhamento eletromagnético tridimensional</a></li>
-  <li><a href="#fidelidades-em-e-aero" id="toc-fidelidades-em-e-aero" class="nav-link" data-scroll-target="#fidelidades-em-e-aero"><span class="header-section-number">7.7</span> Fidelidades EM e aero</a></li>
-  <li><a href="#correspondência-entre-fidelidades" id="toc-correspondência-entre-fidelidades" class="nav-link" data-scroll-target="#correspondência-entre-fidelidades"><span class="header-section-number">7.8</span> Correspondência entre fidelidades</a></li>
-  <li><a href="#dados-manifestos-e-rastreabilidade" id="toc-dados-manifestos-e-rastreabilidade" class="nav-link" data-scroll-target="#dados-manifestos-e-rastreabilidade"><span class="header-section-number">7.9</span> Dados, manifestos e rastreabilidade</a></li>
-  <li><a href="#transferência-do-pipeline-2d" id="toc-transferência-do-pipeline-2d" class="nav-link" data-scroll-target="#transferência-do-pipeline-2d"><span class="header-section-number">7.10</span> Transferência do pipeline 2D</a></li>
-  <li><a href="#critérios-de-prontidão-para-o-capítulo-8" id="toc-critérios-de-prontidão-para-o-capítulo-8" class="nav-link" data-scroll-target="#critérios-de-prontidão-para-o-capítulo-8"><span class="header-section-number">7.11</span> Critérios de prontidão para o Capítulo 8</a></li>
+  <li><a href="#domínios-e-geometria" id="toc-domínios-e-geometria" class="nav-link active" data-scroll-target="#domínios-e-geometria"><span class="header-section-number">7.1</span> Domínios e geometria</a></li>
+  <li><a href="#malhas-e-representação-em-grafos" id="toc-malhas-e-representação-em-grafos" class="nav-link" data-scroll-target="#malhas-e-representação-em-grafos"><span class="header-section-number">7.2</span> Malhas e representação em grafos</a></li>
+  <li><a href="#álgebra-geométrica-em-cl30" id="toc-álgebra-geométrica-em-cl30" class="nav-link" data-scroll-target="#álgebra-geométrica-em-cl30"><span class="header-section-number">7.3</span> Álgebra Geométrica em <span class="math inline">\(Cl(3,0)\)</span></a></li>
+  <li><a href="#modelagem-de-campos" id="toc-modelagem-de-campos" class="nav-link" data-scroll-target="#modelagem-de-campos"><span class="header-section-number">7.4</span> Modelagem de campos</a></li>
+  <li><a href="#fidelidade-e-recursos" id="toc-fidelidade-e-recursos" class="nav-link" data-scroll-target="#fidelidade-e-recursos"><span class="header-section-number">7.5</span> Fidelidade e recursos</a></li>
+  <li><a href="#identificação-e-partição-dos-dados" id="toc-identificação-e-partição-dos-dados" class="nav-link" data-scroll-target="#identificação-e-partição-dos-dados"><span class="header-section-number">7.6</span> Identificação e partição dos dados</a></li>
+  <li><a href="#limites-da-transferência-2d-3d" id="toc-limites-da-transferência-2d-3d" class="nav-link" data-scroll-target="#limites-da-transferência-2d-3d"><span class="header-section-number">7.7</span> Limites da transferência 2D → 3D</a></li>
+  <li><a href="#gate-para-o-capítulo-8" id="toc-gate-para-o-capítulo-8" class="nav-link" data-scroll-target="#gate-para-o-capítulo-8"><span class="header-section-number">7.8</span> Gate para o Capítulo 8</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/cvictorr2508/ucav-aerostealth-gnn/edit/main/chapters/07_multifidelity_3d.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/cvictorr2508/ucav-aerostealth-gnn/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li><li><a href="https://github.com/cvictorr2508/ucav-aerostealth-gnn/blob/main/chapters/07_multifidelity_3d.qmd" class="toc-action"><i class="bi empty"></i>Ver o código fonte</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn/edit/main/chapters/07_multifidelity_3d.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li><li><a href="https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn/blob/main/chapters/07_multifidelity_3d.qmd" class="toc-action"><i class="bi empty"></i>Ver o código fonte</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Modelagem multifidelidade e representação geométrica do estudo 3D</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Representações geométricas e dados acadêmicos tridimensionais</span></h1>
 </div>
 
 
@@ -266,72 +263,50 @@ window.Quarto = {
 </header>
 
 
-<p>Este capítulo estenderá para três dimensões a infraestrutura validada no estudo 2D. A passagem para 3D não será tratada como simples aumento do número de coordenadas: superfícies triangulares, orientação de faces, remalhamento, campos vetoriais e dependências eletromagnéticas de longo alcance introduzem novas exigências geométricas, físicas e computacionais.</p>
-<section id="geometrias-ucav-e-parametrização-3d" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="geometrias-ucav-e-parametrização-3d"><span class="header-section-number">7.1</span> Geometrias UCAV e parametrização 3D</h2>
-<p>A geometria tridimensional deverá ser gerada a partir de um espaço de projeto explicitamente parametrizado. Cada configuração manterá rastreabilidade entre parâmetros de projeto, CAD ou representação geométrica intermediária, malha superficial, grafo e respostas dos solvers.</p>
+<p>Este capítulo descreve requisitos para estender a metodologia de malhas e grafos de problemas 2D a <strong>domínios geométricos 3D acadêmicos</strong>, como corpos genéricos, superfícies discretizadas e benchmarks públicos de equações diferenciais. A transição será estudada sem pressupor uma aplicação específica de projeto de aeronaves.</p>
+<section id="domínios-e-geometria" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="domínios-e-geometria"><span class="header-section-number">7.1</span> Domínios e geometria</h2>
+<p>As geometrias devem ter origem, licença, parâmetros e condições de geração verificáveis. Caso seja utilizado um conjunto representativo de geometria civil UAV, esse contexto será declarado separadamente e não determinará as hipóteses físicas das tarefas matemáticas. A escolha efetiva dependerá da disponibilidade de datasets e benchmarks independentes.</p>
 </section>
-<section id="design-of-experiments-e-banco-de-dados-3d" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="design-of-experiments-e-banco-de-dados-3d"><span class="header-section-number">7.2</span> Design of Experiments e banco de dados 3D</h2>
-<p>A extensão tridimensional exigirá um DoE próprio no espaço de parâmetros geométricos e condições físicas. A estratégia de amostragem deverá considerar restrições de fabricação ou integração, validade geométrica do CAD, qualidade da malha e orçamento dos solvers. Técnicas como LHS podem fornecer cobertura inicial <span class="citation" data-cites="mckay1979lhs"><a href="#ref-mckay1979lhs" role="doc-biblioref">[1]</a></span>, mas a amostragem final deverá ser compatível com a parametrização 3D e com o custo observado de cada fidelidade.</p>
-<p>Quando houver múltiplos níveis de fidelidade, o plano de dados deverá documentar a relação entre os conjuntos de amostras e reservar avaliações de referência para validação e reavaliação final. Estratégias multifidelidade serão selecionadas de acordo com a correlação observada, a compatibilidade das respostas e a relação entre recurso consumido e informação acrescentada <span class="citation" data-cites="peherstorfer2018"><a href="#ref-peherstorfer2018" role="doc-biblioref">[2]</a></span>.</p>
+<section id="malhas-e-representação-em-grafos" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="malhas-e-representação-em-grafos"><span class="header-section-number">7.2</span> Malhas e representação em grafos</h2>
+<p>Faces, células e vértices são entidades distintas. Para cada representação, definir a função que relaciona a malha ao grafo, as adjacências e os atributos carregados. O impacto de refinamento e alteração de conectividade será avaliado mantendo a identidade da geometria.</p>
 </section>
-<section id="malhas-superficiais-e-grafos" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="malhas-superficiais-e-grafos"><span class="header-section-number">7.3</span> Malhas superficiais e grafos</h2>
-<p>Serão avaliados grafos de vértices e de faces, escolhidos de acordo com a localização das variáveis físicas e com a discretização dos modelos de referência. A robustez a alterações de densidade e conectividade da malha será testada explicitamente.</p>
-</section>
-<section id="álgebra-geométrica-em-cl30" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="álgebra-geométrica-em-cl30"><span class="header-section-number">7.4</span> Álgebra Geométrica em <span class="math inline">\(Cl(3,0)\)</span></h2>
-<p>Para uma face triangular <span class="math inline">\(f=(i,j,k)\)</span>, o bivetor de área orientada será</p>
+<section id="álgebra-geométrica-em-cl30" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="álgebra-geométrica-em-cl30"><span class="header-section-number">7.3</span> Álgebra Geométrica em <span class="math inline">\(Cl(3,0)\)</span></h2>
+<p>Para uma face triangular orientada <span class="math inline">\(f=(i,j,k)\)</span> com posições vetoriais <span class="math inline">\(\mathbf x_i,\mathbf x_j,\mathbf x_k\)</span>, defina os vetores relativos <span class="math inline">\(\mathbf r_{ij}=\mathbf x_j-\mathbf x_i\)</span> e <span class="math inline">\(\mathbf r_{ik}=\mathbf x_k-\mathbf x_i\)</span>. O bivetor de área orientada é</p>
 <p><span class="math display">\[
-B_f
-=
-\frac12
-\mathbf r_{ij}\wedge\mathbf r_{ik},
+B_f=\frac{1}{2}\,\mathbf r_{ij}\wedge\mathbf r_{ik}.
 \]</span></p>
-<p>e sua magnitude fornecerá a área. Normais, dualidade, rotores entre referenciais locais e relações de orientação entre faces serão incorporados de forma compatível com as definições do Capítulo 2.</p>
+<p>Sua magnitude representa a área da face, enquanto sua dualidade orientada fornece a normal, sob convenção de sinal explícita. O uso de rotores e extensores exigirá definição dos referenciais e das propriedades de transformação efetivamente preservadas.</p>
 </section>
-<section id="aerodinâmica-tridimensional" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="aerodinâmica-tridimensional"><span class="header-section-number">7.5</span> Aerodinâmica tridimensional</h2>
-<p>As respostas poderão incluir <span class="math inline">\(C_p\)</span>, <span class="math inline">\(C_L\)</span>, <span class="math inline">\(C_D\)</span>, <span class="math inline">\(C_m\)</span> e demais coeficientes relevantes. Os níveis de fidelidade serão definidos por conteúdo físico, discretização, modelos de turbulência quando aplicáveis, condições de contorno, convergência e demanda de recursos.</p>
+<section id="modelagem-de-campos" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="modelagem-de-campos"><span class="header-section-number">7.4</span> Modelagem de campos</h2>
+<p>Para dinâmica dos fluidos, campos de pressão e velocidades, conservação, condições de contorno e modelos físicos devem ser caracterizados antes de construir os grafos. Para eletromagnetismo, problemas canônicos 3D de propagação ou espalhamento poderão ser examinados separadamente; amplitude, fase e localização de componentes complexas serão preservadas quando necessárias para verificação matemática.</p>
 </section>
-<section id="espalhamento-eletromagnético-tridimensional" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="espalhamento-eletromagnético-tridimensional"><span class="header-section-number">7.6</span> Espalhamento eletromagnético tridimensional</h2>
-<p>A resposta eletromagnética será tratada como RCS tridimensional quando sua definição física e normalização corresponderem a essa grandeza. A dependência angular, de frequência e de polarização deverá ser preservada:</p>
-<p><span class="math display">\[
-\sigma
-=
-\sigma(\theta,\phi,f,\mathrm{pol}).
-\]</span></p>
-<p>Quando campos ou correntes locais estiverem disponíveis, serão preservadas amplitude e fase para permitir reconstruções fisicamente coerentes de campo distante.</p>
+<section id="fidelidade-e-recursos" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="fidelidade-e-recursos"><span class="header-section-number">7.5</span> Fidelidade e recursos</h2>
+<p>Resoluções de malha, ordens de discretização e hipóteses físicas definem alternativas numéricas que precisam ser caracterizadas por erro observado, convergência, tempo de parede, CPU/GPU-hora, armazenamento e memória. Diferentes tamanhos de malha não são, por si sós, hierarquias validadas de fidelidade.</p>
 </section>
-<section id="fidelidades-em-e-aero" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="fidelidades-em-e-aero"><span class="header-section-number">7.7</span> Fidelidades EM e aero</h2>
-<p>As hierarquias não serão definidas apenas por nomes de solvers. Cada nível deverá ser documentado por suas hipóteses, discretização, resolução, tratamento de bordas ou viscosidade, critérios numéricos e recursos observados.</p>
+<section id="identificação-e-partição-dos-dados" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="identificação-e-partição-dos-dados"><span class="header-section-number">7.6</span> Identificação e partição dos dados</h2>
+<p>Cada amostra deverá registrar domínio/geometry ID, mesh ID, condições físicas, solver, versão, estado da convergência, local de armazenamento das incógnitas e formato de saída. Uma geometria não pode atravessar partições de treino e teste quando se avaliar generalização geométrica.</p>
 </section>
-<section id="correspondência-entre-fidelidades" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="correspondência-entre-fidelidades"><span class="header-section-number">7.8</span> Correspondência entre fidelidades</h2>
-<p>A construção multifidelidade exigirá compatibilidade entre grandezas. Respostas LF e HF deverão representar a mesma quantidade física sob condições equivalentes antes de serem usadas em correção residual, transferência de representação ou aprendizado conjunto.</p>
+<section id="limites-da-transferência-2d-3d" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="limites-da-transferência-2d-3d"><span class="header-section-number">7.7</span> Limites da transferência 2D → 3D</h2>
+<p>Operações geométricas elementares, testes e mecanismos de rastreabilidade poderão ser reaproveitados. As diferenças entre conectividade planar e superficial, dimensionalidade e condições de contorno exigem verificação independente de modelos e métricas <span class="citation" data-cites="pfaff2021 li2023gino"><a href="#ref-pfaff2021" role="doc-biblioref">[1]</a>, <a href="#ref-li2023gino" role="doc-biblioref">[2]</a></span>.</p>
 </section>
-<section id="dados-manifestos-e-rastreabilidade" class="level2" data-number="7.9">
-<h2 data-number="7.9" class="anchored" data-anchor-id="dados-manifestos-e-rastreabilidade"><span class="header-section-number">7.9</span> Dados, manifestos e rastreabilidade</h2>
-<p>Cada configuração 3D deverá manter identificadores persistentes para geometria, malha, fidelidade e condições físicas. Os splits continuarão sendo realizados por geometria, evitando vazamento entre remalhamentos ou condições derivadas da mesma configuração.</p>
-</section>
-<section id="transferência-do-pipeline-2d" class="level2" data-number="7.10">
-<h2 data-number="7.10" class="anchored" data-anchor-id="transferência-do-pipeline-2d"><span class="header-section-number">7.10</span> Transferência do pipeline 2D</h2>
-<p>Loaders, configuração de jobs, seed oficial, métricas e estrutura de artefatos serão reutilizados. A representação geométrica, os hiperparâmetros e as arquiteturas serão novamente avaliados, pois desempenho no caso 2D não constitui validação automática em 3D.</p>
-</section>
-<section id="critérios-de-prontidão-para-o-capítulo-8" class="level2" data-number="7.11">
-<h2 data-number="7.11" class="anchored" data-anchor-id="critérios-de-prontidão-para-o-capítulo-8"><span class="header-section-number">7.11</span> Critérios de prontidão para o Capítulo 8</h2>
-<p>Antes da otimização tridimensional, os surrogates disciplinares deverão demonstrar generalização em geometrias não vistas, estabilidade frente a remalhamento e erro compatível com as decisões de projeto que serão tomadas no domínio aero-stealth.</p>
+<section id="gate-para-o-capítulo-8" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="gate-para-o-capítulo-8"><span class="header-section-number">7.8</span> Gate para o Capítulo 8</h2>
+<p>A análise 3D somente avançará de planejamento para experimentos após seleção de benchmarks acadêmicos, contratos de dados, baselines e recursos adequados. Não se considerarão resultados 2D como demonstração de desempenho 3D.</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-mckay1979lhs" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">M. D. McKay, R. J. Beckman, e W. J. Conover, <span>“A Comparison of Three Methods for Selecting Values of Input Variables in the Analysis of Output from a Computer Code”</span>, <em>Technometrics</em>, v. 21, n. 2, p. 239–245, 1979, doi: <a href="https://doi.org/10.1080/00401706.1979.10489755">10.1080/00401706.1979.10489755</a>.</div>
+<div id="ref-pfaff2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">T. Pfaff, M. Fortunato, A. Sanchez-Gonzalez, e P. W. Battaglia, <span>“Learning Mesh-Based Simulation with Graph Networks”</span>, em <em>International Conference on Learning Representations</em>, 2021. Disponível em: <a href="https://openreview.net/forum?id=roNqYL0_XP">https://openreview.net/forum?id=roNqYL0_XP</a></div>
 </div>
-<div id="ref-peherstorfer2018" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">B. Peherstorfer, K. Willcox, e M. Gunzburger, <span>“Survey of Multifidelity Methods in Uncertainty Propagation, Inference, and Optimization”</span>, <em>SIAM Review</em>, v. 60, n. 3, p. 550–591, 2018, doi: <a href="https://doi.org/10.1137/16M1082469">10.1137/16M1082469</a>.</div>
+<div id="ref-li2023gino" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">Z. Li <em>et al.</em>, <span>“Geometry-Informed Neural Operator for Large-Scale 3D PDEs”</span>, em <em>Advances in Neural Information Processing Systems</em>, 2023, p. 35836–35854. doi: <a href="https://doi.org/10.52202/075280-1556">10.52202/075280-1556</a>.</div>
 </div>
 </div>
 </section>
@@ -739,13 +714,13 @@ B_f
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/06_optimization.html" class="pagination-link" aria-label="GNNs, treinamento, validação e otimização no estudo 2D">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GNNs, treinamento, validação e otimização no estudo 2D</span></span>
+      <a href="../chapters/06_validation_2d.html" class="pagination-link" aria-label="GNNs e validação experimental em problemas acadêmicos 2D">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GNNs e validação experimental em problemas acadêmicos 2D</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/08_optimization_3d.html" class="pagination-link" aria-label="GNNs multifidelidade e otimização aero-stealth no estudo 3D">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">GNNs multifidelidade e otimização aero-stealth no estudo 3D</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/08_validation_3d.html" class="pagination-link" aria-label="GNNs e validação acadêmica em três dimensões">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">GNNs e validação acadêmica em três dimensões</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -754,4 +729,4 @@ B_f
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cvictorr2508/ucav-aerostealth-gnn/edit/main/chapters/07_multifidelity_3d.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/cvictorr2508/ucav-aerostealth-gnn/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li><li><a href="https://github.com/cvictorr2508/ucav-aerostealth-gnn/blob/main/chapters/07_multifidelity_3d.qmd" class="toc-action"><i class="bi empty"></i>Ver o código fonte</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn/edit/main/chapters/07_multifidelity_3d.qmd" class="toc-action"><i class="bi bi-github"></i>Editar essa página</a></li><li><a href="https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn/issues/new" class="toc-action"><i class="bi empty"></i>Criar uma issue</a></li><li><a href="https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn/blob/main/chapters/07_multifidelity_3d.qmd" class="toc-action"><i class="bi empty"></i>Ver o código fonte</a></li></ul></div></div></div></footer></body></html>
