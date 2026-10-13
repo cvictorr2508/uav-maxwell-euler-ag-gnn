@@ -9,8 +9,16 @@ def availability() -> dict[str, Any]:
     try:
         import torch  # noqa: F401
     except ImportError:
-        return {"available": False, "reason": "PyTorch is not installed; optional GNN was not run."}
-    return {"available": True, "reason": "PyTorch available."}
+        return {
+            "available": False,
+            "training_executed": False,
+            "reason": "PyTorch is not installed; availability was checked only.",
+        }
+    return {
+        "available": True,
+        "training_executed": False,
+        "reason": "PyTorch available; S3 performs an availability check only.",
+    }
 
 
 def train_surface_gnn(*args, **kwargs):

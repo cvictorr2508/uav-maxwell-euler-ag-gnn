@@ -9,6 +9,7 @@ from uav_euler2d.graph import build_surface_graph
 from uav_euler2d.validation import ValidationConfig, integrate_surface, validate_dataset
 from uav_euler2d.experiment import FeatureSpec, MeanPredictor, RidgePredictor, evaluate_predictor
 from uav_euler2d.geometry import check_contour_continuity
+from uav_euler2d.gnn import availability
 
 
 class SyntheticDataset:
@@ -158,6 +159,23 @@ class LoaderPolicyTests(unittest.TestCase):
         self.assertEqual([report.count for report in ridge], [1, 1, 1])
         with self.assertRaises(ValueError):
             FeatureSpec(names=("Cp",)).validate()
+
+    def test_gnn_availability_does_not_claim_training(self):
+        self.assertFalse(availability()["training_executed"])
+
+    def test_s3_cli_blocks_experimental_metrics_after_validation_error(self):
+        import importlib.util
+
+        script = Path(__file__).parents[1] / "scripts" / "run_s3_experiment.py"
+        module_spec = importlib.util.spec_from_file_location("run_s3_experiment", script)
+        module = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(module)
+        result, blocked = module.run_protocol(SyntheticDataset(bad_length=True), 202604, True)
+        self.assertTrue(blocked)
+        self.assertEqual(result["experimental_metrics"]["status"], "blocked")
+        self.assertEqual(result["baselines"], {})
+        self.assertEqual(result["geometry_continuity"], {})
+        self.assertEqual(result["gnn"]["status"], "blocked_by_dataset_validation")
 
 
 if __name__ == "__main__":

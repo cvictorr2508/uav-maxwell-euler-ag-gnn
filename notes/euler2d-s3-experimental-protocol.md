@@ -12,7 +12,7 @@ teste. O caso `c0015` permanece no teste.
 `FeatureSpec` define explicitamente as entradas pré-solver:
 
 ```text
-m, p, t, mach_inf, alpha_deg
+m, p, t, mach_inf, alpha_deg, chord_ref_m
 ```
 
 Os alvos de referência são `CL` e `CD`. `Cp`, pressão superficial e
@@ -26,6 +26,8 @@ entrada. A seleção é verificada em tempo de execução para impedir vazamento
    somente no treino e solução determinística sem `scikit-learn`.
 3. `surface_gnn`: pequena rede opcional em PyTorch, com mensagem média entre
    vizinhos de contorno e pooling global. PyTorch não é dependência obrigatória;
+   o sinalizador `--run-gnn` apenas verifica disponibilidade nesta Sprint e não
+   inicia treinamento;
    quando ausente, a execução registra a inviabilidade do ambiente em vez de
    produzir resultado artificial.
 
