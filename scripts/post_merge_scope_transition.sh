@@ -40,7 +40,7 @@ for record in "${refs[@]}"; do
   [[ "$name" != "main" && "$name" != "develop" && "$name" != "gh-pages" ]] || exit 1
   current="$(gh api "repos/$repo/git/ref/heads/$name" --jq '.object.sha' 2>/dev/null || true)"
   saved="$(gh api "repos/$repo/git/ref/tags/$prefix/$name" --jq '.object.sha' 2>/dev/null || true)"
-  if [[ ( -n "$current" && "$current" != "$expected" ) || ( -n "$saved" && "$saved" != "$expected" ) || ( -z "$current" && "$saved" != "$expected" ) ]]; then
+  if [[ ( -n "$current" && "$current" != "$expected" ) || ( -n "$saved" && "$saved" != "$expected" ) ]]; then
     echo "::error::$name changed or is not safely archived; refusing any deletion."
     exit 1
   fi
