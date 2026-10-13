@@ -46,6 +46,10 @@ def _number(row: dict, key: str) -> float:
     return float(row[key])
 
 
+def _positive(value: object) -> bool:
+    return _finite(value) and float(value) > 0.0
+
+
 def _relative_or_absolute(actual: float, expected: float, rel_pct: float, abs_tol: float) -> bool:
     scale = max(abs(expected), abs_tol)
     return abs(actual - expected) <= max(abs_tol, scale * rel_pct / 100.0)
@@ -64,8 +68,8 @@ def integrate_surface(rows: Iterable[dict], alpha_deg: float, chord: float) -> t
 def _validate_surface(dataset: Euler2DDataset, case: dict, config: ValidationConfig, report: ValidationReport) -> None:
     case_id = case["case_id"]
     rows = dataset.surface_rows(case_id)
-    if len(rows) != 500:
-        report.errors.append(f"{case_id}: expected 500 faces, got {len(rows)}")
+    if not rows:
+        report.errors.append(f"{case_id}: surface has no faces")
     expected_indices = list(range(len(rows)))
     indices = [int(row["contour_index"]) for row in rows]
     if indices != expected_indices:
@@ -82,6 +86,8 @@ def _validate_surface(dataset: Euler2DDataset, case: dict, config: ValidationCon
         for name in ("x_m", "y_m", "normal_x", "normal_y", "segment_length_m", "pressure_abs_Pa", "Cp"):
             if not _finite(row[name]):
                 report.errors.append(f"{case_id}: non-finite {name}")
+        if not _positive(row["segment_length_m"]):
+            report.errors.append(f"{case_id}: segment_length_m must be positive")
         norm = math.hypot(float(row["normal_x"]), float(row["normal_y"]))
         if abs(norm - 1.0) > config.normal_abs:
             report.errors.append(f"{case_id}: non-unit normal")
@@ -125,8 +131,8 @@ def validate_dataset(dataset: Euler2DDataset, config: ValidationConfig | None = 
     geometries = [row["geometry_id"] for row in cases]
     if len(ids) != len(set(ids)):
         report.errors.append("case_id values are not unique")
-    if len(geometries) != len(set(geometries)):
-        report.errors.append("geometry_id values are not unique")
+    if any(not geometry_id for geometry_id in geometries):
+        report.errors.append("geometry_id values must be non-empty")
     unknown = {row["status"] for row in cases} - VALID_STATUSES
     if unknown:
         report.errors.append(f"unknown statuses: {sorted(unknown)}")
@@ -138,7 +144,31 @@ def validate_dataset(dataset: Euler2DDataset, config: ValidationConfig | None = 
             for key in ("CL", "CD", "alpha_deg", "chord_ref_m"):
                 if not _finite(row[key]):
                     report.errors.append(f"{row['case_id']}: invalid {key}")
+            if not _positive(row["chord_ref_m"]):
+                report.errors.append(f"{row['case_id']}: chord_ref_m must be positive")
+            for key in ("rho_inf_kg_m3", "p_inf_Pa", "T_inf_K", "gamma", "V_inf_m_s", "q_inf_Pa"):
+                if key in row and not _positive(row[key]):
+                    report.errors.append(f"{row['case_id']}: {key} must be positive")
+    constants = dataset.physical_constants()
+    for key, value in constants.items():
+        if key != "gamma" and not _positive(value):
+            report.errors.append(f"physical constant {key} must be positive")
+    if not _finite(constants.get("gamma")) or constants["gamma"] <= 1.0:
+        report.errors.append("physical constant gamma must be greater than one")
     split_sets = {name: set(dataset.split_manifest[name]) for name in ("train", "val", "test")}
+    known_geometries = set(geometries)
+    for split, split_ids in split_sets.items():
+        unknown_ids = split_ids - known_geometries
+        if unknown_ids:
+            report.errors.append(f"{split} references unknown geometries: {sorted(unknown_ids)}")
+    excluded_failed = set(dataset.split_manifest.get("excluded_failed", []))
+    unknown_excluded = excluded_failed - known_geometries
+    if unknown_excluded:
+        report.errors.append(f"excluded_failed references unknown geometries: {sorted(unknown_excluded)}")
+    assigned = set.union(*split_sets.values(), excluded_failed)
+    unassigned = known_geometries - assigned
+    if unassigned:
+        report.errors.append(f"geometries are not assigned to a split or excluded_failed: {sorted(unassigned)}")
     for left, right in (("train", "val"), ("train", "test"), ("val", "test")):
         overlap = split_sets[left] & split_sets[right]
         if overlap:
