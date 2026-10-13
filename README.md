@@ -38,7 +38,7 @@ Consulte [o contrato científico de escopo](notes/research-scope-2026-10-13.md),
 
 ## Continuidade do trabalho
 
-A mudança de escopo preserva o histórico Git para fins de rastreabilidade. Documentos e branches antigos **não** são evidências de que resultados científicos foram verificados. A PR #16 é um artefato experimental legado ainda em revisão de pertinência e não deve ser incorporada diretamente sem realinhamento.
+A mudança de escopo preserva o histórico Git para fins de rastreabilidade. Documentos e branches antigos **não** são evidências de que resultados científicos foram verificados. A PR #16 foi encerrada sem merge e sua branch antiga foi excluída após o realinhamento. O código e seu histórico permanecem disponíveis na tag `archive/academic-realignment-2026-10-13/feature/ch5-2d-data-ga-pipeline`, para eventual reutilização somente após revisão científica.
 
 ## Licença
 
