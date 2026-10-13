@@ -1,0 +1,50 @@
+# GNNs e validação acadêmica em três dimensões
+
+Este capítulo planeja a investigação de representações e modelos de aprendizado sobre malhas tridimensionais, a ser executada somente quando os dados e a infraestrutura estiverem verificados. A ênfase permanece em propriedades matemáticas, consistência física e custo computacional. Nenhum resultado 3D é antecipado.
+
+## Questões experimentais
+
+A avaliação deverá determinar se os descritores de geometria 3D preservam orientação, adjacência e as transformações esperadas; se GNNs generalizam a novas geometrias e remalhamentos; e se representações em Álgebra Geométrica melhoram alguma métrica face a baselines convencionais, sob controle de orçamento e particionamento.
+
+## Benchmarks independentes
+
+Problemas acadêmicos elegíveis incluem campos de fluidos sobre geometrias genéricas, equações diferenciais sobre malhas 3D e propagação eletromagnética em domínios canônicos. A escolha será justificada por documentação pública, licenças, condições de contorno e possibilidade de validar os campos de referência. Os benchmarks de diferentes disciplinas não compõem objetivos conjuntos de projeto.
+
+## Modelos comparadores
+
+O estudo poderá incluir uma regressão ou operador simples, uma Message Passing Neural Network convencional e variantes com atributos derivados de \(Cl(3,0)\). Experimentos com camadas geometricamente estruturadas somente deverão reivindicar invariância/equivariança após definição da ação de grupo e realização de testes adequados.
+
+## Previsão de campos de fluidos
+
+Uma tarefa abstrata de previsão é
+
+$$
+\mathcal G_{\boldsymbol\theta}^{\mathrm{fluido}}:
+(G,\mathbf c)\longmapsto \widehat{\mathbf y},
+$$
+
+em que \(G\) é o grafo extraído de malha, \(\mathbf c\) contém condições de contorno e parâmetros conhecidos, \(\boldsymbol\theta\) são pesos do modelo e \(\widehat{\mathbf y}\) corresponde aos campos ou observáveis disponíveis. A referência deverá conter semântica, unidades e local de armazenamento explícitos. Não presumir que apenas observáveis globais permitam reconstruir campos ou resíduos físicos.
+
+## Problemas eletromagnéticos canônicos
+
+Quando incluídos, modelos para Maxwell tratarão **propagação ou espalhamento acadêmico independente** em malhas genéricas. Os alvos e a representação de números complexos deverão preservar convenções de tempo/frequência e relações constitutivas. A comparação não constitui desenvolvimento de redução de detectabilidade nem aplicação de otimização do projeto de aeronaves.
+
+## Multifidelidade
+
+A avaliação multifidelidade é contingente à existência de conjuntos compatíveis de dados de referência e de aproximações menos custosas. Modelos de correção de discrepância, transferência e agregação de dados serão hipóteses testadas com métricas de erro e recursos [@peherstorfer2018].
+
+## Verificação de consistência
+
+A avaliação poderá incluir consistência entre campos e observáveis integrados, conservação, condições de contorno e comparação com resultados numéricos de referência. O cálculo de resíduos depende das variáveis previstas e de operadores discretos conhecidos; operadores incompatíveis com o solver não devem ser apresentados como resíduos idênticos aos seus.
+
+## Sensibilidade a remalhamento e generalização
+
+As partições devem ser definidas por geometria, mantendo juntas suas discretizações e condições. Serão distinguidas interpolação dentro do domínio amostrado, generalização geométrica e extrapolação de condições físicas. A dimensão de teste deverá ser discutida ao relatar resultados estatísticos.
+
+## Medidas de desempenho
+
+O relatório distinguirá tempo de geração/preparação de dados, treinamento e inferência. Comparações deverão informar CPU/GPU-horas, hardware, memória, tamanho da malha e erro associado. A utilidade científica será avaliada pela consistência matemática, reprodutibilidade e compromisso mensurável entre erro e recursos, não por vantagens presumidas.
+
+## Limitações e disseminação
+
+A publicação de resultados será condicionada a dados rastreáveis, código verificável, métricas previamente justificadas e revisão científica. O capítulo é um plano de investigação; resultados experimentais 3D serão incorporados somente depois de obtidos e aprovados.

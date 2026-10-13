@@ -1,24 +1,16 @@
-# M1 review checklist
+# Checklist de revisão científica — marco M1 realinhado
 
-Before Gate B authorization, review the following points in PR #2:
+**Estado:** critérios de revisão, não relatório de experimento.
 
-- Public prose is written for an external specialized reader and contains no M0/M1/developer planning language.
-- UCAV is defined as a functional vehicle class and is not treated as synonymous with flying wing.
-- Acronyms are expanded at first occurrence, including UAV, UCAV, RCS, CEM, CFD, FDTD, MoM, FEM, PO, LE-PO, RL-GO, SBR+, MDO, NLP, MINLP, KPLS and UQ where used.
-- João Pedro Rocha Silva is identified unambiguously on first mention.
-- Fidelity and multifidelity are explicitly explained in terms of physical/numerical detail and computational-resource demand.
-- Computational burden is described through processing time, CPU/GPU, memory, storage and number of reference-solver evaluations rather than “cheap/expensive” computation.
-- The engineering context is grounded in UCAV design literature, including stealth, MDO, SACCON/MULDICON and current work through 2026.
-- The state of the art includes the 2026 joint aero-electromagnetic GNN benchmark by Li et al.
-- The research gap is affirmative and focuses on the integration of UCAV MDO, mesh-GNN surrogates, multifidelity learning, angular/polarized RCS, deterministic mathematical optimization, Geometric Algebra and reference-model re-evaluation.
-- Deterministic mathematical optimization is explicitly introduced within MDO, with gradient-based methods, NLP and MINLP foundations.
-- MINLP is used only when discrete design decisions are actually present.
-- Geometric Algebra is a committed methodological pillar, not a tentative representation.
-- Statements about simplification/linearization with Geometric Algebra preserve mathematical rigor and intrinsic physical nonlinearities.
-- The former H4 comparing GA with conventional representations is absent.
-- UQ and active learning are defined and justified only as optional supporting strategies.
-- The chapter includes an explicit justification, research question, general objective and specific objectives.
-- End-to-end acceleration includes data generation, training, optimization and reference-model re-evaluation.
-- Evaluation includes predictive accuracy, resource use and quality of re-evaluated Pareto solutions.
-- The chapter does not treat a learned model as a replacement for reference-model validation.
-- Quarto HTML/PDF CI build succeeds.
+- [ ] Título, objetivo e resumo apresentam Maxwell, Euler, Álgebra Geométrica e grafos como pesquisa acadêmica.
+- [ ] Três perguntas Q1/Q2/Q3 têm hipóteses e critérios de validação verificáveis.
+- [ ] A distinção entre equivalência matemática, escolha representacional e ganho computacional está explícita.
+- [ ] Equações conservativas de Euler, forma geométrica e tensores preservam seus tipos e condições de validade.
+- [ ] Eletromagnetismo é exposto com convenções de campo, frequência, material e contorno explícitas.
+- [ ] Datasets e benchmarks pertencem a problemas acadêmicos independentes; não há objetivos acoplados de características aeronáuticas e retorno radar.
+- [ ] GNNs com atributos de AG não são automaticamente descritas como equivariantes.
+- [ ] Os casos 2D e 3D têm critérios de validação distintos.
+- [ ] Splits por geometria, seed, proveniência, versão do solver, dados e métricas de recursos são documentados.
+- [ ] Afirmações de desempenho e resultados experimentais têm evidência; ausências são declaradas.
+- [ ] Todas as citações resolvem em `references.bib` e os documentos científicos são renderizados por Quarto.
+- [ ] O histórico Git preserva decisões passadas sem as apresentar como escopo atual.
