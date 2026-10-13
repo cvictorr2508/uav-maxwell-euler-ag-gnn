@@ -1,59 +1,45 @@
-# UCAV Aero-Stealth GNN
+# UAV | Maxwell–Euler, Álgebra Geométrica e Graph Neural Networks
 
-Multifidelity Graph Neural Networks with Geometric Algebra for accelerated multidisciplinary aero-stealth optimization of low-observable UCAV configurations.
+Repositório de pesquisa acadêmica do Programa de Pós-Graduação em Engenharia Elétrica (PPGEE), Universidade de Brasília. O estudo investiga representações matemáticas das equações de Euler e Maxwell, Álgebra Geométrica (AG), geometria de malhas e métodos de aprendizado profundo em grafos.
 
-> **Terminology:** UCAV denotes a functional class of unmanned combat aircraft/air vehicles; it is not synonymous with a flying-wing aerodynamic configuration. Flying-wing, tailless, blended-wing-body, or other layouts may be considered as specific design families.
+## Questões científicas
 
-## Objective
+- **Q1 — Matemática:** quais propriedades de Euler e Maxwell podem ser representadas de modo consistente em Álgebra Geométrica, preservando hipóteses, tipos matemáticos e equações de conservação?
+- **Q2 — Grafos:** quais informações geométricas de domínios e malhas são preservadas por diferentes representações e atributos de Graph Neural Networks (GNNs)?
+- **Q3 — Verificação:** como avaliar integridade dos dados, consistência física, generalização, reprodutibilidade e custos de pipelines que combinam métodos numéricos e aprendizado de máquina?
 
-This project develops a multidisciplinary aero-stealth optimization framework that combines:
+## Delimitação
 
-- Radar Cross Section (RCS) modeling;
-- subsonic aerodynamic performance;
-- Geometric Algebra as a common mathematical representation for geometry and physics;
-- mesh-based Graph Neural Networks (GNNs);
-- multifidelity learning across models with different physical/numerical detail and computational-resource requirements;
-- deterministic mathematical optimization, including NLP and MINLP formulations when appropriate;
-- high-fidelity re-evaluation of selected optimization solutions.
+O desenvolvimento de software concentra-se em **problemas acadêmicos independentes e não militares**, como escoamentos 2D de referência, geometria de malhas, propagação eletromagnética, experimentos sintéticos e benchmarks públicos. O estudo teórico de espalhamento eletromagnético integra a fundamentação física; não constitui uma cadeia de otimização de retorno radar, redução de detectabilidade ou integração de objetivos aeronáuticos de furtividade. Nenhum ganho de AG ou GNN é presumido sem validação empírica.
 
-## Research architecture
+Geometrias UAV podem servir como contexto *civil* ilustrativo; o objeto central é a metodologia matemática e computacional, não o projeto ou a otimização de uma aeronave.
+
+## Desenvolvimento reproduzível
 
 ```text
-Parameterized geometry
-        ↓
-Controlled 2D study: contour/mesh → Cl(2,0) → graph
-        ↓
-2D GNN training and multifidelity validation
-        ↓
-3D extension: UCAV surface mesh → Cl(3,0) → graph
-        ↓
-Multifidelity aero-electromagnetic GNNs
-        ↓
-Deterministic multidisciplinary aero-stealth optimization
-        ↓
-Reference-model re-evaluation
+Equações e hipóteses → discretização / malha → descritores em AG
+                                    ↓
+                         grafos e datasets
+                                    ↓
+                  baselines de regressão / GNN
+                                    ↓
+                     verificação e validação
+                                    ↓
+                análise de erros e recursos
 ```
 
-The principal computational contribution is the use of multifidelity GNNs to reduce the number of resource-intensive electromagnetic and aerodynamic evaluations required inside the optimization loop. Geometric Algebra is adopted as a structuring mathematical formalism for geometric representation, physical relations, and optimization operators.
+O eBook científico é escrito em **Quarto**. Conteúdo pedagógico do eBook e resultados específicos da dissertação são distinguidos. Referências bibliográficas utilizam estilo numérico IEEE.
 
-Uncertainty quantification and active learning are considered supporting strategies that may be evaluated when they demonstrably improve the selection of additional high-fidelity simulations; they are not assumed as mandatory components of the framework.
+- `main`: conteúdo estável e revisado;
+- `develop`: integração após revisão de PRs;
+- branches de trabalho: alterações delimitadas, com revisão e verificações proporcionais.
 
-## Documentation
+Consulte [o contrato científico de escopo](notes/research-scope-2026-10-13.md), [as diretrizes científicas](notes/editorial-scientific-guidelines.md) e [a proposta de contrato dos dados Euler 2D](notes/euler2d-dataset-contract.md).
 
-The technical documentation and research eBook are written in [Quarto](https://quarto.org/) and rendered to HTML and PDF from the same source.
+## Continuidade do trabalho
 
-## Development workflow
+A mudança de escopo preserva o histórico Git para fins de rastreabilidade. Documentos e branches antigos **não** são evidências de que resultados científicos foram verificados. A PR #16 é um artefato experimental legado ainda em revisão de pertinência e não deve ser incorporada diretamente sem realinhamento.
 
-- `main`: stable, reviewed content;
-- `develop`: integration branch for the next milestone;
-- feature branches: optional branches for isolated experiments or substantial changes.
+## Licença
 
-Changes from `develop` to `main` should be reviewed through pull requests.
-
-## Repository status
-
-Research and development in progress.
-
-## License
-
-Software in this repository is currently distributed under the MIT License. Licensing for the eBook and other research content will be specified separately before public release of substantive content.
+O código existente está sob licença MIT. A licença do eBook e de outros conteúdos acadêmicos requer confirmação específica antes de redistribuição.
