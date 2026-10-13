@@ -6,6 +6,8 @@ on:
     branches: [develop]
     paths:
       - notes/research-scope-2026-10-13.md
+      - scripts/post_merge_scope_transition.sh
+      - .github/workflows/post-merge-scope-transition.yml
 
 concurrency:
   group: post-merge-scope-transition
