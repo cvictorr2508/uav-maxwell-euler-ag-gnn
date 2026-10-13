@@ -48,3 +48,13 @@ A nova identidade não constitui uma conclusão experimental, nem transforma um 
 ## Próximo marco
 
 Avaliação do contrato e revisão da PR de realinhamento; depois, encaminhar ao Codex auditoria de **somente leitura** do código genérico da PR #16 e planejar benchmarks científicos independentes. O resultado dessa auditoria não é presumido aqui.
+
+## Transição concluída — verificação de 13/10/2026
+
+A PR #22 foi integrada em `develop`. A PR #16 foi encerrada **sem merge** e sua branch `feature/ch5-2d-data-ga-pipeline` foi excluída. As 11 branches de desenvolvimento existentes durante a transição tiveram suas pontas preservadas por tags sob `archive/academic-realignment-2026-10-13/`, e a correspondência exata de seus SHAs foi confirmada diretamente no GitHub.
+
+O workflow de transição arquivou os commits, excluiu as branches e criou a PR #25 (`develop` → `main`). O job terminou com falha HTTP 403 ao tentar criar a tag adicional `completed`, **após** as operações principais. A inexistência dessa tag foi registrada; os 11 arquivos de tags históricos foram verificados individualmente, e a lista atual de branches contém somente `main`, `develop` e `gh-pages`. O workflow administrativo e seu script foram eliminados de `develop`.
+
+Os metadados em `README.md`, `_quarto.yml` e `CITATION.cff` utilizam a identidade e o endereço GitHub vigentes. `CITATION.cff` ainda reflete a autoria de software previamente declarada; eventuais contribuições e crédito acadêmico de João Pedro dependem de confirmação editorial, sem atribuição automática nesta transição.
+
+A PR #25 permanece proposta de publicação. Seu merge em `main` e a execução de GitHub Pages exigem aprovação posterior; nenhuma comprovação numérica de S1 foi produzida pela refatoração.
