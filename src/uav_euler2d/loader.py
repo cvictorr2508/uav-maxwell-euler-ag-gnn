@@ -14,6 +14,7 @@ from typing import Iterable, Iterator, Mapping, Sequence
 
 StatusFilter = frozenset[str]
 VALID_STATUSES = frozenset({"success", "non_converged", "failed"})
+VALID_SPLITS = frozenset({"train", "val", "test"})
 
 
 def _read_json(path: Path) -> dict:
@@ -57,6 +58,8 @@ class Euler2DDataset:
         selected = None if statuses is None else frozenset(statuses)
         if selected is not None and not selected <= VALID_STATUSES:
             raise ValueError(f"unknown status: {sorted(selected - VALID_STATUSES)}")
+        if split is not None and split not in VALID_SPLITS:
+            raise ValueError(f"unknown split: {split}")
         ids = None if split is None else set(self.split_manifest[split])
         for row in self._cases:
             if selected is not None and row["status"] not in selected:
@@ -68,9 +71,13 @@ class Euler2DDataset:
     def cases_for_split(
         self, split: str, statuses: Iterable[str] = ("success",)
     ) -> tuple[Mapping[str, str], ...]:
-        if split not in {"train", "val", "test"}:
+        if split not in VALID_SPLITS:
             raise ValueError(f"unknown split: {split}")
         return tuple(self.iter_cases(statuses=statuses, split=split))
+
+    def cases_for_geometry(self, geometry_id: str) -> tuple[Mapping[str, str], ...]:
+        """Return all runs/cases belonging to one geometry identifier."""
+        return tuple(row for row in self._cases if row["geometry_id"] == geometry_id)
 
     def case(self, case_id: str) -> Mapping[str, str]:
         try:
@@ -99,5 +106,5 @@ class Euler2DDataset:
     def physical_constants(self) -> dict[str, float]:
         conditions = self.manifest["conditions"]
         return {key: _as_float(conditions[key]) for key in (
-            "p_inf_Pa", "q_inf_Pa", "rho_inf_kg_m3", "V_inf_m_s", "chord_ref_m"
+            "p_inf_Pa", "q_inf_Pa", "rho_inf_kg_m3", "V_inf_m_s", "chord_ref_m", "gamma"
         )}
