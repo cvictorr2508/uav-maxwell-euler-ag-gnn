@@ -35,4 +35,4 @@ O contrato de dados Euler 2D é um **schema proposto**, condicionado à inspeç�
 
 O orientador aprova hipóteses, mudanças metodológicas e publicação. João Pedro mantém responsabilidade intelectual por simulações e pesquisas atribuídas. ChatGPT apoia discussão e revisão; Codex implementa código e testes; GitHub constitui fonte de verdade dos artefatos versionados.
 
-**Critérios de aceite desta refatoração:** identidade e finalidade acadêmicas coerentes; eliminação de referências ativas à aplicação anterior nas fontes correntes; referências bibliográficas pertinentes; Quarto validado; histórico preservado; ausência de alteração automática em \`main\` e ausência de merge da PR #16. O material deverá ser revisado e aprovado antes de qualquer publicação.
+**Critérios de aceite desta refatoração:** identidade e finalidade acadêmicas coerentes; eliminação de referências ativas à aplicação anterior nas fontes correntes; referências bibliográficas pertinentes; Quarto validado; histórico preservado; ausência de alteração automática em `main` e ausência de merge da PR #16. O material deverá ser revisado e aprovado antes de qualquer publicação.

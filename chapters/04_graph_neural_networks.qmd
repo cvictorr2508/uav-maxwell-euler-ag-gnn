@@ -10,7 +10,7 @@ O desempenho de uma GNN deverá ser medido por precisão, robustez, reprodutibil
 
 Considere duas triangulações de uma mesma superfície. Se as coordenadas de todos os vértices forem simplesmente concatenadas em um vetor, a representação passa a depender da numeração dos vértices. Trocar a ordem dos índices altera esse vetor, embora a superfície física permaneça a mesma. Geometrias com números diferentes de vértices também passam a produzir vetores de dimensões diferentes.
 
-Uma imagem ou grade regular evita parte desse problema ao impor posições fixas, mas introduz outra hipótese: a vizinhança passa a ser determinada por deslocamentos regulares em linhas, colunas ou voxels. Malhas de aeronaves, painéis eletromagnéticos e discretizações CFD são, em geral, não estruturadas; o tamanho dos elementos varia e regiões de maior gradiente podem receber refinamento local.
+Uma imagem ou grade regular evita parte desse problema ao impor posições fixas, mas introduz outra hipótese: a vizinhança passa a ser determinada por deslocamentos regulares em linhas, colunas ou voxels. Malhas de geometrias de referência, problemas eletromagnéticos e discretizações CFD são, em geral, não estruturadas; o tamanho dos elementos varia e regiões de maior gradiente podem receber refinamento local.
 
 O grafo preserva explicitamente a relação **quem é vizinho de quem**, sem exigir uma indexação regular. Essa propriedade permite representar malhas com números variáveis de entidades e conectividades distintas.
 
@@ -48,7 +48,7 @@ Portanto, não existe uma transformação universal de malha em grafo. A represe
 
 A conectividade determina relações de vizinhança, mas não determina sozinha a geometria. Dois grafos combinatoriamente idênticos podem representar superfícies geometricamente diferentes. Comprimentos, áreas, orientações e posições relativas continuam necessários para distinguir essas geometrias.
 
-O inverso também é relevante: uma mesma superfície física pode ser remalhada. A numeração dos vértices e a conectividade local podem mudar sem que a aeronave tenha mudado de forma relevante. Uma GNN adequada deve ser insensível à simples permutação dos índices e, quando o uso pretendido exigir, robusta a mudanças de discretização que preservem a geometria e a física.
+O inverso também é relevante: uma mesma superfície física pode ser remalhada. A numeração dos vértices e a conectividade local podem mudar sem que a geometria física tenha mudado de forma relevante. Uma GNN adequada deve ser insensível à simples permutação dos índices e, quando o uso pretendido exigir, robusta a mudanças de discretização que preservem a geometria e a física.
 
 ## Message Passing Neural Networks
 
@@ -158,7 +158,7 @@ $$
 
 O símbolo \(\widehat{\mathbf y}\) indica a resposta **predita** pela rede, em contraste com a resposta de referência \(\mathbf y\) produzida pelo conjunto de dados ou pelo solver.
 
-Quando a saída é local, como um coeficiente de pressão por face, o decoder pode produzir uma previsão para cada nó. Quando a saída é global, como \(C_L\), \(C_D\) ou uma medida integrada de RCS, é necessário um **readout** que reúna os estados de todo o grafo.
+Quando a saída é local, como um coeficiente de pressão por face, o decoder pode produzir uma previsão para cada nó. Quando a saída é global, como \(C_L\), \(C_D\) ou um observável escalar integrado, é necessário um **readout** que reúna os estados de todo o grafo.
 
 Se \(N=|V|\) é o número de nós, um readout médio simples é
 
@@ -182,7 +182,7 @@ A escolha entre pooling uniforme e ponderado faz parte da modelagem: uma quantid
 
 ## Aprender um simulador dinâmico não é o mesmo que aprender um surrogate estacionário
 
-Parte importante da literatura de GNNs para física considera modelos que avançam um estado no tempo. MeshGraphNets, por exemplo, aprende atualizações sobre malhas para simulação dinâmica [@pfaff2021]. O uso principal neste livro é diferente: as consultas da otimização correspondem predominantemente a soluções estacionárias de aerodinâmica ou soluções harmônicas de eletromagnetismo.
+Parte importante da literatura de GNNs para física considera modelos que avançam um estado no tempo. MeshGraphNets, por exemplo, aprende atualizações sobre malhas para simulação dinâmica [@pfaff2021]. O uso principal neste livro é diferente: as tarefas deste estudo incluem soluções estacionárias de escoamento ou campos harmônicos de eletromagnetismo, avaliados separadamente.
 
 A tarefa pode ser escrita como um operador paramétrico
 
@@ -197,7 +197,7 @@ em que \(\boldsymbol\theta\) representa todos os parâmetros treináveis da rede
 
 ## Localidade, longo alcance e escala da malha
 
-A conectividade de malha fornece uma hipótese indutiva local útil, mas nem todas as dependências relevantes são estritamente locais. Em formulações integrais de eletromagnetismo, regiões geometricamente distantes podem estar acopladas por funções de Green. A RCS em campo distante resulta da combinação coerente de amplitudes e fases provenientes de diferentes regiões da superfície.
+A conectividade de malha fornece uma hipótese indutiva local útil, mas nem todas as dependências relevantes são estritamente locais. Em formulações integrais de eletromagnetismo, regiões geometricamente distantes podem estar acopladas por funções de Green. Campos espalhados no campo distante dependem da combinação coerente de amplitudes e fases provenientes de diferentes regiões do domínio.
 
 Na aerodinâmica, as equações diferenciais são locais, mas a solução estacionária externa reflete o acoplamento do campo ao redor de toda a configuração. Uma alteração geométrica em uma região pode modificar a distribuição de pressão em regiões afastadas.
 
@@ -245,7 +245,7 @@ ou o uso direto de um vetor unitário de direção representa a periodicidade se
 
 ### Normalização e adimensionalização
 
-Misturar coordenadas em metros, frequência em gigahertz, pressão em pascals e coeficientes da ordem da unidade sem escalonamento pode dificultar a otimização numérica da rede. A normalização deve preservar a capacidade de reconstruir e interpretar as grandezas físicas.
+Misturar coordenadas em metros, frequência em gigahertz, pressão em pascals e coeficientes da ordem da unidade sem escalonamento pode dificultar a minimização numérica da função de perda. A normalização deve preservar a capacidade de reconstruir e interpretar as grandezas físicas.
 
 Coordenadas podem ser divididas por um comprimento de referência; pressões podem ser expressas pelo coeficiente \(C_p\); frequência pode ser substituída ou complementada por \(kL\). Toda transformação aplicada aos dados deve ser registrada para que previsões normalizadas possam ser convertidas novamente às unidades ou convenções de engenharia.
 
@@ -316,11 +316,11 @@ $$
 
 Uma rede é **invariante** a uma transformação quando a grandeza de saída que deveria permanecer fisicamente igual não muda. Ela é **equivariante** quando a saída se transforma segundo a lei apropriada ao objeto físico. Essas ideias pertencem ao quadro de Geometric Deep Learning [@bronstein2021].
 
-Em um problema acadêmico sobre malhas, a transformação precisa envolver o sistema físico completo. Rotacionar apenas a geometria em relação às condições impostas modifica o problema. Se geometria, direção incidente, direção de observação e base de polarização forem rotacionadas de maneira consistente em um meio isotrópico, uma RCS escalar definida no mesmo referencial físico deve ser preservada. O mesmo princípio vale para forças aerodinâmicas e eixos de referência.
+Em um problema acadêmico sobre malhas, a transformação precisa envolver o sistema físico completo. Rotacionar apenas a geometria em relação às condições impostas modifica o problema. Se geometria, direção incidente, direção de observação e base de polarização forem rotacionadas de maneira consistente em um meio isotrópico, uma observável escalar cuja definição seja invariante sob aquela transformação física deve ser preservada. O mesmo princípio vale para forças aerodinâmicas e eixos de referência.
 
 ## Reparametrização e remalhamento
 
-Duas malhas podem aproximar praticamente a mesma superfície com números de elementos e conectividades diferentes. Isso é relevante em otimização geométrica, porque pequenas mudanças de projeto podem desencadear novo processo de tesselação.
+Duas malhas podem aproximar praticamente a mesma superfície com números de elementos e conectividades diferentes. Isso é relevante em testes de robustez a remalhamento, pois refinamentos podem alterar a tesselação sem mudar o domínio físico.
 
 Uma estratégia mantém topologia de malha consistente durante a parametrização, facilitando correspondência entre entidades. Outra aceita remalhamento e exige generalização entre discretizações. A primeira reduz variabilidade topológica; a segunda oferece maior flexibilidade geométrica, mas torna mais difícil separar erro do surrogate de efeitos da discretização.
 
@@ -452,7 +452,7 @@ $$
 \mathcal R_M=\nabla F-\mathcal J
 $$
 
-requer o bivetor de campo eletromagnético \(F\), o operador derivada geométrica \(\nabla\) e o quatro-vetor de fonte \(\mathcal J\) na mesma convenção de unidades e assinatura definida no Capítulo 3. Uma rede que prevê somente RCS não contém essas variáveis locais.
+requer o bivetor de campo eletromagnético \(F\), o operador derivada geométrica \(\nabla\) e o quatro-vetor de fonte \(\mathcal J\) na mesma convenção de unidades e assinatura definida no Capítulo 3. Uma rede que prevê apenas observáveis integrais não contém necessariamente essas variáveis locais.
 
 Assim, consistências integrais ou relações entre campo e resposta global podem ser mais apropriadas do que um resíduo PDE completo quando a saída do surrogate é reduzida.
 
@@ -466,7 +466,7 @@ O estudo não pressupõe um encoder compartilhado para dois sistemas físicos ne
 
 Suponha que cada geometria seja simulada em dez condições de operação. Se oito condições forem destinadas ao treino e duas ao teste por sorteio independente, a mesma geometria poderá aparecer nos dois subconjuntos. O teste medirá principalmente interpolação em condições de operação.
 
-Para avaliar generalização a novas configurações, a divisão deve ser realizada primeiro por geometria: todas as condições associadas a uma geometria permanecem no mesmo subconjunto. Essa estratégia é denominada **geometry-disjoint** e já foi usada em problema aero-eletromagnético baseado em GNN [@li2026aeroem].
+Para avaliar generalização a novas configurações, a divisão deve ser realizada primeiro por geometria: todas as condições associadas a uma geometria permanecem no mesmo subconjunto. Essa estratégia é denominada **geometry-disjoint** e deve ser auditada com identificadores persistentes para impedir contaminação entre conjuntos.
 
 Convém separar pelo menos quatro perguntas experimentais: desempenho em geometria não vista com condições conhecidas; desempenho em condições não vistas sobre geometria conhecida; desempenho quando geometria e condições são simultaneamente não vistas; e sensibilidade a remalhamento de uma mesma geometria. Cada teste caracteriza uma forma diferente de generalização.
 
@@ -480,7 +480,7 @@ $$
 
 não está validado em \(M_\infty=1{,}5\) apenas porque a rede aceita numericamente esse valor. A mesma restrição vale para frequência, ângulos, curvatura, enflechamento e demais variáveis geométricas.
 
-O domínio coberto pelos dados deve acompanhar o modelo como informação de aplicabilidade. Essa precaução é especialmente importante em otimização, porque o algoritmo pode buscar regiões próximas às fronteiras do domínio em que o surrogate possui pouco suporte empírico.
+O domínio coberto pelos dados deve acompanhar o modelo como informação de aplicabilidade. Essa precaução é especialmente importante na extrapolação, quando novas instâncias apresentam características pouco representadas no treinamento.
 
 ## Métricas de erro para campos e respostas integradas
 
@@ -506,7 +506,7 @@ $$
 
 O coeficiente de determinação \(R^2\) pode complementar essas métricas, mas não substitui erros com interpretação física direta.
 
-Para campos locais, além de MAE e RMSE, são úteis normas relativas e mapas espaciais de erro. Para \(C_L\), \(C_D\) e \(C_m\), erros absolutos possuem interpretação de engenharia. Para curvas angulares de RCS, médias globais devem ser complementadas por erro na posição e magnitude de picos, comportamento em setores angulares de interesse e consistência entre polarizações.
+Para campos locais, além de MAE e RMSE, são úteis normas relativas e mapas espaciais de erro. Para \(C_L\), \(C_D\) e \(C_m\), erros absolutos possuem interpretação de engenharia. Para campos de benchmarks eletromagnéticos, métricas de amplitude e fase devem acompanhar normas de erro de campo e consistência das condições de contorno.
 
 Um pequeno erro médio em \(C_p\) não garante pequeno erro em \(C_D\), porque diferenças pequenas distribuídas sobre a superfície podem se acumular na integração. Erros locais e globais devem ser reportados conjuntamente.
 
