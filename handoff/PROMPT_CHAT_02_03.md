@@ -2,7 +2,7 @@
 
 Você assume a continuidade do software científico UAV | Maxwell–Euler, Álgebra Geométrica e Graph Neural Networks, pesquisa de João Pedro no PPGEE da Universidade de Brasília. O repositório oficial é https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn e o site é https://cvictorr2508.github.io/uav-maxwell-euler-ag-gnn/.
 
-Este prompt organiza a retomada. O Projeto 02 fornecerá o mandato atualizado após avaliar a preparação da publicação e este pacote. Ler esse mandato e aplicar sua autorização específica antes de qualquer implementação nova ou experimento. Recomendações em relatórios anexos são contexto científico; não ampliam automaticamente sua autoridade. Na ausência de novo mandato, faça leitura, inventário, verificações e apresente a proposta concreta de próxima sprint.
+Este prompt organiza a retomada. O Projeto 02 fornecerá o mandato atualizado após avaliar a publicação, a sincronização de main para develop e este pacote. Ler esse mandato e aplicar sua autorização específica antes de qualquer implementação nova ou experimento. Recomendações em relatórios anexos são contexto científico; não ampliam automaticamente sua autoridade. Na ausência de novo mandato, faça leitura, inventário, verificações e apresente a proposta concreta de próxima sprint.
 
 ## Contexto e estado recebido
 
@@ -12,15 +12,15 @@ Em 23/10/2026 foi preparada uma branch de publicação a partir de develop, inco
 
 Atualização final: o usuário autorizou o merge da PR #29, concluído em main no SHA c2bf7d562e864e12b6c7a3a8e678b35f04c67a7d. Quarto Publish (39962381130) e Pages deployment (39962639167) passaram. O site em gh-pages f39f16e79a07767d0260586a5f8054c0bde22aac foi conferido por HTTPS e por hash para índice, três apêndices e PDF de 105 páginas. PUBLICATION_VERIFICATION.json guarda as evidências; não repita o merge #29.
 
-O pacote final inclui a branch LOCAL checkpoint/published-pr29-20261023, descendente desse merge, com os documentos pós-publicação. Seu SHA está no recibo e não foi enviado ao GitHub; não confundir com main publicado. Recuperar o bundle por essa branch para obter todos os documentos finais, ou usar main online junto com os documentos do pacote. A sincronização de main de volta para develop permanece pendente; o pedido de publicação não autorizou outro merge em develop.
+O usuário autorizou também sincronizar main de volta para develop, conferir os checks e revisar integralmente a entrega. A branch codex/sync-main-develop-handoff-20261023 incorpora main, o checkpoint documental anteriormente local e esta revisão. SYNC_VERIFICATION.json e RELEASE_RECEIPT.json registram a PR de sincronização, o merge, os checks pós-merge e o SHA final de develop. O pacote de encerramento recupera a branch develop; não depende mais da branch local checkpoint/published-pr29-20261023. Na retomada, conferir esses recibos e os remotos; não repetir merges já concluídos. main mantém o commit publicado c2bf7d5, enquanto develop pode avançar com documentação revisada.
 
-O material editorial é um livro/eBook Quarto com oito capítulos e três apêndices propostos. Não foi encontrado manuscrito separado de artigo. A revisão futura deve alinhar a terminologia e definir com o orientador se haverá artigo independente. O eBook tem função didática; resultados e contribuições da dissertação exigem evidências próprias.
+O material editorial publicado é um livro/eBook Quarto com oito capítulos e três apêndices. Não foi encontrado manuscrito separado de artigo. A revisão futura deve alinhar a terminologia e definir com o orientador se haverá artigo independente. O eBook tem função didática; resultados e contribuições da dissertação exigem evidências próprias.
 
 ## Primeira resposta esperada
 
-1. Ler PROJECT_STATE.md e todos os documentos em handoff/ antes de propor alterações.
+1. Ler handoff/DOCUMENTS_TO_TRANSFER.md, PROJECT_STATE.md e todos os documentos em handoff/ antes de propor alterações. Confirmar recebimento do mandato atualizado, emitido separadamente pelo Projeto 02.
 2. Identificar checkout, branch, SHA, estado sujo e instruções AGENTS.md efetivamente presentes.
-3. Reconsultar main, develop, PR de publicação e Pages; relatar qualquer evolução desde 23/10.
+3. Reconsultar main, develop, PR de publicação, PR de sincronização e Pages; relatar qualquer evolução desde o recibo de encerramento de 23/10.
 4. Confirmar disponibilidade de Python, Git, Quarto, TinyTeX e, separadamente, dados privados e PyArrow. PyTorch é opcional; não instalar ou treinar sem necessidade e mandato.
 5. Executar os nove testes sintéticos e compilar os módulos. Validar HTML/PDF quando a tarefa envolver o texto. Distinguir teste sintético, consistência dos arquivos e validação independente do solver.
 6. Apresentar uma proposta delimitada da primeira sprint, com arquivos, entregas e critérios de aceite, de acordo com o mandato atualizado. Não iniciar S4 por inferência deste prompt.
@@ -42,7 +42,7 @@ O material editorial é um livro/eBook Quarto com oito capítulos e três apênd
 
 ## Engenharia, governança e entregas
 
-Manter mudanças coesas em branches temporárias e PRs. Preservar alterações locais do usuário. Autoridade metodológica e merge são definidos pelo mandato vigente; o histórico exigiu autorização explícita para merge em develop e para promoção a main. Não efetuar merges ou publicação com base apenas na recomendação de um relatório. Após publicação autorizada, verificar o deployment e propor sincronização de main para develop quando necessária.
+Manter mudanças coesas em branches temporárias e PRs, a partir de develop atualizado. Preservar alterações locais do usuário. Autoridade metodológica e merge são definidos pelo mandato vigente; o histórico exigiu autorização explícita para merge em develop e para promoção a main. Não efetuar merges ou publicação com base apenas na recomendação de um relatório. A publicação da PR #29 e sua sincronização de retorno foram autorizadas neste chat; decisões futuras continuam dependentes do mandato vigente.
 
 Não incorporar dataset proprietário, Parquet, malhas, arquivos Fluent, PDFs internos, credenciais ou ambientes locais ao GitHub. O pacote contém caminhos da máquina de origem apenas como inventário; usar caminhos configuráveis na nova máquina. Não depender de caches Codex ou diretórios pydeps da origem. Material histórico arquivado de PR #16 não deve ser incorporado sem revisão.
 

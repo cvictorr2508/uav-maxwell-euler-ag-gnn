@@ -6,9 +6,9 @@ Versão de planejamento de 23/10/2026. A sequência será aprovada ou ajustada p
 
 Entrada: develop com S1–S3 aceitas, main com merges de publicação anteriores. Entrega: uma PR de release para main, três apêndices navegáveis, PROJECT_STATE e este pacote. Verificações: teste/compilação, build HTML/PDF, ausência de dados privados e referência a SHAs/PRs.
 
-Aceite: PR com checks aprovados, diff revisável e pacote verificável na outra máquina. Aprovação de merge/publicação será decisão posterior. Após merge autorizado, verificar workflow e site e planejar sincronização de retorno a develop. Encerramento da preparação não equivale à publicação efetivada.
+Aceite: PR de promoção com checks aprovados, publicação autorizada e verificada, sincronização de retorno com checks aprovados, documentos completos e pacote recuperável em outra máquina.
 
-Atualização de encerramento P0: merge da PR #29 autorizado e concluído em main c2bf7d5; Quarto Publish e Pages deployment aprovados; índice, apêndices e PDF verificados no site. O pacote pós-publicação contém recibo, evidência HTTP e checkpoint local atualizado. A sincronização de retorno a develop permanece pendente de decisão própria. As próximas etapas não foram iniciadas.
+Atualização P0: merge da PR #29 autorizado e concluído em main c2bf7d5; Quarto Publish e Pages deployment aprovados; índice, apêndices e PDF verificados no site. O usuário autorizou também a sincronização de retorno a develop e a revisão integral dos documentos. O pacote de encerramento registra essa integração em SYNC_VERIFICATION.json e recupera o develop remoto integrado. O mandato das próximas etapas será emitido pelo Projeto 02; nenhuma sprint experimental adicional foi iniciada.
 
 ## D1 — harmonização da documentação e do artigo/eBook
 

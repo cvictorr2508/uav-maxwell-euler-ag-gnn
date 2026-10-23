@@ -43,6 +43,7 @@ def main() -> None:
     parser.add_argument("--evidence", type=Path, required=True, help="verified local evidence JSON")
     parser.add_argument("--publication-evidence", type=Path, help="verified deployment and live-site evidence JSON")
     parser.add_argument("--checkpoint", type=Path, help="final human-readable checkpoint")
+    parser.add_argument("--sync-evidence", type=Path, help="verified main-to-develop synchronization JSON")
     args = parser.parse_args()
     root = args.output.resolve()
     if root.is_relative_to(REPO):
@@ -64,9 +65,16 @@ def main() -> None:
     checks = api(f"repos/{REMOTE}/commits/{checks_sha}/check-runs?per_page=100")
     pages = api(f"repos/{REMOTE}/pages")
     branches = api(f"repos/{REMOTE}/branches?per_page=100")
+    sync = None
+    if args.sync_evidence:
+        sync = json.loads(args.sync_evidence.read_text(encoding="utf-8"))
+        if not sync["passed"] or sync["develop_sha"] != sha:
+            raise RuntimeError("sync evidence must verify the packaged develop commit")
     root.mkdir(parents=True)
     shutil.copy2(REPO / "PROJECT_STATE.md", root / "PROJECT_STATE.md")
     shutil.copytree(REPO / "handoff", root / "handoff")
+    if args.sync_evidence:
+        shutil.copy2(args.sync_evidence, root / "SYNC_VERIFICATION.json")
     (root / "scripts").mkdir()
     shutil.copy2(REPO / "scripts" / "verify_transfer.py", root / "scripts" / "verify_transfer.py")
     shutil.copy2(args.evidence, root / "LOCAL_VERIFICATION.json")
@@ -99,7 +107,7 @@ def main() -> None:
         "head_sha": sha,
         "branch": branch,
         "package_commit": sha,
-        "package_commit_is_local_checkpoint": pr["merged"] and sha != pr["merge_commit_sha"],
+        "package_commit_is_local_checkpoint": not any(b["commit"]["sha"] == sha for b in branches),
         "checks_sha": checks_sha,
         "published_source_sha": publication["source_sha"] if publication else None,
         "pr": {"number": pr["number"], "url": pr["html_url"], "state": pr["state"], "merged": pr["merged"], "merged_at": pr["merged_at"], "merge_commit_sha": pr["merge_commit_sha"], "head_sha": pr["head"]["sha"], "base": pr["base"]["ref"], "head": pr["head"]["ref"]},
@@ -108,6 +116,7 @@ def main() -> None:
         "remote_branches": {b["name"]: b["commit"]["sha"] for b in branches},
         "pages": {k: pages.get(k) for k in ("status", "html_url", "build_type", "source")},
         "publication_of_this_pr": "verified; see PUBLICATION_VERIFICATION.json" if publication else "not_verified_by_this_package",
+        "main_to_develop_sync": sync,
         "packaging_environment": {"python": platform.python_version(), "platform": platform.platform(), "quarto": command("quarto", "--version"), "git": command("git", "--version")},
         "private_data_included": False,
         "private_dataset_hashes_included": args.dataset_root is not None,

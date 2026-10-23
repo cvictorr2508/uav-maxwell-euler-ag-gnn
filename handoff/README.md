@@ -4,6 +4,8 @@ Data de referência: 23/10/2026. A pausa do chat de origem está prevista até p
 
 ## Ordem de leitura
 
+Consultar primeiro DOCUMENTS_TO_TRANSFER.md, que lista integralmente os documentos a repassar ao chat 02.03.
+
 1. PROJECT_STATE.md: situação técnica e científica, evidências e restrições.
 2. RELEASE_STATUS.md: branch, PR e mecanismo de publicação.
 3. PROMPT_CHAT_02_03.md: texto integral para iniciar a continuidade.
@@ -23,6 +25,10 @@ O recibo externo é deliberadamente separado do commit: o SHA final de um commit
 
 A PR #29 foi mesclada com autorização e o site foi verificado. O pacote pós-publicação acrescenta PUBLICATION_VERIFICATION.json, CHECKPOINT_FINAL.md e published-book/ com uma cópia exata do PDF servido. rendered-book/ continua sendo o preview local validado anteriormente.
 
-O Git bundle anuncia a branch LOCAL checkpoint/published-pr29-20261023 e as referências observadas de origin/main e origin/develop. O checkpoint local inclui os documentos atualizados e o empacotador compatível com uma PR já mesclada; não foi enviado ao GitHub. Os recibos distinguem seu SHA do commit c2bf7d5 publicado em main. Para continuar esse estado completo, clonar o bundle pela branch de checkpoint e depois consultar o remoto. Um clone online de main recupera o código publicado, mas seus documentos ainda descrevem a preparação da PR; consultar também os documentos atualizados deste pacote.
+## Edição de encerramento após sincronização
+
+Usar a edição ENCERRAMENTO, que substitui para a continuidade as edições de preparação e PUBLICADO, preservadas como histórico. A sincronização main→develop e a incorporação dos documentos anteriormente locais foram autorizadas; SYNC_VERIFICATION.json registra a PR, o merge e os checks finais. O pacote é gerado a partir do develop remoto integrado. O bundle permite clonar a branch develop diretamente; repository-source.zip corresponde a esse mesmo commit. Não é necessário recuperar uma branch exclusivamente local para obter o prompt, o planejamento ou o guia revisados.
+
+main continua no commit c2bf7d5 publicado em Pages. develop contém essa história e a revisão documental adicional; SHAs diferentes são esperados. O recibo distingue publicação, sincronização e commit empacotado. Os documentos completos do chat 02.03 estão listados em DOCUMENTS_TO_TRANSFER.md, incluindo o mandato atualizado que o Projeto 02 ainda deverá emitir separadamente.
 
 Os fontes e o bundle contêm histórico público do repositório; nenhuma restauração de componentes antigos implica aceitação científica. Não enviar credenciais, .env, tokens, perfis de navegador, ambientes virtuais ou dumps privados. O PDF de acompanhamento e o dataset não acompanham o pacote.

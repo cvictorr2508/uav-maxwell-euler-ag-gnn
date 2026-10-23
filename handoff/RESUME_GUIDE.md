@@ -2,7 +2,7 @@
 
 ## 1. Integridade e código
 
-Verificar SHA256SUMS.json com o script scripts/verify_transfer.py fornecido no pacote. O manifesto cobre os arquivos do diretório, exceto o próprio manifesto; o ZIP externo tem hash separado. Ler o recibo antes de escolher a branch. Esta edição é pós-publicação: a PR #29 está merged; main publicado é c2bf7d5. O checkpoint LOCAL contém documentos atualizados que ainda não foram enviados ao GitHub.
+Começar por handoff/DOCUMENTS_TO_TRANSFER.md. Extrair a edição ENCERRAMENTO em uma pasta curta no Windows, por exemplo C:\uav ou D:\uav, para evitar o limite de comprimento de caminhos dos recursos HTML. Verificar SHA256SUMS.json com scripts/verify_transfer.py. O manifesto cobre os arquivos do diretório, exceto o próprio manifesto; o ZIP externo tem hash separado. Esta edição usa develop integrado após a sincronização de main. O commit publicado de main é c2bf7d5; o SHA final de develop e os checks estão em SYNC_VERIFICATION.json e RELEASE_RECEIPT.json. O checkpoint anteriormente local foi incorporado à PR de sincronização.
 
 Com rede, clonar o repositório oficial em uma pasta nova:
 
@@ -10,22 +10,23 @@ Com rede, clonar o repositório oficial em uma pasta nova:
 git clone https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn.git
 Set-Location uav-maxwell-euler-ag-gnn
 git fetch origin --prune
+git switch develop
 git status --short --branch
 git log --all -8 --oneline
 ```
 
-Se a PR ainda estiver aberta, selecionar a branch codex/release-s3-handoff-20261023. Se já estiver integrada, consultar o SHA de merge e escolher a base atual indicada pelo mandato. Não executar reset em checkout com alterações.
+Comparar o SHA de develop com os recibos do pacote e consultar eventuais alterações posteriores. A base para novo desenvolvimento é develop, conforme o mandato atualizado. main contém a publicação do texto; seus documentos podem refletir o estágio anterior da preparação. Não executar reset em checkout com alterações.
 
 Sem rede, o bundle permite criar outro checkout:
 
 ```powershell
-git clone --branch checkpoint/published-pr29-20261023 CAMINHO\repository.bundle uav-offline
+git clone --branch develop CAMINHO\repository.bundle uav-offline
 Set-Location uav-offline
 git remote set-url origin https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn.git
 git log -3 --oneline
 ```
 
-O bundle anuncia a branch local de checkpoint e as referências observadas de main/develop; elas são um snapshot, não o estado remoto futuro. repository-source.zip contém os fontes versionados desse checkpoint, sem metadados Git. O recibo distingue o commit local do merge publicado. Preferir clone/bundle para continuar o histórico e reconsultar o remoto antes de desenvolver.
+O bundle anuncia develop e as referências observadas de main/develop; elas são um snapshot, não o estado remoto futuro. repository-source.zip contém os fontes versionados de develop no encerramento, sem metadados Git. O recibo distingue o SHA de develop do merge publicado em main. Preferir clone/bundle para continuar o histórico e reconsultar o remoto antes de desenvolver.
 
 ## 2. Python mínimo
 
@@ -73,7 +74,7 @@ A publicação da PR #29 já foi autorizada, executada e verificada. PUBLICATION
 
 Conferir checks test e render no SHA atual da PR. Obter aprovação explícita de merge em main; então o push decorrente do merge aciona Quarto Publish. Acompanhar build-deploy e o deployment Pages, verificar o commit de origem em gh-pages e abrir index, apêndices e download PDF por HTTPS. Registrar SHA e URLs; build local não comprova publicação.
 
-Após publicação, avaliar PR de main para develop para incorporar os commits de release. Não criar essa PR ou mesclá-la automaticamente com base neste guia; aplicar o mandato atualizado. Não apagar branches de trabalho ou histórico arquivado por rotina.
+A sincronização de retorno de main para develop foi autorizada; seu resultado é registrado em SYNC_VERIFICATION.json. Conferir o merge e os checks antes de retomar, sem repetir a operação. Novas sincronizações ou publicações seguirão o mandato atualizado. Não apagar branches de trabalho ou histórico arquivado por rotina.
 
 ## 6. Ponto de decisão
 

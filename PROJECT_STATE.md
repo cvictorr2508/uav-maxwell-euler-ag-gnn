@@ -6,16 +6,16 @@ Checkpoint: 23/10/2026 (America/Sao_Paulo). Destino: chat 02.03 do Projeto 02 e 
 
 - Repositório: https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn
 - Pages: https://cvictorr2508.github.io/uav-maxwell-euler-ag-gnn/
-- develop observado: 3e088101ca1b7e7e94785949006b6a90b0db7f3e.
+- develop antes da sincronização: 3e088101ca1b7e7e94785949006b6a90b0db7f3e. O SHA final de develop, a PR e os checks pós-merge estão em SYNC_VERIFICATION.json do pacote de encerramento.
 - main publicado: c2bf7d562e864e12b6c7a3a8e678b35f04c67a7d (merge da PR #29).
 - gh-pages publicado: f39f16e79a07767d0260586a5f8054c0bde22aac.
 - Branch de publicação: codex/release-s3-handoff-20261023, baseada em develop e contendo o merge de main. A divergência inicial era de sete commits exclusivos de develop e dois merges exclusivos de main; a integração local foi sem conflitos.
 - PR #29: https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn/pull/29 — merged em main após autorização explícita do usuário em 23/10/2026. Head aprovado: 3a6e0d1934b417b627970185eb87816241a81f78; checks test e render aprovados.
 - Quarto Publish, run 39962381130, e Pages deployment, run 39962639167: success. A página inicial, os três apêndices e o PDF foram verificados por HTTPS, comparando os bytes aos blobs de gh-pages. O PDF publicado tem 105 páginas.
 - PUBLICATION_VERIFICATION.json e RELEASE_RECEIPT.json do pacote registram SHA de origem, deployment, URLs e hashes.
-- O pacote pós-publicação usa a branch LOCAL checkpoint/published-pr29-20261023, descendente do merge em main, para atualizar os documentos e o empacotador. Seu commit não foi enviado ao GitHub e não é o commit publicado. O bundle permite recuperá-lo. Os documentos dentro do snapshot remoto de main ainda registram a preparação pré-merge; usar o estado final deste pacote na retomada.
+- O checkpoint documental cec52deedb55a731e1cc8ec48586b8462fe26c10, inicialmente local, foi incorporado à branch codex/sync-main-develop-handoff-20261023 junto com esta revisão dos documentos. A PR de sincronização tem base develop e contém main como ancestral. O pacote de encerramento deve ser gerado a partir do develop remoto integrado, sem depender de commits exclusivamente locais.
 - O workflow Quarto Publish publica em gh-pages após push em main. Pages usa a raiz de gh-pages. Não é necessário criar infraestrutura nova.
-- A sincronização de main de volta para develop continua pendente de autorização própria. develop remoto permanece em 3e088101ca1b7e7e94785949006b6a90b0db7f3e. A atualização documental local não cria outra PR nem modifica as branches remotas.
+- A sincronização de main de volta para develop foi autorizada pelo usuário em 23/10/2026. O recibo SYNC_VERIFICATION.json registra o merge e os checks, e verifica main como ancestral de develop. Os SHAs podem diferir porque develop incorpora a revisão documental; não presumir igualdade de ponteiros. Esta sincronização não altera o conteúdo publicado de main nem inicia uma sprint experimental.
 
 ## Escopo científico
 
@@ -63,4 +63,4 @@ Resultados de 13/10/2026, exploratórios. Sem evidência de superioridade geral.
 
 ## Entrada para retomada
 
-Ler handoff/README.md, handoff/PROMPT_CHAT_02_03.md, handoff/RESUME_GUIDE.md, handoff/COMPLETION_PLAN.md, handoff/DECISIONS_AND_OPEN_ISSUES.md e handoff/EXTERNAL_ASSETS.md. Antes de alterar software ou iniciar experimentos, obter o mandato atualizado do Projeto 02. Toda situação remota deste checkpoint deve ser reconsultada na nova máquina.
+Ler handoff/DOCUMENTS_TO_TRANSFER.md, handoff/README.md, handoff/PROMPT_CHAT_02_03.md, handoff/RESUME_GUIDE.md, handoff/COMPLETION_PLAN.md, handoff/DECISIONS_AND_OPEN_ISSUES.md e handoff/EXTERNAL_ASSETS.md. O inventário distingue documentos obrigatórios, evidências, código e materiais privados externos. Antes de alterar software ou iniciar experimentos, obter o mandato atualizado do Projeto 02. Toda situação remota deste checkpoint deve ser reconsultada na nova máquina.

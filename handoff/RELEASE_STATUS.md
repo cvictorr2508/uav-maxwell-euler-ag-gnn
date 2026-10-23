@@ -14,6 +14,6 @@
 - Alterações editoriais: apêndices A (dados/verificação), B (grafos) e C (baselines/reprodução), sem novas métricas ou mudanças nos modelos.
 - Continuidade: PROJECT_STATE e documentos handoff/.
 
-O pacote pós-publicação contém RELEASE_RECEIPT.json e PUBLICATION_VERIFICATION.json. Eles distinguem o head aprovado da PR, o merge publicado, gh-pages e o commit local de checkpoint. O checkpoint local descendente de main atualiza estes documentos e o empacotador, sem push ou nova publicação. O pacote pré-merge foi preservado como histórico e não representa o estado final.
+O pacote de encerramento contém RELEASE_RECEIPT.json, PUBLICATION_VERIFICATION.json e SYNC_VERIFICATION.json. Eles distinguem o head aprovado da PR #29, o merge publicado em main, gh-pages e o merge de sincronização em develop. Os documentos do checkpoint local anterior foram incorporados à branch de sincronização codex/sync-main-develop-handoff-20261023 para integração versionada. O pacote final é gerado a partir de develop integrado; as edições anteriores foram preservadas como histórico. A sincronização para develop não dispara nova publicação em main.
 
 Workflow existente: .github/workflows/quarto-publish.yml, nome Quarto Publish; push em main dispara build-deploy, que renderiza e publica em gh-pages. Pages está configurado para a raiz dessa branch. O site público não deve ser declarado atualizado com base apenas no build da PR.

@@ -14,11 +14,12 @@
 | GNN S3 | Protótipo não executado; --run-gnn é disponibilidade |
 | Barreira científica | Erros de validate_dataset bloqueiam métricas no CLI S3 |
 | Publicação atual | PR #29 merged em main com autorização; Quarto Publish, deployment e site verificados |
+| Retorno a develop | Sincronização autorizada pelo usuário, incluindo documentação revisada; PR/merge/checks em SYNC_VERIFICATION.json |
 
 ## Questões para o mandato atualizado do Projeto 02
 
 1. Qual é o artefato editorial principal da próxima sprint: harmonização do eBook, artigo separado ou metodologia da dissertação? Quais entregas e avaliadores?
-2. A PR #29 já foi mesclada em main e publicada com autorização. Como e quando será autorizada a sincronização de retorno a develop e a incorporação do checkpoint documental local?
+2. Registrar a publicação #29 e a sincronização de retorno já autorizadas. Definir a autonomia para merges e futuras publicações durante a continuidade em outra máquina.
 3. Quando e sob qual orçamento serão autorizados PyTorch e treino da GNN com condições globais? Quais seeds/repetições e critérios de checkpoint?
 4. Há documentação suficiente para reproduzir a campanha Fluent? Qual é a política de acesso/transferência dos arquivos científicos?
 5. Qual análise de qualidade de c0015 e de refinamento é possível sem alterar o teste? Novas simulações são de responsabilidade e aprovação específicas.
