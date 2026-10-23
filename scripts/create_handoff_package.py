@@ -92,14 +92,14 @@ def main() -> None:
         write_json(root / "DATASET_SHA256.json", {p.relative_to(dataset).as_posix(): {"sha256": sha256(p), "bytes": p.stat().st_size} for p in sorted(dataset.rglob("*")) if p.is_file()})
     write_json(root / "SHA256SUMS.json", {p.relative_to(root).as_posix(): sha256(p) for p in sorted(root.rglob("*")) if p.is_file()})
     command(sys.executable, str(root / "scripts" / "verify_transfer.py"), str(root))
-    archive = root.with_suffix(".zip")
+    archive = root.with_name(root.name + ".zip")
     if archive.exists():
         raise FileExistsError(archive)
     with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as zf:
         for path in sorted(root.rglob("*")):
             if path.is_file():
                 zf.write(path, path.relative_to(root.parent))
-    write_json(root.with_suffix(".zip.sha256.json"), {archive.name: sha256(archive)})
+    write_json(archive.with_name(archive.name + ".sha256.json"), {archive.name: sha256(archive)})
     print(json.dumps({"package": str(root), "zip": str(archive), "head_sha": sha, "files": len(list(root.rglob("*")))}, ensure_ascii=False))
 
 
