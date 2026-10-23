@@ -64,7 +64,7 @@
     "href": "index.html#estrutura-do-ebook",
     "title": "UAV | Maxwell–Euler, Álgebra Geométrica e Graph Neural Networks",
     "section": "Estrutura do eBook",
-    "text": "Estrutura do eBook\nO Capítulo 1 formaliza o problema acadêmico; os Capítulos 2–4 abordam AG, fundamentos de Maxwell e Euler, e aprendizado em grafos. Os Capítulos 5–6 tratam de dados, modelagem e validação acadêmica 2D; os Capítulos 7–8 apresentam requisitos e experimentos de extensão 3D, condicionados a dados e evidências suficientes.\nO eBook tem propósito didático e científico-editorial. Contribuições originais e resultados específicos da dissertação dependem de avaliação independente, revisão e aprovação.\n\n\n\n\n[1] D. Hestenes e G. Sobczyk, Clifford Algebra to Geometric Calculus: A Unified Language for Mathematics and Physics. Dordrecht, The Netherlands: D. Reidel Publishing Company, 1984. doi: 10.1007/978-94-009-6292-7.\n\n\n[2] C. Doran e A. Lasenby, Geometric Algebra for Physicists. Cambridge University Press, 2003. doi: 10.1017/CBO9780511807497.\n\n\n[3] J. Dressel, K. Y. Bliokh, e F. Nori, “Spacetime Algebra as a Powerful Tool for Electromagnetism”, Physics Reports, v. 589, p. 1–71, 2015, doi: 10.1016/j.physrep.2015.06.001.\n\n\n[4] M. M. Bronstein, J. Bruna, T. Cohen, e P. Veličković, “Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges”, arXiv preprint arXiv:2104.13478, 2021, doi: 10.48550/arXiv.2104.13478.\n\n\n[5] T. Pfaff, M. Fortunato, A. Sanchez-Gonzalez, e P. W. Battaglia, “Learning Mesh-Based Simulation with Graph Networks”, em International Conference on Learning Representations, 2021. Disponível em: https://openreview.net/forum?id=roNqYL0_XP\n\n\n[6] B. Peherstorfer, K. Willcox, e M. Gunzburger, “Survey of Multifidelity Methods in Uncertainty Propagation, Inference, and Optimization”, SIAM Review, v. 60, n. 3, p. 550–591, 2018, doi: 10.1137/16M1082469.\n\n\n[7] D. Sen, “Field Theoretic Formulation of Fluid Mechanics According to the Geometric Algebra”, Pramana – Journal of Physics, v. 97, p. 132, 2023, doi: 10.1007/s12043-023-02617-x.",
+    "text": "Estrutura do eBook\nO Capítulo 1 formaliza o problema acadêmico; os Capítulos 2–4 abordam AG, fundamentos de Maxwell e Euler, e aprendizado em grafos. Os Capítulos 5–6 tratam de dados, modelagem e validação acadêmica 2D; os Capítulos 7–8 apresentam requisitos e experimentos de extensão 3D, condicionados a dados e evidências suficientes.\nO eBook tem propósito didático e científico-editorial. Contribuições originais e resultados específicos da dissertação dependem de avaliação independente, revisão e aprovação.\nOs apêndices apresentam a estrutura dos dados Euler 2D e sua verificação física (Apêndice A — Dados Euler 2D e verificação física), os grafos de superfície (Apêndice B — Representação dos grafos de superfície) e os resultados exploratórios dos baselines com procedimentos de reprodução (Apêndice C — Baselines e resultados exploratórios).\n\n\n\n\n[1] D. Hestenes e G. Sobczyk, Clifford Algebra to Geometric Calculus: A Unified Language for Mathematics and Physics. Dordrecht, The Netherlands: D. Reidel Publishing Company, 1984. doi: 10.1007/978-94-009-6292-7.\n\n\n[2] C. Doran e A. Lasenby, Geometric Algebra for Physicists. Cambridge University Press, 2003. doi: 10.1017/CBO9780511807497.\n\n\n[3] J. Dressel, K. Y. Bliokh, e F. Nori, “Spacetime Algebra as a Powerful Tool for Electromagnetism”, Physics Reports, v. 589, p. 1–71, 2015, doi: 10.1016/j.physrep.2015.06.001.\n\n\n[4] M. M. Bronstein, J. Bruna, T. Cohen, e P. Veličković, “Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges”, arXiv preprint arXiv:2104.13478, 2021, doi: 10.48550/arXiv.2104.13478.\n\n\n[5] T. Pfaff, M. Fortunato, A. Sanchez-Gonzalez, e P. W. Battaglia, “Learning Mesh-Based Simulation with Graph Networks”, em International Conference on Learning Representations, 2021. Disponível em: https://openreview.net/forum?id=roNqYL0_XP\n\n\n[6] B. Peherstorfer, K. Willcox, e M. Gunzburger, “Survey of Multifidelity Methods in Uncertainty Propagation, Inference, and Optimization”, SIAM Review, v. 60, n. 3, p. 550–591, 2018, doi: 10.1137/16M1082469.\n\n\n[7] D. Sen, “Field Theoretic Formulation of Fluid Mechanics According to the Geometric Algebra”, Pramana – Journal of Physics, v. 97, p. 132, 2023, doi: 10.1007/s12043-023-02617-x.",
     "crumbs": [
       "Maxwell–Euler, Álgebra Geométrica e Aprendizado em Grafos"
     ]
@@ -1187,6 +1187,116 @@
     "text": "8.10 Limitações e disseminação\nA publicação de resultados será condicionada a dados rastreáveis, código verificável, métricas previamente justificadas e revisão científica. O capítulo é um plano de investigação; resultados experimentais 3D serão incorporados somente depois de obtidos e aprovados.\n\n\n\n\n[1] B. Peherstorfer, K. Willcox, e M. Gunzburger, “Survey of Multifidelity Methods in Uncertainty Propagation, Inference, and Optimization”, SIAM Review, v. 60, n. 3, p. 550–591, 2018, doi: 10.1137/16M1082469.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>GNNs e validação acadêmica em três dimensões</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/A_euler2d_data_validation.html",
+    "href": "appendices/A_euler2d_data_validation.html",
+    "title": "Apêndice A — Dados Euler 2D e verificação física",
+    "section": "",
+    "text": "A.1 Campanha e unidade experimental\nA campanha de referência utiliza as equações de Euler 2D sobre perfis NACA no ANSYS Fluent. O registro contém 60 execuções: 46 convergidas, oito não convergidas e seis com falhas. Cada execução possui um identificador case_id; geometry_id identifica a geometria e pode estar associado a várias execuções. Os arquivos científicos são mantidos separadamente do código público.\nOs estados success, non_converged e failed permanecem distintos. A referência determinística utiliza exclusivamente os casos convergidos: 31 no treinamento, sete na validação e oito no teste. Os oito casos não convergidos são preservados para análises de sensibilidade; os casos com falhas permanecem no registro, sem alvo numérico e fora das partições. O caso c0015 permanece no teste, com sua limitação de malha documentada. As partições são lidas do manifesto original.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Dados Euler 2D e verificação física</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/A_euler2d_data_validation.html#estrutura-e-verificações-independentes",
+    "href": "appendices/A_euler2d_data_validation.html#estrutura-e-verificações-independentes",
+    "title": "Apêndice A — Dados Euler 2D e verificação física",
+    "section": "A.2 Estrutura e verificações independentes",
+    "text": "A.2 Estrutura e verificações independentes\nO leitor utiliza os seguintes arquivos de metadados, além dos Parquet de superfície referenciados pelos casos:\n\ncases.csv;\ndataset_manifest.json;\nsplit_manifest.json;\nmeshes/mesh_metadata.json.\n\nAs verificações abrangem identificadores, referências entre casos e superfícies, cobertura e disjunção das partições, comprimentos positivos, parâmetros físicos, valores finitos, normais unitárias e fechamento do contorno. Não há pressuposição de um número universal de faces.\nPara pressão local absoluta \\(p\\), pressão de referência \\(p_\\infty\\) e pressão dinâmica positiva \\(q_\\infty\\), o coeficiente de pressão é recalculado como\n\\[\nC_p=\\frac{p-p_\\infty}{q_\\infty}.\n\\]\nConsidere a face \\(i\\), com comprimento \\(\\ell_i\\), coeficiente de pressão \\(C_{p,i}\\) e normal unitária \\((n_{x,i},n_{y,i})\\) externa ao corpo. Para corda de referência positiva \\(c\\), os coeficientes de força nos eixos cartesianos são\n\\[\nC_{F_x}=-\\frac{1}{c}\\sum_i C_{p,i}n_{x,i}\\ell_i,\n\\qquad\nC_{F_y}=-\\frac{1}{c}\\sum_i C_{p,i}n_{y,i}\\ell_i.\n\\]\nO ângulo de ataque \\(\\alpha\\), convertido para radianos, define a projeção aerodinâmica adotada na verificação:\n\\[\nC_D=C_{F_x}\\cos\\alpha+C_{F_y}\\sin\\alpha,\n\\qquad\nC_L=-C_{F_x}\\sin\\alpha+C_{F_y}\\cos\\alpha.\n\\]\nAs tolerâncias padrão são: erro absoluto de \\(10^{-4}\\) para a relação pressão–\\(C_p\\), \\(10^{-9}\\) para fechamento e norma unitária, e diferenças relativas de 0,1% para \\(C_L\\) e 2% para \\(C_D\\). Os coeficientes também possuem tolerâncias absolutas configuráveis, com padrão de \\(10^{-8}\\), para valores próximos de zero. Essas tolerâncias verificam consistência entre arquivos; não estimam o erro de discretização da simulação.\nNos casos não convergidos, a superfície final exportada é comparada com CL_final e CD_final. A média da janela final permanece como alvo do registro e a distinção gera aviso. Esses avisos não são promovidos automaticamente a erros. Quando a validação registra erros, o executor de experimentos bloqueia a geração de métricas preditivas e retorna saída de falha.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Dados Euler 2D e verificação física</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/A_euler2d_data_validation.html#limitações-dos-dados",
+    "href": "appendices/A_euler2d_data_validation.html#limitações-dos-dados",
+    "title": "Apêndice A — Dados Euler 2D e verificação física",
+    "section": "A.3 Limitações dos dados",
+    "text": "A.3 Limitações dos dados\nA validação dos arquivos não substitui estudos de convergência de malha, auditoria das configurações do Fluent ou investigação das execuções falhas. A proveniência das simulações, a qualidade de c0015 e a amostra reduzida permanecem limitações. A campanha Euler invíscida não fornece uma estimativa de arrasto viscoso nem evidência experimental de Maxwell.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Dados Euler 2D e verificação física</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/B_surface_graphs.html",
+    "href": "appendices/B_surface_graphs.html",
+    "title": "Apêndice B — Representação dos grafos de superfície",
+    "section": "",
+    "text": "B.1 Nós, atributos e origem\nCada face exportada no Parquet corresponde a um nó. A representação preserva case_id, geometry_id, entity_id, coordenadas, normal, comprimento do segmento e atributos físicos originais. O campo source_parquet mantém o caminho relativo do arquivo de origem. Execuções de uma mesma geometria conservam seus identificadores de caso.\nAs arestas ligam faces consecutivas segundo contour_index, incluindo o fechamento entre a última e a primeira face. Essa conectividade descreve o contorno exportado. O conjunto de arestas volumétricas é vazio, pois os dados disponíveis não informam a conectividade entre células do domínio.\nGuardar um observável físico no grafo não o torna uma entrada válida para previsão. Pressão superficial, Cp e coeficientes derivados do solver são referências; a seleção de entradas do modelo deve ser explícita e usar apenas informações conhecidas antes da execução do solver.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Representação dos grafos de superfície</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/B_surface_graphs.html#continuidade-e-orientação",
+    "href": "appendices/B_surface_graphs.html#continuidade-e-orientação",
+    "title": "Apêndice B — Representação dos grafos de superfície",
+    "section": "B.2 Continuidade e orientação",
+    "text": "B.2 Continuidade e orientação\nPara cada adjacência, o diagnóstico compara a distância entre centros das faces com o comprimento dos segmentos. Uma razão excessiva sinaliza possível descontinuidade da ordem exportada; o limiar padrão da razão é 4,0. Como os arquivos não contêm os endpoints das faces, esse teste constitui evidência geométrica local e não prova que as faces compartilham um extremo.\nO sentido dirigido das arestas segue a convenção de ordenação do arquivo. O sinal da área orientada pelos centros é registrado como diagnóstico e não representa, por si só, sentido do escoamento ou orientação física das normais. A ordem arbitrária não é interpretada como propriedade física.\nNa execução exploratória de referência, os oito grafos do conjunto de teste passaram no diagnóstico. c0015 apresentou 500 arestas de contorno e razão máxima entre distância de centros adjacentes e comprimento do segmento de aproximadamente 1,000014. O número 500 caracteriza esse caso, sem impor uma cardinalidade universal às superfícies.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Representação dos grafos de superfície</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/B_surface_graphs.html#inspeção-reproduzível",
+    "href": "appendices/B_surface_graphs.html#inspeção-reproduzível",
+    "title": "Apêndice B — Representação dos grafos de superfície",
+    "section": "B.3 Inspeção reproduzível",
+    "text": "B.3 Inspeção reproduzível\nCom Python, o pacote local no caminho de importação e acesso autorizado ao dataset, a inspeção pode ser realizada por:\n$env:PYTHONPATH = \"src\"\npython scripts/inspect_surface_graph.py C:\\dados\\dataset_euler_2d c0015\nO resumo informa nós, arestas de contorno, ausência de arestas volumétricas, origem Parquet e uma amostra dos atributos para inspeção local. Os arquivos de superfície e os resultados individuais não precisam ser publicados para disponibilizar o código.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Representação dos grafos de superfície</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/C_baselines_reproducibility.html",
+    "href": "appendices/C_baselines_reproducibility.html",
+    "title": "Apêndice C — Baselines e resultados exploratórios",
+    "section": "",
+    "text": "C.1 Entradas e protocolo\nCada observação corresponde a um caso convergido. As entradas são os parâmetros geométricos m, p e t, o Mach de referência mach_inf, o ângulo de ataque alpha_deg e a corda chord_ref_m. Os alvos são os coeficientes globais CL e CD. Pressão, Cp e coeficientes calculados pelo solver não são utilizados como entradas preditivas.\nA média do treinamento produz uma previsão constante por alvo. O modelo Ridge utiliza regressão linear regularizada, com padronização calculada apenas no treinamento, intercepto sem penalização e parâmetro de regularização igual a 1,0 na execução de referência. A solução é determinística e utiliza eliminação gaussiana. As partições convergidas permanecem em 31/7/8; nenhum nó é tratado como observação independente e o teste não participa da seleção de hiperparâmetros.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Baselines e resultados exploratórios</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/C_baselines_reproducibility.html#resultados-registrados",
+    "href": "appendices/C_baselines_reproducibility.html#resultados-registrados",
+    "title": "Apêndice C — Baselines e resultados exploratórios",
+    "section": "C.2 Resultados registrados",
+    "text": "C.2 Resultados registrados\nOs números abaixo reproduzem a execução local registrada em 13/10/2026, com seed reportada 202604; não representam um novo treinamento. MAE denota erro absoluto médio e RMSE, raiz do erro quadrático médio. Ambos são calculados por alvo e por partição.\n\n\n\nModelo\nPartição\nCasos\nMAE CL\nRMSE CL\nMAE CD\nRMSE CD\n\n\n\n\nMédia\nTreino\n31\n0,15035\n0,17961\n0,02696\n0,03197\n\n\nMédia\nValid.\n7\n0,14790\n0,17123\n0,01549\n0,02185\n\n\nMédia\nTeste\n8\n0,16352\n0,18885\n0,02466\n0,02729\n\n\nRidge\nTreino\n31\n0,02992\n0,03703\n0,00206\n0,00269\n\n\nRidge\nValid.\n7\n0,03138\n0,03311\n0,00112\n0,00157\n\n\nRidge\nTeste\n8\n0,02588\n0,03020\n0,00264\n0,00299\n\n\n\nO teste possui oito casos. Essas diferenças descrevem a amostra observada e não estabelecem superioridade geral, generalização robusta ou significância estatística. Os resultados são sujeitos às limitações da campanha, da discretização e da proveniência dos dados.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Baselines e resultados exploratórios</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/C_baselines_reproducibility.html#protótipo-de-rede-de-superfície",
+    "href": "appendices/C_baselines_reproducibility.html#protótipo-de-rede-de-superfície",
+    "title": "Apêndice C — Baselines e resultados exploratórios",
+    "section": "C.3 Protótipo de rede de superfície",
+    "text": "C.3 Protótipo de rede de superfície\nExiste um protótipo opcional de GNN com atributos geométricos dos nós, agregação média das mensagens de vizinhos e pooling global. Ele não foi treinado na execução de referência. O sinalizador --run-gnn do executor verifica disponibilidade do PyTorch e registra training_executed: false; não inicia o treinamento. Não há métricas GNN para comparar nesta versão.\nUma futura comparação deverá fornecer à GNN as condições operacionais relevantes também utilizadas pelo Ridge, incluindo Mach e ângulo de ataque, e documentar diferenças entre representações geométricas. A arquitetura atual do protótipo não inclui esse condicionamento global. A inclusão de atributos de Álgebra Geométrica e a avaliação de invariância ou equivariância exigem definições e experimentos próprios.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Baselines e resultados exploratórios</span>"
+    ]
+  },
+  {
+    "objectID": "appendices/C_baselines_reproducibility.html#reprodução-local-e-barreira-de-validação",
+    "href": "appendices/C_baselines_reproducibility.html#reprodução-local-e-barreira-de-validação",
+    "title": "Apêndice C — Baselines e resultados exploratórios",
+    "section": "C.4 Reprodução local e barreira de validação",
+    "text": "C.4 Reprodução local e barreira de validação\nOs testes sintéticos exigem apenas a biblioteca padrão do Python. A leitura do dataset real requer PyArrow e acesso autorizado aos arquivos, mantidos fora do repositório:\n$env:PYTHONPATH = \"src\"\n$dataset = \"C:\\dados\\dataset_euler_2d\"\npython -m unittest discover -s tests -v\npython scripts/validate_euler2d.py $dataset --json\npython scripts/run_s3_experiment.py $dataset `\n  --seed 202604 --output s3-results.json\nSe validate_dataset() registrar erros, o executor preserva o relatório da validação, deixa vazios os resultados de baselines e de continuidade e retorna código de saída diferente de zero. Os avisos relativos às oito execuções não convergidas permanecem documentados e não impedem, sozinhos, a avaliação dos casos convergidos.\nA seed 202604 identifica o registro histórico desta execução. A seed 42, adotada como referência no planejamento geral, não autoriza refazer o particionamento herdado. Novos experimentos deverão registrar configuração, seed, versões de dependências, hardware e tempos medidos. O registro histórico mínimo ainda não constitui um ambiente completamente fixado ou uma caracterização completa de recursos.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>Baselines e resultados exploratórios</span>"
     ]
   }
 ]
