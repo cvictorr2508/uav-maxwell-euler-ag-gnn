@@ -7,19 +7,21 @@ Checkpoint: 23/10/2026 (America/Sao_Paulo). Destino: chat 02.03 do Projeto 02 e 
 - Repositório: https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn
 - Pages: https://cvictorr2508.github.io/uav-maxwell-euler-ag-gnn/
 - develop observado: 3e088101ca1b7e7e94785949006b6a90b0db7f3e.
-- main observado: 04f4c027aafeaaa449c40e22f476c873559d5a80.
-- gh-pages observado: 8ee0e00168da81895812517044a553cf1258d201.
+- main publicado: c2bf7d562e864e12b6c7a3a8e678b35f04c67a7d (merge da PR #29).
+- gh-pages publicado: f39f16e79a07767d0260586a5f8054c0bde22aac.
 - Branch de publicação: codex/release-s3-handoff-20261023, baseada em develop e contendo o merge de main. A divergência inicial era de sete commits exclusivos de develop e dois merges exclusivos de main; a integração local foi sem conflitos.
-- A PR de publicação destina-se a main. Sua URL, o SHA final e os checks observados estão em handoff/RELEASE_STATUS.md e no recibo externo RELEASE_RECEIPT.json do pacote.
-- A preparação de PR está autorizada. Merge em main e disparo manual de publicação dependem de autorização explícita; o pedido atual não foi interpretado como autorização de merge.
+- PR #29: https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn/pull/29 — merged em main após autorização explícita do usuário em 23/10/2026. Head aprovado: 3a6e0d1934b417b627970185eb87816241a81f78; checks test e render aprovados.
+- Quarto Publish, run 39962381130, e Pages deployment, run 39962639167: success. A página inicial, os três apêndices e o PDF foram verificados por HTTPS, comparando os bytes aos blobs de gh-pages. O PDF publicado tem 105 páginas.
+- PUBLICATION_VERIFICATION.json e RELEASE_RECEIPT.json do pacote registram SHA de origem, deployment, URLs e hashes.
+- O pacote pós-publicação usa a branch LOCAL checkpoint/published-pr29-20261023, descendente do merge em main, para atualizar os documentos e o empacotador. Seu commit não foi enviado ao GitHub e não é o commit publicado. O bundle permite recuperá-lo. Os documentos dentro do snapshot remoto de main ainda registram a preparação pré-merge; usar o estado final deste pacote na retomada.
 - O workflow Quarto Publish publica em gh-pages após push em main. Pages usa a raiz de gh-pages. Não é necessário criar infraestrutura nova.
-- Após eventual merge, sincronizar main de volta para develop em PR própria quando autorizado, verificando o estado remoto. Esta branch de publicação não altera develop remotamente e não garante igualdade de ponteiros entre main e develop.
+- A sincronização de main de volta para develop continua pendente de autorização própria. develop remoto permanece em 3e088101ca1b7e7e94785949006b6a90b0db7f3e. A atualização documental local não cria outra PR nem modifica as branches remotas.
 
 ## Escopo científico
 
 Mestrado de João Pedro no PPGEE/UnB: representações matemáticas de Maxwell e Euler em Álgebra Geométrica; representação de malhas e contornos em grafos; aprendizado e validação reprodutível. A primeira fase computacional utiliza perfis NACA com Euler 2D. Maxwell permanece fundamentação matemática, com benchmark independente ainda necessário para qualquer alegação experimental. O eBook Quarto e os resultados da dissertação são artefatos distintos. Não se presume vantagem de GNN, AG, equivariância ou multifidelidade.
 
-O artefato editorial encontrado é um livro/eBook Quarto com index.qmd e oito capítulos, não um manuscrito independente de artigo. A publicação proposta preserva esses capítulos e acrescenta três apêndices técnicos de revisão baseados nos resultados aceitos. O chat 02.03 deverá confirmar com o Projeto 02 o destino editorial de um eventual artigo autônomo.
+O artefato editorial encontrado é um livro/eBook Quarto com index.qmd e oito capítulos, não um manuscrito independente de artigo. A versão publicada preserva esses capítulos e acrescenta três apêndices técnicos de revisão baseados nos resultados aceitos. O chat 02.03 deverá confirmar com o Projeto 02 o destino editorial de um eventual artigo autônomo.
 
 ## Sprints e evidências
 

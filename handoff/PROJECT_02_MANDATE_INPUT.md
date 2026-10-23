@@ -5,7 +5,7 @@ Este documento é um roteiro para a decisão do Projeto 02, não uma autorizaç�
 ## Evidências disponíveis para a decisão
 
 - PROJECT_STATE.md identifica S0–S3, commits aceitos e limitações científicas.
-- A PR de publicação promove o software S1–S3 e acrescenta apêndices de revisão; RELEASE_STATUS.md e o recibo externo fornecem URL/SHA/checks.
+- A PR #29 promoveu o software S1–S3 e acrescentou apêndices de revisão; merge autorizado em main c2bf7d5, workflow e site verificados. RELEASE_STATUS.md e os recibos externos fornecem URL/SHA/checks e evidências de publicação.
 - Há nove testes sintéticos, validação real com zero erros e oito avisos preservados. Não há treino GNN novo ou alterações de dados/partições.
 - COMPLETION_PLAN.md propõe revisão documental/editorial, qualidade/proveniência, comparação GNN, AG/ablações e encerramento.
 
@@ -14,7 +14,7 @@ Este documento é um roteiro para a decisão do Projeto 02, não uma autorizaç�
 1. Identificador e versão do mandato, responsável científico e data.
 2. Artefato prioritário e objetivo da próxima sprint: eBook/artigo/dissertação ou protocolo experimental.
 3. Arquivos/etapas autorizados, entregas, limites e critérios de aceite.
-4. Decisão sobre merge da PR para main e publicação Pages; sincronização posterior com develop.
+4. Registrar a publicação já concluída da PR #29 e decidir sobre sincronização posterior com develop e incorporação dos documentos do checkpoint local.
 5. Autonomia para branches, commits, testes e PRs; quem aprova merges em develop/main.
 6. Se e quando haverá autorização para dependências/treino GNN, condições operacionais, orçamento, seeds e avaliação final do teste.
 7. Custódia/acesso ao dataset e aos documentos Fluent na outra máquina.

@@ -2,7 +2,7 @@
 
 ## 1. Integridade e código
 
-Verificar SHA256SUMS.json com o script scripts/verify_transfer.py fornecido no pacote. O manifesto cobre os arquivos do diretório, exceto o próprio manifesto; o ZIP externo tem hash separado. Ler o recibo antes de escolher a branch.
+Verificar SHA256SUMS.json com o script scripts/verify_transfer.py fornecido no pacote. O manifesto cobre os arquivos do diretório, exceto o próprio manifesto; o ZIP externo tem hash separado. Ler o recibo antes de escolher a branch. Esta edição é pós-publicação: a PR #29 está merged; main publicado é c2bf7d5. O checkpoint LOCAL contém documentos atualizados que ainda não foram enviados ao GitHub.
 
 Com rede, clonar o repositório oficial em uma pasta nova:
 
@@ -19,13 +19,13 @@ Se a PR ainda estiver aberta, selecionar a branch codex/release-s3-handoff-20261
 Sem rede, o bundle permite criar outro checkout:
 
 ```powershell
-git clone --branch codex/release-s3-handoff-20261023 CAMINHO\repository.bundle uav-offline
+git clone --branch checkpoint/published-pr29-20261023 CAMINHO\repository.bundle uav-offline
 Set-Location uav-offline
 git remote set-url origin https://github.com/cvictorr2508/uav-maxwell-euler-ag-gnn.git
 git log -3 --oneline
 ```
 
-O bundle só anuncia a branch de publicação; não presumir que contém referências atualizadas de main/develop. repository-source.zip contém somente fontes versionados, sem metadados Git. Preferir clone/bundle para continuar o histórico.
+O bundle anuncia a branch local de checkpoint e as referências observadas de main/develop; elas são um snapshot, não o estado remoto futuro. repository-source.zip contém os fontes versionados desse checkpoint, sem metadados Git. O recibo distingue o commit local do merge publicado. Preferir clone/bundle para continuar o histórico e reconsultar o remoto antes de desenvolver.
 
 ## 2. Python mínimo
 
@@ -68,6 +68,8 @@ quarto render --no-execute
 Examinar _book/index.html, os três apêndices e o PDF gerado. Verificar navegação, tabela de métricas, equações, referências e links. O CI Quarto continua executando quarto render normalmente. Uma falha de render é diagnóstico editorial/ambiente, não motivo para refazer simulações.
 
 ## 5. Publicação, somente após autorização
+
+A publicação da PR #29 já foi autorizada, executada e verificada. PUBLICATION_VERIFICATION.json registra o resultado. O procedimento abaixo aplica-se a publicações futuras; não repetir a operação já concluída.
 
 Conferir checks test e render no SHA atual da PR. Obter aprovação explícita de merge em main; então o push decorrente do merge aciona Quarto Publish. Acompanhar build-deploy e o deployment Pages, verificar o commit de origem em gh-pages e abrir index, apêndices e download PDF por HTTPS. Registrar SHA e URLs; build local não comprova publicação.
 

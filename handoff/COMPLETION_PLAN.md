@@ -8,6 +8,8 @@ Entrada: develop com S1–S3 aceitas, main com merges de publicação anteriores
 
 Aceite: PR com checks aprovados, diff revisável e pacote verificável na outra máquina. Aprovação de merge/publicação será decisão posterior. Após merge autorizado, verificar workflow e site e planejar sincronização de retorno a develop. Encerramento da preparação não equivale à publicação efetivada.
 
+Atualização de encerramento P0: merge da PR #29 autorizado e concluído em main c2bf7d5; Quarto Publish e Pages deployment aprovados; índice, apêndices e PDF verificados no site. O pacote pós-publicação contém recibo, evidência HTTP e checkpoint local atualizado. A sincronização de retorno a develop permanece pendente de decisão própria. As próximas etapas não foram iniciadas.
+
 ## D1 — harmonização da documentação e do artigo/eBook
 
 Dependência: mandato atualizado e estado remoto revalidado. Prioridade alta; escopo documental, sem novos experimentos.

@@ -21,7 +21,6 @@ from verify_transfer import sha256
 
 REPO = Path(__file__).resolve().parents[1]
 REMOTE = "cvictorr2508/uav-maxwell-euler-ag-gnn"
-BRANCH = "codex/release-s3-handoff-20261023"
 
 
 def command(*args: str) -> str:
@@ -42,6 +41,8 @@ def main() -> None:
     parser.add_argument("--pr", type=int, required=True)
     parser.add_argument("--dataset-root", type=Path)
     parser.add_argument("--evidence", type=Path, required=True, help="verified local evidence JSON")
+    parser.add_argument("--publication-evidence", type=Path, help="verified deployment and live-site evidence JSON")
+    parser.add_argument("--checkpoint", type=Path, help="final human-readable checkpoint")
     args = parser.parse_args()
     root = args.output.resolve()
     if root.is_relative_to(REPO):
@@ -51,12 +52,16 @@ def main() -> None:
     if command("git", "status", "--porcelain"):
         raise RuntimeError("commit changes before packaging")
     sha = command("git", "rev-parse", "HEAD")
-    if command("git", "branch", "--show-current") != BRANCH:
-        raise RuntimeError("package the reviewed release branch")
+    branch = command("git", "branch", "--show-current")
+    if not branch:
+        raise RuntimeError("package a named branch so the offline checkout can be restored")
     pr = api(f"repos/{REMOTE}/pulls/{args.pr}")
-    if pr["head"]["sha"] != sha:
-        raise RuntimeError("local HEAD differs from PR head; fetch/inspect before packaging")
-    checks = api(f"repos/{REMOTE}/commits/{sha}/check-runs?per_page=100")
+    if pr["merged"]:
+        command("git", "merge-base", "--is-ancestor", pr["merge_commit_sha"], "HEAD")
+    elif pr["head"]["sha"] != sha:
+        raise RuntimeError("local HEAD differs from open PR head; fetch/inspect before packaging")
+    checks_sha = pr["head"]["sha"]
+    checks = api(f"repos/{REMOTE}/commits/{checks_sha}/check-runs?per_page=100")
     pages = api(f"repos/{REMOTE}/pages")
     branches = api(f"repos/{REMOTE}/branches?per_page=100")
     root.mkdir(parents=True)
@@ -65,23 +70,44 @@ def main() -> None:
     (root / "scripts").mkdir()
     shutil.copy2(REPO / "scripts" / "verify_transfer.py", root / "scripts" / "verify_transfer.py")
     shutil.copy2(args.evidence, root / "LOCAL_VERIFICATION.json")
+    publication = None
+    if args.publication_evidence:
+        publication = json.loads(args.publication_evidence.read_text(encoding="utf-8"))
+        if not pr["merged"] or not publication["passed"] or publication["source_sha"] != pr["merge_commit_sha"]:
+            raise RuntimeError("publication evidence must verify this PR's merge commit")
+        shutil.copy2(args.publication_evidence, root / "PUBLICATION_VERIFICATION.json")
+        pdf_record = next(row for row in publication["http_files"] if row["path"].lower().endswith(".pdf"))
+        published_pdf = args.publication_evidence.parent / "published-book.pdf"
+        if sha256(published_pdf) != pdf_record["sha256"]:
+            raise RuntimeError("downloaded PDF differs from publication evidence")
+        (root / "published-book").mkdir()
+        shutil.copy2(published_pdf, root / "published-book" / pdf_record["filename"])
+    if args.checkpoint:
+        shutil.copy2(args.checkpoint, root / "CHECKPOINT_FINAL.md")
     if (REPO / "_book" / "index.html").exists():
         shutil.copytree(REPO / "_book", root / "rendered-book")
     command("git", "archive", "--format=zip", "--output", str(root / "repository-source.zip"), "HEAD")
-    command("git", "bundle", "create", str(root / "repository.bundle"), f"refs/heads/{BRANCH}")
+    bundle_refs = [f"refs/heads/{branch}"]
+    if pr["merged"]:
+        bundle_refs += ["refs/remotes/origin/main", "refs/remotes/origin/develop"]
+    command("git", "bundle", "create", str(root / "repository.bundle"), *bundle_refs)
     command("git", "bundle", "verify", str(root / "repository.bundle"))
     check_rows = [{key: row.get(key) for key in ("name", "status", "conclusion", "html_url", "head_sha")} for row in checks["check_runs"]]
     receipt = {
         "observed_at_utc": datetime.now(timezone.utc).isoformat(),
         "repository": f"https://github.com/{REMOTE}",
         "head_sha": sha,
-        "branch": BRANCH,
-        "pr": {"number": pr["number"], "url": pr["html_url"], "state": pr["state"], "merged": pr["merged"], "base": pr["base"]["ref"], "head": pr["head"]["ref"]},
+        "branch": branch,
+        "package_commit": sha,
+        "package_commit_is_local_checkpoint": pr["merged"] and sha != pr["merge_commit_sha"],
+        "checks_sha": checks_sha,
+        "published_source_sha": publication["source_sha"] if publication else None,
+        "pr": {"number": pr["number"], "url": pr["html_url"], "state": pr["state"], "merged": pr["merged"], "merged_at": pr["merged_at"], "merge_commit_sha": pr["merge_commit_sha"], "head_sha": pr["head"]["sha"], "base": pr["base"]["ref"], "head": pr["head"]["ref"]},
         "checks": check_rows,
         "all_required_named_checks_passed": all(any(c["name"] == name and c["status"] == "completed" and c["conclusion"] == "success" for c in check_rows) for name in ("test", "render")),
         "remote_branches": {b["name"]: b["commit"]["sha"] for b in branches},
         "pages": {k: pages.get(k) for k in ("status", "html_url", "build_type", "source")},
-        "publication_of_this_pr": "not_performed_by_this_handoff; confirm current PR and deployment before claiming publication",
+        "publication_of_this_pr": "verified; see PUBLICATION_VERIFICATION.json" if publication else "not_verified_by_this_package",
         "packaging_environment": {"python": platform.python_version(), "platform": platform.platform(), "quarto": command("quarto", "--version"), "git": command("git", "--version")},
         "private_data_included": False,
         "private_dataset_hashes_included": args.dataset_root is not None,

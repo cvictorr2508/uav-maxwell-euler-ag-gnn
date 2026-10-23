@@ -19,4 +19,10 @@ O diretório de entrega inclui estes documentos, um recibo de release consultado
 
 O recibo externo é deliberadamente separado do commit: o SHA final de um commit e o estado posterior dos seus checks não podem ser gravados dentro desse mesmo commit sem referência circular. Revalidar a PR e Pages na retomada.
 
+## Estado final da publicação
+
+A PR #29 foi mesclada com autorização e o site foi verificado. O pacote pós-publicação acrescenta PUBLICATION_VERIFICATION.json, CHECKPOINT_FINAL.md e published-book/ com uma cópia exata do PDF servido. rendered-book/ continua sendo o preview local validado anteriormente.
+
+O Git bundle anuncia a branch LOCAL checkpoint/published-pr29-20261023 e as referências observadas de origin/main e origin/develop. O checkpoint local inclui os documentos atualizados e o empacotador compatível com uma PR já mesclada; não foi enviado ao GitHub. Os recibos distinguem seu SHA do commit c2bf7d5 publicado em main. Para continuar esse estado completo, clonar o bundle pela branch de checkpoint e depois consultar o remoto. Um clone online de main recupera o código publicado, mas seus documentos ainda descrevem a preparação da PR; consultar também os documentos atualizados deste pacote.
+
 Os fontes e o bundle contêm histórico público do repositório; nenhuma restauração de componentes antigos implica aceitação científica. Não enviar credenciais, .env, tokens, perfis de navegador, ambientes virtuais ou dumps privados. O PDF de acompanhamento e o dataset não acompanham o pacote.
