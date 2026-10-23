@@ -21,6 +21,10 @@ book:
     - chapters/06_validation_2d.qmd
     - chapters/07_multifidelity_3d.qmd
     - chapters/08_validation_3d.qmd
+  appendices:
+    - appendices/A_euler2d_data_validation.qmd
+    - appendices/B_surface_graphs.qmd
+    - appendices/C_baselines_reproducibility.qmd
   downloads: [pdf]
 
 bibliography: references.bib

@@ -49,3 +49,5 @@ O espalhamento eletromagnético poderá ser exposto como parte da teoria de Maxw
 O Capítulo 1 formaliza o problema acadêmico; os Capítulos 2–4 abordam AG, fundamentos de Maxwell e Euler, e aprendizado em grafos. Os Capítulos 5–6 tratam de dados, modelagem e validação acadêmica 2D; os Capítulos 7–8 apresentam requisitos e experimentos de extensão 3D, condicionados a dados e evidências suficientes.
 
 O eBook tem propósito didático e científico-editorial. Contribuições originais e resultados específicos da dissertação dependem de avaliação independente, revisão e aprovação.
+
+Os apêndices apresentam a estrutura dos dados Euler 2D e sua verificação física (@sec-app-euler-data), os grafos de superfície (@sec-app-surface-graphs) e os resultados exploratórios dos baselines com procedimentos de reprodução (@sec-app-baselines).

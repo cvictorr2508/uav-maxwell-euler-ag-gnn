@@ -1,0 +1,48 @@
+# Dados Euler 2D e verificação física {#sec-app-euler-data}
+
+## Campanha e unidade experimental
+
+A campanha de referência utiliza as equações de Euler 2D sobre perfis NACA no ANSYS Fluent. O registro contém 60 execuções: 46 convergidas, oito não convergidas e seis com falhas. Cada execução possui um identificador `case_id`; `geometry_id` identifica a geometria e pode estar associado a várias execuções. Os arquivos científicos são mantidos separadamente do código público.
+
+Os estados `success`, `non_converged` e `failed` permanecem distintos. A referência determinística utiliza exclusivamente os casos convergidos: 31 no treinamento, sete na validação e oito no teste. Os oito casos não convergidos são preservados para análises de sensibilidade; os casos com falhas permanecem no registro, sem alvo numérico e fora das partições. O caso `c0015` permanece no teste, com sua limitação de malha documentada. As partições são lidas do manifesto original.
+
+## Estrutura e verificações independentes
+
+O leitor utiliza os seguintes arquivos de metadados, além dos Parquet de superfície referenciados pelos casos:
+
+- `cases.csv`;
+- `dataset_manifest.json`;
+- `split_manifest.json`;
+- `meshes/mesh_metadata.json`.
+
+As verificações abrangem identificadores, referências entre casos e superfícies, cobertura e disjunção das partições, comprimentos positivos, parâmetros físicos, valores finitos, normais unitárias e fechamento do contorno. Não há pressuposição de um número universal de faces.
+
+Para pressão local absoluta \(p\), pressão de referência \(p_\infty\) e pressão dinâmica positiva \(q_\infty\), o coeficiente de pressão é recalculado como
+
+$$
+C_p=\frac{p-p_\infty}{q_\infty}.
+$$
+
+Considere a face \(i\), com comprimento \(\ell_i\), coeficiente de pressão \(C_{p,i}\) e normal unitária \((n_{x,i},n_{y,i})\) externa ao corpo. Para corda de referência positiva \(c\), os coeficientes de força nos eixos cartesianos são
+
+$$
+C_{F_x}=-\frac{1}{c}\sum_i C_{p,i}n_{x,i}\ell_i,
+\qquad
+C_{F_y}=-\frac{1}{c}\sum_i C_{p,i}n_{y,i}\ell_i.
+$$
+
+O ângulo de ataque \(\alpha\), convertido para radianos, define a projeção aerodinâmica adotada na verificação:
+
+$$
+C_D=C_{F_x}\cos\alpha+C_{F_y}\sin\alpha,
+\qquad
+C_L=-C_{F_x}\sin\alpha+C_{F_y}\cos\alpha.
+$$
+
+As tolerâncias padrão são: erro absoluto de \(10^{-4}\) para a relação pressão–\(C_p\), \(10^{-9}\) para fechamento e norma unitária, e diferenças relativas de 0,1% para \(C_L\) e 2% para \(C_D\). Os coeficientes também possuem tolerâncias absolutas configuráveis, com padrão de \(10^{-8}\), para valores próximos de zero. Essas tolerâncias verificam consistência entre arquivos; não estimam o erro de discretização da simulação.
+
+Nos casos não convergidos, a superfície final exportada é comparada com `CL_final` e `CD_final`. A média da janela final permanece como alvo do registro e a distinção gera aviso. Esses avisos não são promovidos automaticamente a erros. Quando a validação registra erros, o executor de experimentos bloqueia a geração de métricas preditivas e retorna saída de falha.
+
+## Limitações dos dados
+
+A validação dos arquivos não substitui estudos de convergência de malha, auditoria das configurações do Fluent ou investigação das execuções falhas. A proveniência das simulações, a qualidade de `c0015` e a amostra reduzida permanecem limitações. A campanha Euler invíscida não fornece uma estimativa de arrasto viscoso nem evidência experimental de Maxwell.
