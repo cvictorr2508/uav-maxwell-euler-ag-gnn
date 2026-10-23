@@ -36,6 +36,8 @@ O eBook científico é escrito em **Quarto**. Conteúdo pedagógico do eBook e r
 
 Consulte [o contrato científico de escopo](notes/research-scope-2026-10-13.md), [as diretrizes científicas](notes/editorial-scientific-guidelines.md) e [a proposta de contrato dos dados Euler 2D](notes/euler2d-dataset-contract.md).
 
+Para a revisão da versão integrada, os apêndices do eBook descrevem dados e verificação física Euler 2D, grafos de superfície e resultados exploratórios dos baselines. O [estado do projeto](PROJECT_STATE.md) e o [pacote de continuidade](handoff/README.md) registram a transferência para o chat 02.03, incluindo guia de retomada, plano de conclusão e decisões científicas pendentes.
+
 ## Continuidade do trabalho
 
 A mudança de escopo preserva o histórico Git para fins de rastreabilidade. Documentos e branches antigos **não** são evidências de que resultados científicos foram verificados. A PR #16 foi encerrada sem merge e sua branch antiga foi excluída após o realinhamento. O código e seu histórico permanecem disponíveis na tag `archive/academic-realignment-2026-10-13/feature/ch5-2d-data-ga-pipeline`, para eventual reutilização somente após revisão científica.

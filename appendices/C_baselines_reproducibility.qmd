@@ -1,0 +1,45 @@
+# Baselines e resultados exploratórios {#sec-app-baselines}
+
+## Entradas e protocolo
+
+Cada observação corresponde a um caso convergido. As entradas são os parâmetros geométricos `m`, `p` e `t`, o Mach de referência `mach_inf`, o ângulo de ataque `alpha_deg` e a corda `chord_ref_m`. Os alvos são os coeficientes globais `CL` e `CD`. Pressão, `Cp` e coeficientes calculados pelo solver não são utilizados como entradas preditivas.
+
+A média do treinamento produz uma previsão constante por alvo. O modelo Ridge utiliza regressão linear regularizada, com padronização calculada apenas no treinamento, intercepto sem penalização e parâmetro de regularização igual a 1,0 na execução de referência. A solução é determinística e utiliza eliminação gaussiana. As partições convergidas permanecem em 31/7/8; nenhum nó é tratado como observação independente e o teste não participa da seleção de hiperparâmetros.
+
+## Resultados registrados
+
+Os números abaixo reproduzem a execução local registrada em 13/10/2026, com seed reportada `202604`; não representam um novo treinamento. MAE denota erro absoluto médio e RMSE, raiz do erro quadrático médio. Ambos são calculados por alvo e por partição.
+
+| Modelo | Partição | Casos | MAE CL | RMSE CL | MAE CD | RMSE CD |
+|---|---|---:|---:|---:|---:|---:|
+| Média | Treino | 31 | 0,15035 | 0,17961 | 0,02696 | 0,03197 |
+| Média | Valid. | 7 | 0,14790 | 0,17123 | 0,01549 | 0,02185 |
+| Média | Teste | 8 | 0,16352 | 0,18885 | 0,02466 | 0,02729 |
+| Ridge | Treino | 31 | 0,02992 | 0,03703 | 0,00206 | 0,00269 |
+| Ridge | Valid. | 7 | 0,03138 | 0,03311 | 0,00112 | 0,00157 |
+| Ridge | Teste | 8 | 0,02588 | 0,03020 | 0,00264 | 0,00299 |
+
+O teste possui oito casos. Essas diferenças descrevem a amostra observada e não estabelecem superioridade geral, generalização robusta ou significância estatística. Os resultados são sujeitos às limitações da campanha, da discretização e da proveniência dos dados.
+
+## Protótipo de rede de superfície
+
+Existe um protótipo opcional de GNN com atributos geométricos dos nós, agregação média das mensagens de vizinhos e pooling global. Ele não foi treinado na execução de referência. O sinalizador `--run-gnn` do executor verifica disponibilidade do PyTorch e registra `training_executed: false`; não inicia o treinamento. Não há métricas GNN para comparar nesta versão.
+
+Uma futura comparação deverá fornecer à GNN as condições operacionais relevantes também utilizadas pelo Ridge, incluindo Mach e ângulo de ataque, e documentar diferenças entre representações geométricas. A arquitetura atual do protótipo não inclui esse condicionamento global. A inclusão de atributos de Álgebra Geométrica e a avaliação de invariância ou equivariância exigem definições e experimentos próprios.
+
+## Reprodução local e barreira de validação
+
+Os testes sintéticos exigem apenas a biblioteca padrão do Python. A leitura do dataset real requer PyArrow e acesso autorizado aos arquivos, mantidos fora do repositório:
+
+```powershell
+$env:PYTHONPATH = "src"
+$dataset = "C:\dados\dataset_euler_2d"
+python -m unittest discover -s tests -v
+python scripts/validate_euler2d.py $dataset --json
+python scripts/run_s3_experiment.py $dataset `
+  --seed 202604 --output s3-results.json
+```
+
+Se `validate_dataset()` registrar erros, o executor preserva o relatório da validação, deixa vazios os resultados de baselines e de continuidade e retorna código de saída diferente de zero. Os avisos relativos às oito execuções não convergidas permanecem documentados e não impedem, sozinhos, a avaliação dos casos convergidos.
+
+A seed `202604` identifica o registro histórico desta execução. A seed 42, adotada como referência no planejamento geral, não autoriza refazer o particionamento herdado. Novos experimentos deverão registrar configuração, seed, versões de dependências, hardware e tempos medidos. O registro histórico mínimo ainda não constitui um ambiente completamente fixado ou uma caracterização completa de recursos.

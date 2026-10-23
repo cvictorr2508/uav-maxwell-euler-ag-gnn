@@ -1,0 +1,28 @@
+# Representação dos grafos de superfície {#sec-app-surface-graphs}
+
+## Nós, atributos e origem
+
+Cada face exportada no Parquet corresponde a um nó. A representação preserva `case_id`, `geometry_id`, `entity_id`, coordenadas, normal, comprimento do segmento e atributos físicos originais. O campo `source_parquet` mantém o caminho relativo do arquivo de origem. Execuções de uma mesma geometria conservam seus identificadores de caso.
+
+As arestas ligam faces consecutivas segundo `contour_index`, incluindo o fechamento entre a última e a primeira face. Essa conectividade descreve o contorno exportado. O conjunto de arestas volumétricas é vazio, pois os dados disponíveis não informam a conectividade entre células do domínio.
+
+Guardar um observável físico no grafo não o torna uma entrada válida para previsão. Pressão superficial, `Cp` e coeficientes derivados do solver são referências; a seleção de entradas do modelo deve ser explícita e usar apenas informações conhecidas antes da execução do solver.
+
+## Continuidade e orientação
+
+Para cada adjacência, o diagnóstico compara a distância entre centros das faces com o comprimento dos segmentos. Uma razão excessiva sinaliza possível descontinuidade da ordem exportada; o limiar padrão da razão é 4,0. Como os arquivos não contêm os endpoints das faces, esse teste constitui evidência geométrica local e não prova que as faces compartilham um extremo.
+
+O sentido dirigido das arestas segue a convenção de ordenação do arquivo. O sinal da área orientada pelos centros é registrado como diagnóstico e não representa, por si só, sentido do escoamento ou orientação física das normais. A ordem arbitrária não é interpretada como propriedade física.
+
+Na execução exploratória de referência, os oito grafos do conjunto de teste passaram no diagnóstico. `c0015` apresentou 500 arestas de contorno e razão máxima entre distância de centros adjacentes e comprimento do segmento de aproximadamente 1,000014. O número 500 caracteriza esse caso, sem impor uma cardinalidade universal às superfícies.
+
+## Inspeção reproduzível
+
+Com Python, o pacote local no caminho de importação e acesso autorizado ao dataset, a inspeção pode ser realizada por:
+
+```powershell
+$env:PYTHONPATH = "src"
+python scripts/inspect_surface_graph.py C:\dados\dataset_euler_2d c0015
+```
+
+O resumo informa nós, arestas de contorno, ausência de arestas volumétricas, origem Parquet e uma amostra dos atributos para inspeção local. Os arquivos de superfície e os resultados individuais não precisam ser publicados para disponibilizar o código.
