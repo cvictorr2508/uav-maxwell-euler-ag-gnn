@@ -72,7 +72,7 @@ Durante desenvolvimento, a vista de modelagem contém só treino/validação. O 
 
 Antes de revelar qualquer predição/erro novo do teste, o [registro de congelamento](../templates/r2-freeze-record.json) deve identificar protocolo/configuração e SHAs, inventário e manifesto, ambiente/hardware, todos os candidatos e falhas, alpha/kernel selecionados, três checkpoints GNN, transformações, regras de métricas e autorizações. O custodiante confere hashes, estado limpo do código e orçamento consumido. Rejeitar campos obrigatórios vazios; os templates deste commit não constituem recibos preenchidos.
 
-Após aceite específico da avaliação final, uma passagem em lote calcula, nos mesmos oito casos, as previsões da média, Ridge selecionado, par GPR selecionado e três GNNs. São **seis sistemas, 96 valores escalares CL/CD**, além dos Cp das três GNNs. Não executar kernels perdedores no teste. Salvar predições e hashes em arquivo privado antes de inspecionar erros. Calcular todos os resumos desse arquivo não é novo treinamento ou nova consulta adaptativa.
+Após aceite específico da avaliação final, uma passagem em lote calcula, nos mesmos oito casos, as previsões oficiais da média, Ridge selecionado, par GPR selecionado e três GNNs, com uma abertura de rótulos para pontuação. São **seis sistemas, 96 valores escalares CL/CD**, além dos Cp das três GNNs. Não executar kernels perdedores no teste. Salvar predições e hashes em arquivo privado antes de inspecionar erros. Calcular todos os resumos desse arquivo não é novo treinamento ou nova consulta adaptativa. Cronometragem repetida usa cópias das entradas sem rótulos, sem novas escolhas ou pontuações.
 
 Depois da abertura, nenhuma mudança de seed, arquitetura, kernel, tolerância, exclusão de caso ou processamento pode alegar o mesmo teste como independente. Erro de implementação comprovado recebe incidente com causa, diff e resultados anteriores preservados; uma correção requer revisão e eventual nova autorização, identificada como reavaliação exposta. Repetição técnica exata antes de revelar métricas requer registro; não é licença para selecionar a melhor tentativa.
 
@@ -90,7 +90,7 @@ Não usar MAPE, erro dividido por média possivelmente nula, teste de significâ
 
 ## Orçamento fechado
 
-Perfil de referência: uma máquina local, **CPU somente, um processo de ajuste e uma thread computacional**, sem jobs paralelos, GPU, cloud paga ou treinamento distribuído. Teto global: **8 horas de parede e 8 horas de núcleo CPU**, prevalecendo o primeiro atingido; RSS máximo do processo e filhos 8 GiB; saídas privadas até 2 GiB. Limites são tetos, não estimativas de duração. Medir CPU e threads inclui bibliotecas BLAS e subprocessos.
+Perfil de referência: uma máquina local, **CPU somente, um processo de ajuste e uma thread computacional**, sem jobs paralelos, GPU, cloud paga ou treinamento distribuído. Teto global: **8 horas de parede e 8 horas de núcleo CPU**, prevalecendo o primeiro atingido; RSS máximo do processo e filhos 8 GiB; saídas privadas até 2 GiB. O tempo de parede é a soma das execuções sequenciais ativas, incluindo preparação e encerramento; espera por decisões e trabalho humano de custódia não consomem esse teto computacional. Limites são tetos, não estimativas de duração. Medir CPU e threads inclui bibliotecas BLAS e subprocessos.
 
 | Etapa | Limite | Ajustes máximos |
 |---|---|---|
