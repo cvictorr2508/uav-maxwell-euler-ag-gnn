@@ -1,0 +1,21 @@
+{
+  "template": true,
+  "protocol_id": "r2-euler2d-v1",
+  "status": "unfilled_no_scientific_evidence_received",
+  "privacy": "fill_and_store_outside_git",
+  "custodian": "Joao Pedro",
+  "inventory_created_at": null,
+  "dataset_archive": {"private_location": null, "sha256": null, "source_version": null, "transfer_receipt": null},
+  "files": [],
+  "file_record_fields": ["relative_path", "byte_count", "sha256", "origin", "raw_or_derived", "transformation_version", "license_or_access_limit"],
+  "frozen_partition": {"manifest_sha256": null, "case_and_geometry_ids_by_split": null, "success_counts_verified": null, "c0015_still_test": null, "physical_geometry_duplicates_checked": null},
+  "physical_model": {"solver_and_version": null, "equations_and_viscosity": null, "boundary_conditions": null, "numerical_settings": null, "coefficient_axes_signs_references": null, "Cp_native_location_and_normalization": null},
+  "geometry": {"generator_and_version": null, "domain_verified": null, "surface_is_presolver_without_solution_adaptation": null},
+  "constant_conditions_all_success": {"mach_inf": null, "alpha_deg": null, "chord_ref_m": null, "source_records": null},
+  "convergence": {"success_evidence": null, "non_converged_snapshot_vs_window_reconciliation": null, "failed_case_inventory": null, "c0015_mesh_evidence_and_limit": null},
+  "test_access_history": [],
+  "test_access_record_fields": ["date_or_unknown", "actor", "model_version", "purpose", "references_or_predictions_seen", "reported_influence_on_decisions", "supporting_artifact_sha256", "verification_limit"],
+  "computational_validation": {"code_sha": null, "report_sha256": null, "errors": null, "warnings_and_disposition": null},
+  "known_missing_materials": [],
+  "scientific_acceptance": {"decision": null, "responsible": null, "dated_record": null, "accepted_limits": null, "blocking_findings": null}
+}
