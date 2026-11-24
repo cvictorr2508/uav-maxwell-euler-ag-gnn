@@ -4,17 +4,17 @@ Este capítulo estabelece um protocolo experimental para avaliar métodos de apr
 
 ## Evidências e estado da implementação
 
-No corte de 24/11/2026, `develop` contém a PR #31, merge `557e598`. Integração do código e aceite científico dos resultados são estados distintos:
+Na implementação auditada em 24/11/2026, disponibilidade de código e evidência empírica dos resultados são estados distintos:
 
 | Componente | Estado e alcance |
 |---|---|
-| Leitor, verificação física e grafos de contorno | Implementados em S1–S2; não substituem auditoria do solver |
-| Média e Ridge | Resultados exploratórios S3 de 13/10/2026, documentados no @sec-app-baselines |
-| Protótipo GNN de S3 | Não treinado na execução de referência |
-| GNN v4 e GPR da PR #31 | Código integrado; resultados do documento de João Pedro ainda não reproduzidos nesta retomada |
+| Leitor, verificação física e grafos de contorno | Implementados; não substituem auditoria do solver |
+| Média e Ridge | Resultados exploratórios de 13/10/2026, documentados no @sec-app-baselines |
+| Protótipo GNN inicial | Não treinado na execução de referência |
+| GNN v4 e GPR | Código disponível; resultados do documento de João Pedro ainda não reproduzidos na auditoria |
 | AG e ablações | Experiência relatada pelo autor, com código e evidências ainda pendentes de auditoria |
 
-A referência S3 contém 46 casos convergidos em 31/7/8. A v4 inclui não convergidos e reúne treino/validação para cinco partes de desenvolvimento. O número de casos e a supervisão diferem: v4 aprende \(C_p\) e integra coeficientes, enquanto os baselines globais aprendem \(C_L,C_D\). Não se comparam essas métricas como se fossem a mesma execução ou uma ablação isolada de arquitetura.
+A referência exploratória contém 46 casos convergidos em 31/7/8. A v4 inclui não convergidos e reúne treino/validação para cinco partes de desenvolvimento. O número de casos e a supervisão diferem: v4 aprende \(C_p\) e integra coeficientes, enquanto os baselines globais aprendem \(C_L,C_D\). Não se comparam essas métricas como se fossem a mesma execução ou uma ablação isolada de arquitetura.
 
 ## Unidade experimental e procedimento
 
@@ -68,7 +68,7 @@ A seed de referência é 42 para operações estocásticas controláveis, regist
 
 O conjunto de teste permanecerá isolado da escolha de hiperparâmetros, seleção de atributos e estratégias adaptativas. Experimentos com número pequeno de geometrias exigem interpretação cautelosa e análises complementares por grupos, quando viáveis.
 
-O documento de João Pedro incorporado à PR #31 relata consulta ao teste na v2 (p. 5) e afirma que o resultado não motivou alterações. Essa declaração exige registro de cronologia; não permite descrever o teste como nunca consultado nem concluir, sozinha, que houve seleção baseada nele. Preservam-se o manifesto e `c0015`. Na v4, a melhor época é selecionada pela validação e avaliada no mesmo grupo; seus escores são de desenvolvimento sujeitos a seleção [@cawley2010]. O desvio entre cinco partes não é, por si, um intervalo de confiança ou demonstração de equivalência.
+O documento explicativo v4 de João Pedro, auditado em novembro de 2026, relata consulta ao teste na v2 (p. 5) e afirma que o resultado não motivou alterações. Essa declaração exige registro de cronologia; não permite descrever o teste como nunca consultado nem concluir, sozinha, que houve seleção baseada nele. Preservam-se o manifesto e `c0015`. Na v4, a melhor época é selecionada pela validação e avaliada no mesmo grupo; seus escores são de desenvolvimento sujeitos a seleção [@cawley2010]. O desvio entre cinco partes não é, por si, um intervalo de confiança ou demonstração de equivalência.
 
 ## Métricas preditivas e físicas
 

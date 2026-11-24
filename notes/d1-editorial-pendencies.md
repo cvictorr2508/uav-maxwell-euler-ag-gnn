@@ -16,3 +16,5 @@ Corte: 24/11/2026. R0 trata documentação; R1 trata correções de infraestrutu
 | ENCERRAMENTO | Inventário `handoff/DOCUMENTS_TO_TRANSFER.md` | Receber ZIP e recibos/hashes externos para atestar a transferência; Git não substitui essa verificação |
 
 Critérios de aceite de R0: diff restrito aos dez arquivos delimitados; fontes e datas explícitas; tabela histórica S3 preservada; HTML/PDF sem execução científica; revisão visual de tabelas, equações e referências afetadas. O orientador decide merge e publicação separadamente.
+
+Na revisão da PR #32, referências a tarefas internas e números de PR foram mantidas nas notas de auditoria e retiradas dos acréscimos à narrativa pública, conforme `notes/editorial-scientific-guidelines.md`. Datas, estado de evidência e limitações científicas permanecem no eBook.
