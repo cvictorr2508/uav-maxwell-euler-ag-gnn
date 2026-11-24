@@ -57,6 +57,9 @@ def _relative_or_absolute(actual: float, expected: float, rel_pct: float, abs_to
 
 def integrate_surface(rows: Iterable[dict], alpha_deg: float, chord: float) -> tuple[float, float]:
     """Integrate face pressure using the documented external body normal."""
+    if not _finite(alpha_deg) or not _positive(chord):
+        raise ValueError("integration needs a finite angle and positive chord")
+    rows = tuple(rows)
     alpha = math.radians(alpha_deg)
     cfx = -sum(float(r["Cp"]) * float(r["normal_x"]) * float(r["segment_length_m"]) for r in rows) / chord
     cfy = -sum(float(r["Cp"]) * float(r["normal_y"]) * float(r["segment_length_m"]) for r in rows) / chord
@@ -116,7 +119,7 @@ def _validate_surface(dataset: Euler2DDataset, case: dict, config: ValidationCon
         for name, actual, expected_key in (("CL", cl, "CL"), ("CD", cd, "CD")):
             expected = expected_values[0 if name == "CL" else 1]
             report.metrics[f"{case_id}.{name}_comparison"] = comparison
-            report.metrics[f"{case_id}.{name}_relative_pct"] = 100.0 * (actual / expected - 1.0)
+            report.metrics[f"{case_id}.{name}_relative_pct"] = 100.0 * (actual / expected - 1.0) if expected != 0 else None
             if not _relative_or_absolute(
                 actual, expected, config.coefficient_relative_pct[name], config.coefficient_absolute[name]
             ):
