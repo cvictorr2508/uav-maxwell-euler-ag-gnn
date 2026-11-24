@@ -44,6 +44,22 @@ def prepare_experiment(dataset: Euler2DDataset) -> dict:
             "warnings": list(report.warnings), "evaluation": "development_only"}
 
 
+def validate_flow_conditions(conditions) -> dict[str, float]:
+    """Reject incomplete or corrupt geometry-only inference contracts."""
+    names = ("mach_inf", "alpha_deg")
+    if not isinstance(conditions, dict) or set(conditions) != set(names):
+        raise ValueError("flow contract requires exactly mach_inf and alpha_deg")
+    if any(isinstance(value, bool) for value in conditions.values()):
+        raise ValueError("flow conditions must be finite numbers")
+    try:
+        result = {key: float(conditions[key]) for key in names}
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError("flow conditions must be finite numbers") from exc
+    if not all(math.isfinite(value) for value in result.values()) or result["mach_inf"] < 0:
+        raise ValueError("flow conditions must be finite with non-negative Mach")
+    return result
+
+
 def require_constant_flow(rows: Sequence[dict]) -> dict[str, float]:
     """Legacy geometry-only models are restricted to one verified flow setting."""
     result = {}
@@ -52,9 +68,7 @@ def require_constant_flow(rows: Sequence[dict]) -> dict[str, float]:
         if len(values) != 1 or not all(math.isfinite(v) for v in values):
             raise ValueError(f"geometry-only model requires one finite {name}; conditioning is not implemented")
         result[name] = next(iter(values))
-    if result["mach_inf"] < 0:
-        raise ValueError("mach_inf must be non-negative")
-    return result
+    return validate_flow_conditions(result)
 
 
 def source_hashes(dataset: Euler2DDataset) -> dict[str, str]:

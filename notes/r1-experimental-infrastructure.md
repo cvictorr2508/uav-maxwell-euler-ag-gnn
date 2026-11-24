@@ -31,6 +31,7 @@ Os modelos geométricos atuais exigem Mach e ângulo constantes, verificados nos
 - O artefato GPR contém modelo, ordem de atributos, limites de transformação, alvo e condições. `kriging.predict_cl` reaplica essa transformação e confere o domínio operacional.
 - Checkpoints GNN contêm `state_dict`, normalizações de nós/arestas/Cp, layout de atributos, configuração, melhor época, IDs de treino/validação, hashes e ambiente. `load_checkpoint` e `predict_cp` conferem o contrato para inferência sem rótulos.
 - Os pesos antigos sem pré-processamento não são completados por suposição; o carregador rejeita formatos sem o novo contrato. Guardam-se originais e respectivas evidências separadamente.
+- A revisão de R1 exige exatamente Mach e ângulo finitos no contrato salvo. Condições vazias, incompletas ou inválidas bloqueiam a inferência antes de chamar o modelo.
 - Estatísticas são ajustadas apenas no treino de cada parte. Sua implementação agora é explícita na biblioteca padrão, com cálculo amostral e tratamento de variância nula; pequenas diferenças numéricas em relação ao cálculo float32 histórico não implicam reprodução das métricas anteriores.
 - O diretório de saída não pode existir previamente nem ficar sob o dataset. Hashes e metadados são privados quando incluem IDs ou caminhos de dados restritos; não adicionar artefatos de execução ao Git por rotina.
 

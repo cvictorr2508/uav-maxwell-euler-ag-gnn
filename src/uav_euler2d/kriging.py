@@ -14,7 +14,7 @@ if __package__ in (None, ""):
 
 from uav_euler2d.execution import (
     environment, prepare_experiment, require_constant_flow, reserve_output,
-    source_hashes, write_json,
+    source_hashes, validate_flow_conditions, write_json,
 )
 from uav_euler2d.loader import Euler2DDataset
 
@@ -35,7 +35,7 @@ def normalized_inputs(rows, lower=LOWER, upper=UPPER):
 def predict_cl(artifact, rows):
     if artifact.get("schema_version") != 1 or artifact.get("features") != ["m", "p", "t"]:
         raise ValueError("unsupported GPR artifact layout")
-    if require_constant_flow(rows) != artifact["flow_conditions"]:
+    if require_constant_flow(rows) != validate_flow_conditions(artifact["flow_conditions"]):
         raise ValueError("flow differs from the geometry-only model")
     return artifact["model"].predict(
         normalized_inputs(rows, artifact["lower"], artifact["upper"]), return_std=True)

@@ -19,6 +19,7 @@ from test_loader_validation import SyntheticDataset
 from uav_euler2d.execution import (
     DatasetValidationError, Standardizer, SurfacePreprocessor, prepare_experiment,
     require_valid_dataset, reserve_output, write_json,
+    validate_flow_conditions,
 )
 from uav_euler2d.graph import SurfaceGraph, SurfaceNode, _make_edge, validate_contour
 from uav_euler2d.validation import integrate_surface
@@ -193,6 +194,26 @@ print('import-safe')
 
 
 class PreprocessingRegressionTests(unittest.TestCase):
+    def test_incomplete_or_nonfinite_saved_flow_fails_before_inference(self):
+        invalid = (None, {}, {"mach_inf": .8},
+                   {"mach_inf": math.nan, "alpha_deg": 2.},
+                   {"mach_inf": .8, "alpha_deg": math.inf},
+                   {"mach_inf": -1., "alpha_deg": 2.},
+                   {"mach_inf": True, "alpha_deg": 2.},
+                   {"mach_inf": .8, "alpha_deg": 2., "extra": 1.})
+        for conditions in invalid:
+            with self.subTest(conditions=conditions):
+                with self.assertRaises(ValueError):
+                    validate_flow_conditions(conditions)
+                with self.assertRaises(ValueError):
+                    v4.predict_cp(SimpleNamespace(flow_conditions=conditions), None, square(False))
+        model = mock.Mock()
+        artifact = {"schema_version": 1, "features": ["m", "p", "t"],
+                    "flow_conditions": {}, "model": model}
+        with self.assertRaises(ValueError):
+            kriging.predict_cl(artifact, [{"mach_inf": .8, "alpha_deg": 0.}])
+        model.predict.assert_not_called()
+
     def test_train_statistics_are_stable_after_heldout_transformation(self):
         scale = Standardizer.fit([[1.,0.],[3.,1.]],preserve=(1,))
         saved = scale.to_dict()

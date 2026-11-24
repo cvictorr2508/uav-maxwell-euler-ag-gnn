@@ -19,7 +19,7 @@ if __package__ in (None, ""):
 
 from uav_euler2d.execution import (
     SurfacePreprocessor, environment, prepare_experiment, require_constant_flow,
-    reserve_output, source_hashes, write_json,
+    reserve_output, source_hashes, validate_flow_conditions, write_json,
 )
 from uav_euler2d.graph import EDGE_FEATURE_NAMES, NODE_FEATURE_NAMES, build_surface_graph
 from uav_euler2d.loader import Euler2DDataset
@@ -114,13 +114,14 @@ def normalized_graph(graph, preprocessing: SurfacePreprocessor, *, targets=False
 
 
 def predict_cp(model, preprocessing, graph):
-    import torch
-    from torch_geometric.loader import DataLoader
-    if not hasattr(model, "flow_conditions") or any(
+    conditions = validate_flow_conditions(getattr(model, "flow_conditions", None))
+    if any(
         key not in graph.graph_inputs or not math.isclose(float(graph.graph_inputs[key]), value, abs_tol=1e-9)
-        for key, value in model.flow_conditions.items()
+        for key, value in conditions.items()
     ):
         raise ValueError("flow differs from the geometry-only checkpoint")
+    import torch
+    from torch_geometric.loader import DataLoader
     data = normalized_graph(graph_to_data(graph), preprocessing)
     model.eval()
     with torch.no_grad():
@@ -136,7 +137,7 @@ def load_checkpoint(path):
     preprocessing = SurfacePreprocessor.from_dict(payload["preprocessing"])
     model = RedeGrafos(NetworkConfig(**payload["configuration"]))
     model.load_state_dict(payload["state_dict"])
-    model.flow_conditions = payload["flow_conditions"]
+    model.flow_conditions = validate_flow_conditions(payload["flow_conditions"])
     return model, preprocessing, payload
 
 
