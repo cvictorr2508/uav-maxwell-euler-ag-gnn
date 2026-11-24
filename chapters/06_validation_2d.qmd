@@ -2,6 +2,20 @@
 
 Este capítulo estabelece um protocolo experimental para avaliar métodos de aprendizado sobre grafos obtidos de malhas e contornos bidimensionais. As tarefas iniciais incluem predição de observáveis de fluidos, testes de descrição geométrica e verificação de consistência de dados. Estudos eletromagnéticos podem ser conduzidos **separadamente**, em problemas acadêmicos canônicos.
 
+## Evidências e estado da implementação
+
+Na implementação auditada em 24/11/2026, disponibilidade de código e evidência empírica dos resultados são estados distintos:
+
+| Componente | Estado e alcance |
+|---|---|
+| Leitor, verificação física e grafos de contorno | Implementados; não substituem auditoria do solver |
+| Média e Ridge | Resultados exploratórios de 13/10/2026, documentados no @sec-app-baselines |
+| Protótipo GNN inicial | Não treinado na execução de referência |
+| GNN v4 e GPR | Código disponível; resultados do documento de João Pedro ainda não reproduzidos na auditoria |
+| AG e ablações | Experiência relatada pelo autor, com código e evidências ainda pendentes de auditoria |
+
+A referência exploratória contém 46 casos convergidos em 31/7/8. A v4 inclui não convergidos e reúne treino/validação para cinco partes de desenvolvimento. O número de casos e a supervisão diferem: v4 aprende \(C_p\) e integra coeficientes, enquanto os baselines globais aprendem \(C_L,C_D\). Não se comparam essas métricas como se fossem a mesma execução ou uma ablação isolada de arquitetura.
+
 ## Unidade experimental e procedimento
 
 Cada instância deverá ter uma geometria ou domínio, uma discretização, condições físicas e saídas de referência identificadas. A validação começará pela inspeção de arquivos e pelo confronto entre valores e definições físicas do solver. A conectividade das malhas, a orientação de contorno e o local de armazenamento das incógnitas devem permanecer rastreáveis.
@@ -24,6 +38,8 @@ Nenhum arquivo experimental é considerado automaticamente validado pela presen�
 O conjunto mínimo de modelos para uma tarefa de campo ou resposta global incluirá: (i) um baseline simples adequado às variáveis disponíveis, (ii) uma MPNN usando atributos usuais de geometria relativa e (iii) a mesma família com atributos adicionais derivados de Álgebra Geométrica, mantendo partições e orçamento de treinamento comparáveis. Caso sejam adotadas camadas multivetoriais, sua lei de transformação deverá ser definida e testada; atributos numéricos derivados de AG não conferem equivariância por si só [@bronstein2021; @pfaff2021].
 
 Uma ablação deverá alterar um mecanismo por vez quando isso for metodologicamente possível. Serão reportadas médias, dispersões e limitações de amostra; diferenças ocasionais não constituem comprovação de vantagem estrutural.
+
+Para a tarefa global, a comparação convencional proposta inclui média, Ridge e regressão por processo gaussiano (GPR/krigagem). Componente de ruído no kernel permite regressão, sem garantia de interpolação exata. A variância preditiva é condicionada ao modelo e não mede automaticamente erro de discretização ou falha do solver [@rasmussen2006]. A tarefa de campo da GNN possui valor próprio, mas sua supervisão adicional deve acompanhar qualquer comparação de \(C_L,C_D\). Novas campanhas e ablações dependem de protocolo e orçamento aprovados.
 
 ## Exemplo de tarefa aerodinâmica 2D
 
@@ -51,6 +67,8 @@ Não se presume compartilhamento de parâmetros entre surrogates aerodinâmicos 
 A seed de referência é 42 para operações estocásticas controláveis, registrando exceções. Hiperparâmetros, partições e versões dos dados serão mantidos em configurações reprodutíveis. Ao afirmar generalização geométrica, nenhuma geometria pode aparecer em mais de um subconjunto, mesmo após remalhamento, mudança de condições ou fidelidade.
 
 O conjunto de teste permanecerá isolado da escolha de hiperparâmetros, seleção de atributos e estratégias adaptativas. Experimentos com número pequeno de geometrias exigem interpretação cautelosa e análises complementares por grupos, quando viáveis.
+
+O documento explicativo v4 de João Pedro, auditado em novembro de 2026, relata consulta ao teste na v2 (p. 5) e afirma que o resultado não motivou alterações. Essa declaração exige registro de cronologia; não permite descrever o teste como nunca consultado nem concluir, sozinha, que houve seleção baseada nele. Preservam-se o manifesto e `c0015`. Na v4, a melhor época é selecionada pela validação e avaliada no mesmo grupo; seus escores são de desenvolvimento sujeitos a seleção [@cawley2010]. O desvio entre cinco partes não é, por si, um intervalo de confiança ou demonstração de equivalência.
 
 ## Métricas preditivas e físicas
 
