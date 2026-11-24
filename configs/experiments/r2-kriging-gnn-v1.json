@@ -4,12 +4,17 @@
   "status": "prepared_for_review_not_execution",
   "specification_only": true,
   "authorizations": {
-    "merge": false,
     "install_dependencies": false,
     "training": false,
     "final_test": false,
     "new_cfd": false,
     "publication": false
+  },
+  "repository_integration": {
+    "authorized_pull_requests": [33, 34],
+    "target": "develop",
+    "authorization_date": "2026-11-24",
+    "authorizes_future_PR_merges": false
   },
   "implementation": {
     "r0_pr": 32,

@@ -1,6 +1,6 @@
 # R2 Protocolo comparativo de krigagem e GNN
 
-Versão `r2-euler2d-v1`, 24/11/2026. Destinatários: orientador e João Pedro. O escopo metodológico está fechado para implementação e revisão: comparar previsões de CL/CD em Euler 2D, preservando média e Ridge como controles e avaliando Cp da GNN separadamente. A solicitação desta entrega autoriza revisão e preparação; **não autoriza merge, instalação, treinamento, avaliação preditiva do teste ou novas simulações**.
+Versão `r2-euler2d-v1`, 24/11/2026. Destinatários: orientador e João Pedro. O escopo metodológico está fechado: comparar previsões de CL/CD em Euler 2D, preservando média e Ridge como controles e avaliando Cp da GNN separadamente. O orientador autorizou encerrar as entregas R1/R2 e integrar as PRs #33/#34 em develop, conforme o [registro de encerramento](../handoff/R1_R2_CLOSURE.md). **Instalação, treinamento, avaliação preditiva do teste e novas simulações continuam sem autorização**.
 
 O contrato numérico está em [r2-kriging-gnn-v1.json](../configs/experiments/r2-kriging-gnn-v1.json). Seus limites são decisões de planejamento, não medições de hardware ou resultados. A campanha depende das evidências E1 e do aceite específico descrito no [checklist de execução](../handoff/R2_EXECUTION_CHECKLIST.md). O código R1 continua sendo infraestrutura legada de desenvolvimento; R3/R4 ainda devem implementar este protocolo.
 
