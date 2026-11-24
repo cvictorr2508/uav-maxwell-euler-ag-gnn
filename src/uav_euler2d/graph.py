@@ -16,8 +16,8 @@ Changes with respect to the first version (all backward compatible):
    two face centres, its length and the signed turning angle between the two
    outward normals (the scalar and bivector parts of the geometric product of
    the normals).
-4. The contour is checked on construction: counter-clockwise orientation,
-   outward normals consistent with the contour tangent, closing gap and
+4. The contour is checked on construction: finite geometry, outward normals
+   consistent with either traversal direction, closing gap and
    duplicated face centres.  The check is diagnostic by default (stored in
    ``validation``); ``strict_validation=True`` turns issues into errors.
 5. Flow conditions and global coefficients are attached to the graph as
@@ -160,30 +160,54 @@ class SurfaceGraph:
             ],
         }
 
-    def to_arrays(self, bidirectional: bool = True) -> dict[str, Any]:
+    def to_arrays(self, bidirectional: bool = True, *, require_targets: bool = False) -> dict[str, Any]:
         """Numeric arrays for a GNN: features, targets and a 2 x E edge index.
 
-        Node inputs never include solver outputs; targets are returned apart.
+        Targets may be absent for inference. Partial labels are rejected.
         """
+        if not self.nodes:
+            raise ValueError(f"{self.case_id}: cannot export an empty graph")
+        if not math.isfinite(self.chord_ref_m) or self.chord_ref_m <= 0:
+            raise ValueError(f"{self.case_id}: chord_ref_m must be finite and positive")
+        required = ("x_over_c", "y_over_c", "s_over_c", "side")
+        for node in self.nodes:
+            missing = [k for k in required if k not in node.inputs]
+            if missing:
+                raise ValueError(f"{node.node_id}: missing surface columns {missing}")
+            if node.inputs["side"] not in ("upper", "lower"):
+                raise ValueError(f"{node.node_id}: side must be upper or lower")
+            values = [node.inputs[k] for k in required[:-1]] + [
+                node.x_m, node.y_m, node.normal_x, node.normal_y, node.segment_length_m]
+            if not all(math.isfinite(_as_float(v)) for v in values):
+                raise ValueError(f"{node.node_id}: non-finite geometry")
+            if node.segment_length_m <= 0 or abs(math.hypot(node.normal_x, node.normal_y) - 1) > 1e-9:
+                raise ValueError(f"{node.node_id}: invalid length or normal")
+        labelled = ["Cp" in n.targets for n in self.nodes]
+        if (require_targets and not all(labelled)) or (any(labelled) and not all(labelled)):
+            raise ValueError(f"{self.case_id}: Cp must label every node when targets are required or present")
+        if all(labelled) and not all(math.isfinite(_as_float(n.targets["Cp"])) for n in self.nodes):
+            raise ValueError(f"{self.case_id}: non-finite Cp target")
+        position = {node.node_id: i for i, node in enumerate(self.nodes)}
+        if len(position) != len(self.nodes):
+            raise ValueError(f"{self.case_id}: duplicate node IDs")
+        edges = self.edges(bidirectional)
+        for edge in edges:
+            if edge.source not in position or edge.target not in position:
+                raise ValueError(f"{self.case_id}: edge references an unknown node")
+            if not all(math.isfinite(v) for v in (edge.dx_m, edge.dy_m, edge.length_m, edge.normal_dot, edge.normal_wedge)):
+                raise ValueError(f"{self.case_id}: non-finite edge features")
         import numpy as np
 
-        required = ("x_over_c", "y_over_c", "s_over_c", "side")
-        missing = [k for k in required if k not in self.nodes[0].inputs] + \
-                  ([] if "Cp" in self.nodes[0].targets else ["Cp"])
-        if missing:
-            raise ValueError(f"{self.case_id}: to_arrays needs surface columns {missing}")
-        position = {node.node_id: i for i, node in enumerate(self.nodes)}
         c = self.chord_ref_m
         x = np.array([[float(n.inputs["x_over_c"]), float(n.inputs["y_over_c"]),
                        float(n.inputs["s_over_c"]), n.normal_x, n.normal_y,
                        n.segment_length_m / c, 1.0 if n.inputs["side"] == "upper" else 0.0]
                       for n in self.nodes])
-        y = np.array([[float(n.targets["Cp"])] for n in self.nodes])
-        edges = self.edges(bidirectional)
+        y = np.array([[float(n.targets["Cp"])] for n in self.nodes]) if all(labelled) else None
         edge_index = np.array([[position[e.source] for e in edges],
                                [position[e.target] for e in edges]], dtype=np.int64)
         edge_attr = np.array([[e.dx_m / c, e.dy_m / c, e.length_m / c,
-                               e.normal_dot, e.normal_wedge, e.normal_turn_rad] for e in edges])
+                               e.normal_dot, e.normal_wedge, e.normal_turn_rad] for e in edges]).reshape(-1, len(EDGE_FEATURE_NAMES))
         return {
             "node_features": x, "node_feature_names": NODE_FEATURE_NAMES,
             "node_targets": y, "node_target_names": NODE_TARGET_NAMES,
@@ -226,11 +250,9 @@ def _make_edge(a: SurfaceNode, b: SurfaceNode, direction: str, connectivity: str
 def validate_contour(nodes: tuple[SurfaceNode, ...], case_id: str, strict: bool = False) -> dict[str, Any]:
     """Check orientation, normals and closure of an ordered closed contour.
 
-    - Orientation: signed polygon area (shoelace formula) must be positive,
-      i.e. the contour is traversed counter-clockwise.
-    - Normals: for a counter-clockwise contour, the outward normal equals the
-      unit tangent rotated by -90 deg, (t_y, -t_x).  The tangent is taken by
-      central differences of the face centres.
+    - Signed center area distinguishes clockwise and counter-clockwise order.
+      Either direction is allowed; this diagnostic does not infer topology.
+    - Outward-normal alignment uses the rotation appropriate to that order.
     - Closure: the closing edge (last -> first face) must not be much longer
       than a typical edge, otherwise the contour is open or misordered.
 
@@ -238,6 +260,21 @@ def validate_contour(nodes: tuple[SurfaceNode, ...], case_id: str, strict: bool 
     the issues are reported in ``issues`` and ``passed``.  With
     ``strict=True`` the first issue raises ``ValueError``.
     """
+    issues = []
+    for node in nodes:
+        if not all(math.isfinite(v) for v in (node.x_m, node.y_m, node.normal_x, node.normal_y, node.segment_length_m)):
+            issues.append(f"{case_id}: non-finite geometry at {node.node_id}")
+        elif node.segment_length_m <= 0 or abs(math.hypot(node.normal_x, node.normal_y) - 1) > 1e-9:
+            issues.append(f"{case_id}: invalid length or normal at {node.node_id}")
+    if len(nodes) < 3:
+        issues.append(f"{case_id}: contour needs at least three face centres")
+    if issues:
+        if strict:
+            raise ValueError("; ".join(issues))
+        return {"passed": False, "issues": issues, "orientation": "undetermined",
+                "signed_area_m2": None, "closing_gap_ratio": None,
+                "min_normal_tangent_alignment": None, "misaligned_normals": None,
+                "duplicate_centres": None}
     n = len(nodes)
     xs = [node.x_m for node in nodes]
     ys = [node.y_m for node in nodes]
@@ -255,23 +292,23 @@ def validate_contour(nodes: tuple[SurfaceNode, ...], case_id: str, strict: bool 
         norm = math.hypot(tx, ty)
         if norm == 0.0:
             continue
-        align = (ty / norm) * nodes[i].normal_x + (-tx / norm) * nodes[i].normal_y
+        orientation_sign = 1.0 if area > 0 else -1.0
+        align = orientation_sign * ((ty / norm) * nodes[i].normal_x + (-tx / norm) * nodes[i].normal_y)
         min_align = min(min_align, align)
         if align < _MIN_NORMAL_TANGENT_ALIGNMENT:
             misaligned += 1
 
     report = {
-        "signed_area_m2": area, "orientation": "ccw" if area > 0 else "cw",
-        "closing_gap_ratio": closing / median_len if median_len > 0 else float("inf"),
+        "signed_area_m2": area, "orientation": "ccw" if area > 0 else "cw" if area < 0 else "degenerate",
+        "closing_gap_ratio": closing / median_len if median_len > 0 else None,
         "min_normal_tangent_alignment": min_align, "misaligned_normals": misaligned,
         "duplicate_centres": duplicates,
     }
-    issues = []
-    if area <= 0:
-        issues.append(f"{case_id}: contour is not counter-clockwise (signed area {area:.3e} m2)")
+    if area == 0:
+        issues.append(f"{case_id}: degenerate signed centre area")
     if misaligned > 0:
         issues.append(f"{case_id}: {misaligned} normals inconsistent with the contour tangent")
-    if report["closing_gap_ratio"] > _MAX_CLOSING_GAP_RATIO:
+    if report["closing_gap_ratio"] is not None and report["closing_gap_ratio"] > _MAX_CLOSING_GAP_RATIO:
         issues.append(f"{case_id}: closing gap is {report['closing_gap_ratio']:.2f} x the median edge")
     if duplicates:
         issues.append(f"{case_id}: {duplicates} duplicated consecutive face centres")
@@ -345,7 +382,7 @@ def build_surface_graph(dataset: Euler2DDataset, case_id: str,
         nodes=node_tuple,
         contour_edges=forward,
         reverse_edges=reverse,
-        chord_ref_m=_as_float(case.get("chord_ref_m", 1.0)),
+        chord_ref_m=_as_float(case.get("chord_ref_m")),
         graph_inputs={k: _as_float(case[k]) for k in GRAPH_INPUT_KEYS if k in case},
         graph_targets={k: _as_float(case[k]) for k in GRAPH_TARGET_KEYS if k in case},
         status=str(case["status"]),
