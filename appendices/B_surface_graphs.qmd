@@ -6,6 +6,8 @@ Cada face exportada no Parquet corresponde a um nó. A representação preserva 
 
 As arestas ligam faces consecutivas segundo `contour_index`, incluindo o fechamento entre a última e a primeira face. Essa conectividade descreve o contorno exportado. O conjunto de arestas volumétricas é vazio, pois os dados disponíveis não informam a conectividade entre células do domínio.
 
+A PR #31 acrescentou arestas reversas opcionais, separação de entradas/alvos e descritores relativos entre centros e normais. Seu exportador e diagnóstico estão em revisão técnica: a exigência de \(C_p\) impede exportar geometrias sem rótulos, e a checagem de finitude e orientação necessita correções. O script v4 contém um construtor próprio; não se presume que utilize automaticamente as verificações deste módulo.
+
 Guardar um observável físico no grafo não o torna uma entrada válida para previsão. Pressão superficial, `Cp` e coeficientes derivados do solver são referências; a seleção de entradas do modelo deve ser explícita e usar apenas informações conhecidas antes da execução do solver.
 
 ## Continuidade e orientação
@@ -13,6 +15,8 @@ Guardar um observável físico no grafo não o torna uma entrada válida para pr
 Para cada adjacência, o diagnóstico compara a distância entre centros das faces com o comprimento dos segmentos. Uma razão excessiva sinaliza possível descontinuidade da ordem exportada; o limiar padrão da razão é 4,0. Como os arquivos não contêm os endpoints das faces, esse teste constitui evidência geométrica local e não prova que as faces compartilham um extremo.
 
 O sentido dirigido das arestas segue a convenção de ordenação do arquivo. O sinal da área orientada pelos centros é registrado como diagnóstico e não representa, por si só, sentido do escoamento ou orientação física das normais. A ordem arbitrária não é interpretada como propriedade física.
+
+Um contorno percorrido em sentido horário pode possuir normais externas válidas. Se a exportação exigir sentido anti-horário, isso deve ser uma convenção documentada, sem equipará-la a prova de validade física ou topológica. Os produtos escalar e exterior entre normais têm interpretação algébrica, mas sua presença como atributos não demonstra equivariância da rede.
 
 Na execução exploratória de referência, os oito grafos do conjunto de teste passaram no diagnóstico. `c0015` apresentou 500 arestas de contorno e razão máxima entre distância de centros adjacentes e comprimento do segmento de aproximadamente 1,000014. O número 500 caracteriza esse caso, sem impor uma cardinalidade universal às superfícies.
 

@@ -32,6 +32,8 @@ Seja \(I=e_1e_2\) o pseudoescalar de \(Cl(2,0)\). Produtos como \(\mathbf t_i\cd
 
 O grafo \(G=(V,E)\) associa nós e arestas à conectividade definida. Uma malha volumétrica não deve ser inferida apenas da ordem dos pontos do contorno; sua topologia requer arquivos adicionais. Geometria discreta não equivale à vorticidade do campo de fluidos: o produto exterior entre tangentes do contorno e \(\Omega=\nabla\wedge\mathbf u\) possuem significados diferentes.
 
+Na implementação Euler 2D de referência, cada nó corresponde a uma **face exportada**, localizada pelo seu centro, e as arestas seguem `contour_index`. A construção ideal por vértices e tangentes acima não implica que endpoints estejam disponíveis no dataset. Comprimentos e normais são lidos da exportação; o sinal da área pelos centros é um diagnóstico de ordenação. Os produtos escalar e exterior entre normais acrescentados na PR #31 são descritores numéricos, sem demonstração automática de equivariância. O @sec-app-surface-graphs descreve essa representação e suas limitações.
+
 ## Dados científicos necessários
 
 O registro dos casos deverá conter geometrias, condições de operação, versão do solver, malha, convergência, unidades, observáveis e proveniência. Para escoamento 2D, \(C_L\), \(C_D\) e pressão superficial \(C_p\) serão considerados quando disponíveis e fisicamente definidos:
@@ -51,13 +53,13 @@ $$
 \mathbf F'=-\oint_\Gamma p(s)\,\mathbf n(s)\,ds.
 $$
 
-A relação entre forças e os coeficientes globais depende dos eixos aerodinâmicos e das referências adotadas pelo solver. A integração numérica de \(C_p\) somente será implementada após confirmação de conectividade, normais, quadratura e localização física da pressão. \(L/D\) deve ser tratado como razão derivada de coeficientes, não como uma grandeza física independente de \(C_L\) e \(C_D\).
+A relação entre forças e os coeficientes globais depende dos eixos aerodinâmicos e das referências adotadas pelo solver. A rotina `integrate_surface`, implementada em S1, soma as contribuições das faces usando seus comprimentos e normais e projeta a força com o ângulo de ataque do caso. As equações, convenções e tolerâncias estão no @sec-app-euler-data. Essa verificação de consistência entre arquivos não comprova convergência de malha nem recupera topologia ausente. \(L/D\) deve ser tratado como razão derivada de coeficientes, não como uma grandeza física independente de \(C_L\) e \(C_D\).
 
 ## Design of Experiments e reprodutibilidade
 
-Se novas instâncias forem necessárias, o plano de amostragem deverá indicar domínio, restrições geométricas e orçamento numérico. Latin Hypercube Sampling (LHS) é uma alternativa documentada para exploração do domínio, sem ser opção obrigatória [@mckay1979lhs]. A seed 42 é referência para operações estocásticas controláveis. O conjunto de teste deve permanecer fixo e independente de seleção adaptativa posterior.
+Se novas instâncias forem necessárias, o plano de amostragem deverá indicar domínio, restrições geométricas e orçamento numérico. Latin Hypercube Sampling (LHS) é uma alternativa documentada para exploração do domínio, sem ser opção obrigatória [@mckay1979lhs]. A seed 42 é referência de planejamento para operações estocásticas controláveis; a execução histórica S3 registra `202604`. Essa diferença não autoriza regenerar as partições. O conjunto de teste permanece fixo e não deverá selecionar modelos ou atributos.
 
-As proporções iniciais de 70% treino, 15% validação e 15% teste são configuráveis por job. Com poucas geometrias, a incerteza estatística das métricas e a sensibilidade ao split precisam ser reconhecidas.
+As proporções 70%/15%/15% pertencem ao planejamento inicial. A referência executada S3 usa **31/7/8 casos convergidos**, lendo o manifesto original e preservando `c0015` no teste. A contribuição v4 integrada em novembro usa outra população e validação cruzada de desenvolvimento; seus resultados não substituem a referência S3. Com poucas geometrias, a incerteza das métricas e a sensibilidade à seleção precisam ser reconhecidas.
 
 ## Fidelidade numérica e aprendizado
 
@@ -81,6 +83,6 @@ Propagação ou espalhamento em problemas acadêmicos canônicos de Maxwell pode
 
 ## Requisitos de implementação e artefatos
 
-A preparação deverá produzir manifestos com IDs, versão dos dados, transformação geométrica e partição por geometria, além de atributos de grafos, testes de consistência e arquivos serializados em formato independente da biblioteca de GNN. A infraestrutura existente na PR #16 constitui um **protótipo legado ainda não integrado** e precisa de revisão de nomenclatura e validação com dados reais antes de reutilização. Não se atribui suporte a malhas arbitrárias ou a campos volumétricos que não tenham sido implementados e testados.
+A preparação utiliza manifestos com IDs e partições, leitor, validador e grafos de contorno implementados em S1–S3. A PR #16 foi encerrada **sem merge**; seu protótipo está preservado em tag de arquivo, conforme o README, e não é a implementação atual. O @sec-app-baselines distingue os baselines aceitos da contribuição v4 integrada na PR #31. Não se atribui suporte a malhas arbitrárias ou a campos volumétricos que não tenham sido implementados e testados.
 
 O Capítulo 6 estabelece critérios de comparação e validação, sem apresentar resultados que ainda não foram obtidos.

@@ -25,7 +25,11 @@ O teste possui oito casos. Essas diferenças descrevem a amostra observada e nã
 
 Existe um protótipo opcional de GNN com atributos geométricos dos nós, agregação média das mensagens de vizinhos e pooling global. Ele não foi treinado na execução de referência. O sinalizador `--run-gnn` do executor verifica disponibilidade do PyTorch e registra `training_executed: false`; não inicia o treinamento. Não há métricas GNN para comparar nesta versão.
 
+Essa descrição se refere ao protótipo **S3**, não a toda atividade posterior do pesquisador. Em 20/11/2026, a PR #31 integrou código GNN v4 que prevê \(C_p\), além de GPR para coeficientes. O PDF de João Pedro apresenta resultados de desenvolvimento com não convergidos e cinco partes, ainda não reproduzidos nesta retomada. Seus números não são incorporados à tabela histórica acima. O mesmo documento relata consulta ao teste na v2 e uma experiência AG fora do código integrado; esses registros exigem avaliação própria.
+
 Uma futura comparação deverá fornecer à GNN as condições operacionais relevantes também utilizadas pelo Ridge, incluindo Mach e ângulo de ataque, e documentar diferenças entre representações geométricas. A arquitetura atual do protótipo não inclui esse condicionamento global. A inclusão de atributos de Álgebra Geométrica e a avaliação de invariância ou equivariância exigem definições e experimentos próprios.
+
+Condições constantes podem delimitar um estudo específico depois de verificadas nos metadados; quando variarem, deverão condicionar os modelos. A integração dos coeficientes a partir do \(C_p\) previsto garante apenas a relação campo–integral adotada, não satisfação das equações Euler. O código GPR integrado usa `RBF + WhiteKernel`, com fator de amplitude, sem co-krigagem. Sua incerteza depende das hipóteses estatísticas e precisa de avaliação [@rasmussen2006]. A comparação convencional e o tratamento do teste continuam dependentes de protocolo aprovado.
 
 ## Reprodução local e barreira de validação
 

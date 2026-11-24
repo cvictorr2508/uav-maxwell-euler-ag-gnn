@@ -1,5 +1,15 @@
 # Projeto 02 — estado de transferência
 
+## Atualização de retomada — 24/11/2026
+
+O estado remoto consultado é develop `557e5982bcecc1bbc3ca9dbab350406bbd15dc8f`, merge da PR #31 em 20/11/2026; main permanece em `c2bf7d562e864e12b6c7a3a8e678b35f04c67a7d`. A contribuição de João Pedro acrescenta GNN v4, GPR, alterações de grafo e um PDF explicativo. O código coincide com o head `4a01910` avaliado antes do merge. Checks Python/Quarto do merge passaram; nove testes e compilação foram repetidos no snapshot integrado, sem treinamento. Isso não reproduz as métricas do autor.
+
+O documento v4 relata consulta ao teste na v2 (p. 5) e AG em andamento (p. 25), sem o código AG nesta PR. Preservam-se os oito casos e `c0015`; a cronologia e o alcance da exposição precisam ser consolidados. A população e validação cruzada v4 diferem da referência S3. Não promover seus resultados a evidência aceita nem afirmar superioridade ou equivariância.
+
+O orientador autorizou preparar R0/D1 e R1: documentação e infraestrutura com testes, commits e PRs revisáveis. Merge, treinamento, instalações relevantes e campanhas posteriores permanecem sujeitos às autorizações correspondentes. A matriz `notes/d1-claim-evidence-matrix.md` distingue fatos de código, resultados históricos, relatos e hipóteses; `notes/d1-editorial-pendencies.md` registra as decisões pendentes. Dados privados e ENCERRAMENTO ainda não foram disponibilizados neste workspace.
+
+## Checkpoint histórico de transferência — 23/10/2026
+
 Checkpoint: 23/10/2026 (America/Sao_Paulo). Destino: chat 02.03 do Projeto 02 e Codex em outra máquina. Este arquivo é um estado verificado, não um novo mandato científico. O Projeto 02 atualizará o mandato após avaliar esta entrega. O chat de origem ficará sem atividade até pelo menos 16/11/2026; essa data não agenda uma retomada automática.
 
 ## Fonte de verdade e publicação

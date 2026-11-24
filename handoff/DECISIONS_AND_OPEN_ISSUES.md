@@ -1,5 +1,16 @@
 # Decisões, ressalvas e escolhas abertas
 
+## Retomada pós-PR #31 — 24/11/2026
+
+- R0/D1 e R1 foram autorizadas para preparação de mudanças, testes, commits e PRs; não há autorização de merge ou campanha de treinamento nesta entrega.
+- develop contém o merge `557e598`; integração operacional não equivale a aceite científico dos resultados v4.
+- A referência S3 continua em 31/7/8 convergidos, seed histórica `202604`, com `c0015` preservado. A população v4 com não convergidos e validação cruzada é um estudo de desenvolvimento distinto.
+- O autor relata consulta ao teste na v2 e AG em andamento. Solicitar cronologia e artefatos; não apagar esses registros, regenerar partições ou pressupor auditoria do código AG.
+- R1 deverá compartilhar a barreira de validação, eliminar execução ao importar, corrigir exportação/diagnóstico e persistir pré-processamento. O aceite da tarefa global/campo, do orçamento e da política de status pertence a R2.
+- Autoria, licença editorial, fontes privadas e documentação de simulação permanecem pendentes conforme `notes/d1-editorial-pendencies.md`.
+
+Os registros abaixo preservam as decisões e pendências do checkpoint de outubro.
+
 ## Decisões aceitas no histórico
 
 | Decisão | Registro e consequência |
